@@ -46,6 +46,7 @@ in {
     inputs.neovim-nightly.packages.${system}.default
     tmux
     rustup
+    gh
 
     # School
     typst
