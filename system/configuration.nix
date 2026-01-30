@@ -16,11 +16,18 @@ in {
     trusted-users = [ "ben" ];
     experimental-features = [ "nix-command" "flakes" ];
   };
+  nixpkgs.config.allowUnfree = true;
+
+  # nixpkgs.overlays = [
+  #   (import ../overlay/root.nix)
+  # ];
 
   # Quick patch for compatibility while migrating
   programs.nix-ld = {
     enable = true;
     libraries = with pkgs; [
+      libxcrypt
+      libGL
     ];
   };
 
@@ -34,22 +41,48 @@ in {
     ben = {
       uid = 1000;
       isNormalUser = true;
-      extraGroups = [ "wheel" ];
+      extraGroups = [ "wheel" "docker" ];
+      shell = pkgs.zsh;
     };
   };
 
-  # Select internationalisation properties.
+  home-manager = {
+    users.ben = {
+      imports = [
+        ../user/home-manager.nix
+        inputs.catppuccin.homeModules.catppuccin
+      ];
+    };
+    useUserPackages = true;
+    useGlobalPkgs = true;
+    extraSpecialArgs = { inherit inputs; };
+  };
+
   i18n.defaultLocale = "en_US.UTF-8";
 
   environment.systemPackages = with pkgs; [
-    # Programming/General Use
     inputs.neovim-nightly.packages.${system}.default
+    ripgrep
     tmux
     rustup
     gh
+    modrinth-app
+    appimage-run
+    python314
+    superTuxKart
+    librewolf
+    docker-compose
+    intentrace
+    jetbrains.idea
+    xonotic
+    intel-gpu-tools
+    distrobox
+    ladybird
 
     # School
     typst
+    jetbrains.pycharm
+    uv
 
     # Desktop environment
     fastfetch
@@ -62,32 +95,38 @@ in {
     rofi
     hyprshot
     vimiv-qt
-    catppuccin-cursors.mochaDark
-    catppuccin-gtk
-    catppuccin-qt5ct
-    catppuccin-grub
     inputs.hyprshutdown.packages.${system}.default
 
     # Core system
+    wget
     git
+    file
     gnumake
+    unixtools.xxd
     blueman
     pavucontrol
   ];
 
   programs.firefox.enable = true;
+  # programs.bash.blesh.enable = true;
+  programs.zsh.enable = true;
+  environment.pathsToLink = [ "/share/zsh" ];
 
   programs.hyprland = {
     enable = true;
     package = inputs.hyprland.packages.${system}.hyprland;
     portalPackage = inputs.hyprland.packages.${system}.xdg-desktop-portal-hyprland;
   };
+  programs.xwayland.enable = true;
 
   fonts.packages = with pkgs; [
     nerd-fonts.droid-sans-mono
     nerd-fonts.fira-code
     nerd-fonts.fira-mono
+    nerd-fonts.jetbrains-mono
     nerd-fonts.symbols-only
+    noto-fonts
+    roboto
   ];
 
   # Battery/Power
@@ -103,6 +142,21 @@ in {
   # Bluetooth
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
+
+  services.i2pd = {
+    enable = true;
+    bandwidth = 1024;
+    enableIPv6 = true;
+    ifname = "enp0s31f6";
+
+    proto = {
+      socksProxy.enable = true;
+      httpProxy.enable = true;
+      http.enable = true;
+    };
+  };
+
+  services.tailscale.enable = true;
 
   # Keyboard remapping
   services.keyd = {
@@ -126,6 +180,22 @@ in {
     };
   };
 
+  catppuccin = {
+    accent = "blue";
+    flavor = "mocha";
+    grub.enable = true;
+    tty.enable = true;
+  };
+
+  virtualisation.docker.enable = true;
+  # virtualisation.virtualbox = {
+  #   host.enable = true;
+  #   guest = {
+  #     clipboard = true;
+  #     dragAndDrop = true;
+  #   };
+  # };
+
   # btop needs the CAP_PERFMON capability in order to display GPU usage statistics
   security.wrappers.btop = {
     setuid = false;
@@ -133,6 +203,14 @@ in {
     owner = "root";
     group = "root";
     capabilities = "CAP_PERFMON=+ep";
+  };
+
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
+      intel-vaapi-driver
+    ];
   };
 
   boot.loader = {

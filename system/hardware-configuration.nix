@@ -22,7 +22,8 @@
   fileSystems."/nix" =
     { device = "/dev/disk/by-uuid/abb2f538-2ec5-4fa9-b168-811574181bff";
       fsType = "btrfs";
-      options = [ "subvol=@nix" ];
+      neededForBoot = true;
+      options = [ "subvol=@nix" "noatime" ];
     };
 
   fileSystems."/home" =
