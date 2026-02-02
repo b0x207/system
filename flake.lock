@@ -779,6 +779,21 @@
         "type": "github"
       }
     },
+    "nix-gc-env": {
+      "locked": {
+        "lastModified": 1688934394,
+        "narHash": "sha256-Y72My5Ym2w9jhprmw8kQrom7ObvzqZ3DfNO2r3ZqfOo=",
+        "owner": "Julow",
+        "repo": "nix-gc-env",
+        "rev": "c1e41568772c21a8274ab8edf5d0faadd5df4c8c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Julow",
+        "repo": "nix-gc-env",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1763966396,
@@ -907,6 +922,7 @@
         "hyprland": "hyprland",
         "hyprshutdown": "hyprshutdown",
         "neovim-nightly": "neovim-nightly",
+        "nix-gc-env": "nix-gc-env",
         "nixpkgs": "nixpkgs_6"
       }
     },

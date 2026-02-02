@@ -9,6 +9,10 @@
   programs.vesktop = {
     enable = true;
   };
+  programs.discord = {
+    enable = true;
+    settings.SKIP_HOST_UPDATE = true;
+  };
 
   programs.ghostty = {
     enable = true;

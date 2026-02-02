@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, inputs, flake, ... }:
 let
   system = pkgs.stdenv.hostPlatform.system;
 in {
@@ -15,6 +15,13 @@ in {
     auto-optimise-store = true;
     trusted-users = [ "ben" ];
     experimental-features = [ "nix-command" "flakes" ];
+  };
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    # Keep a reasonable number of generations to allow for experimentation while still keeping a
+    # safety net
+    delete_generations = "+15";
   };
   nixpkgs.config.allowUnfree = true;
 
@@ -78,11 +85,13 @@ in {
     intel-gpu-tools
     distrobox
     ladybird
+    mission-center
 
     # School
     typst
     jetbrains.pycharm
     uv
+    sqlitebrowser
 
     # Desktop environment
     fastfetch
@@ -96,10 +105,15 @@ in {
     hyprshot
     vimiv-qt
     inputs.hyprshutdown.packages.${system}.default
+    dex
+    thunar
 
     # Core system
+    python314
+    ffmpeg-full
     wget
     git
+    gcc
     file
     gnumake
     unixtools.xxd
@@ -111,6 +125,23 @@ in {
   # programs.bash.blesh.enable = true;
   programs.zsh.enable = true;
   environment.pathsToLink = [ "/share/zsh" ];
+
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
+  services.open-webui = {
+    enable = false;
+    port = 9090;
+    # host = "127.0.0.1";
+    environment = {
+      ANONYMIZED_TELEMETRY = "False";
+      DO_NOT_TRACK = "True";
+      SCARF_NO_ANALYTICS = "True";
+
+      ENABLE_OPENAI_API = "True";
+      OPENAI_API_BASE_URL = "http://localhost:10000";
+      OPENAI_API_KEY = "";
+    };
+  };
 
   programs.hyprland = {
     enable = true;
@@ -210,6 +241,7 @@ in {
     extraPackages = with pkgs; [
       intel-media-driver
       intel-vaapi-driver
+      vpl-gpu-rt
     ];
   };
 
@@ -276,6 +308,8 @@ in {
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   networking.firewall.enable = true;
+
+  system.configurationRevision = toString(flake.rev or flake.dirtyRev or "unknown");
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you

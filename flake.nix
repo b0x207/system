@@ -16,20 +16,22 @@
     };
     ags.url = "github:aylur/ags";
     astal.url = "github:aylur/astal";
+    nix-gc-env.url = "github:Julow/nix-gc-env";
 	};
 
   nixConfig = {
     # substituters = [];
   };
 
-	outputs = { self, nixpkgs, home-manager, catppuccin, ... }@inputs: {
+	outputs = { self, nixpkgs, home-manager, catppuccin, nix-gc-env, ... }@inputs: {
 		nixosConfigurations.system = nixpkgs.lib.nixosSystem {
 			modules = [
 				./system/configuration.nix
         home-manager.nixosModules.home-manager
         catppuccin.nixosModules.catppuccin
+        nix-gc-env.nixosModules.default
 			];
-			specialArgs = { inherit inputs; };
+			specialArgs = { flake = self; inherit inputs; };
 		};
 	};
 }

@@ -9,9 +9,16 @@
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "vmd" "nvme" "usbhid" "rtsx_pci_sdmmc" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.initrd.kernelModules = [ "xe" ];
+  boot.kernelModules = [ "kvm-intel" "xe" ];
   boot.extraModulePackages = [ ];
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+  hardware.enableRedistributableFirmware = true;
+  boot.blacklistedKernelModules = [ "i915" ];
+  boot.kernelParams = [
+    "i915.force_probe=!"
+    "xe.force_probe=*"
+  ];
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/abb2f538-2ec5-4fa9-b168-811574181bff";
