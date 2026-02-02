@@ -27,6 +27,18 @@
   programs.git = {
     enable = true;
     lfs.enable = true;
+    settings = {
+      user = {
+        name = "Ben Landon";
+        email = "landb0x207@gmail.com";
+      };
+      init.defaultBranch = "main";
+    };
+    signing = {
+      format = "ssh";
+      key = "~/.ssh/id_ed25519";
+      signByDefault = true;
+    };
   };
 
   programs.zsh = {
