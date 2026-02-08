@@ -33,6 +33,7 @@
         email = "landb0x207@gmail.com";
       };
       init.defaultBranch = "main";
+      gpg.ssh.allowedSignersFile = "~/.config/git/allowed-signers";
     };
     signing = {
       format = "ssh";
@@ -41,12 +42,20 @@
     };
   };
 
+  xdg.configFile."git/allowed-signers" = {
+    enable = true;
+    force = true;
+    text = "${config.programs.git.settings.user.email} " +
+           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDnyx15yATERx55O38TsVldST7u2eXX8fAsv15L6AhLE";
+  };
+
   programs.zsh = {
     enable = true;
     enableVteIntegration = true;
     autosuggestion = {
       enable = true;
     };
+    syntaxHighlighting.enable = true;
     initContent = lib.mkOrder 1000 ''
       export EDITOR=nvim
       
@@ -67,6 +76,8 @@
       }
     ];
   };
+
+  programs.fzf.enable = true;
 
   programs.atuin = {
     enable = true;
@@ -91,7 +102,20 @@
       enable = true;
       accent = "dark";
     };
-    gtk.icon.enable = true;
+    fzf.enable = true;
+    #gtk.icon.enable = true;
     zsh-syntax-highlighting.enable = true;
+  };
+
+  gtk = {
+    colorScheme = "dark";
+    iconTheme = {
+      package = pkgs.adwaita-icon-theme;
+      name = "Adwaita";
+    };
+    cursorTheme = {
+      name = "catppuccin-mocha-dark-cursors";
+      size = 18;
+    };
   };
 }

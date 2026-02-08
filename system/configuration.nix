@@ -4,14 +4,16 @@ let
 in {
   imports = [
     ./hardware-configuration.nix
+    ./secrets.nix
+    ./vpn.nix
   ];
 
   networking.hostName = "laptop";
 
   nix.settings = {
-    # substituters = [];
+    substituters = [];
     max-jobs = 1;
-    cores = 6;
+    cores = 12;
     auto-optimise-store = true;
     trusted-users = [ "ben" ];
     experimental-features = [ "nix-command" "flakes" ];
@@ -86,12 +88,18 @@ in {
     distrobox
     ladybird
     mission-center
+    inputs.utpm.packages.${system}.default
+    nodejs
 
     # School
-    typst
+    inputs.typst.packages.${system}.default
+    inputs.typst-plantuml.packages.${system}.default
     jetbrains.pycharm
     uv
     sqlitebrowser
+    plantuml
+    jq
+    jdk
 
     # Desktop environment
     fastfetch
@@ -107,6 +115,8 @@ in {
     inputs.hyprshutdown.packages.${system}.default
     dex
     thunar
+    satty
+    inputs.HyprQuickFrame.packages.${system}.default
 
     # Core system
     python314
@@ -122,16 +132,15 @@ in {
   ];
 
   programs.firefox.enable = true;
-  # programs.bash.blesh.enable = true;
   programs.zsh.enable = true;
   environment.pathsToLink = [ "/share/zsh" ];
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
   services.open-webui = {
-    enable = false;
+    enable = true;
     port = 9090;
-    # host = "127.0.0.1";
+    host = "127.0.0.1";
     environment = {
       ANONYMIZED_TELEMETRY = "False";
       DO_NOT_TRACK = "True";
@@ -175,7 +184,7 @@ in {
   services.blueman.enable = true;
 
   services.i2pd = {
-    enable = true;
+    enable = false;
     bandwidth = 1024;
     enableIPv6 = true;
     ifname = "enp0s31f6";
@@ -186,8 +195,6 @@ in {
       http.enable = true;
     };
   };
-
-  services.tailscale.enable = true;
 
   # Keyboard remapping
   services.keyd = {
