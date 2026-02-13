@@ -11,16 +11,17 @@ in {
   networking.hostName = "laptop";
 
   nix.settings = {
-    substituters = [];
+    # substituters = [];
     max-jobs = 1;
     cores = 12;
     auto-optimise-store = true;
     trusted-users = [ "ben" ];
     experimental-features = [ "nix-command" "flakes" ];
+    ssl-cert-file = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
   };
   nix.gc = {
     automatic = true;
-    dates = "weekly";
+    dates = "daily";
     # Keep a reasonable number of generations to allow for experimentation while still keeping a
     # safety net
     delete_generations = "+15";
@@ -40,8 +41,8 @@ in {
     ];
   };
 
-  # Configure network connections interactively with nmcli or nmtui.
   networking.networkmanager.enable = true;
+  networking.nameservers = [ "1.1.1.1" "8.8.8.8" ];
 
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
@@ -90,6 +91,10 @@ in {
     mission-center
     inputs.utpm.packages.${system}.default
     nodejs
+    beyond-all-reason
+    warzone2100
+    thunderbird
+    nodejs
 
     # School
     inputs.typst.packages.${system}.default
@@ -102,7 +107,6 @@ in {
     jdk
 
     # Desktop environment
-    fastfetch
     btop
     ghostty
     quickshell
@@ -117,9 +121,11 @@ in {
     thunar
     satty
     inputs.HyprQuickFrame.packages.${system}.default
+    hyprpolkitagent
 
     # Core system
     python314
+    cacert
     ffmpeg-full
     wget
     git
@@ -158,6 +164,7 @@ in {
     portalPackage = inputs.hyprland.packages.${system}.xdg-desktop-portal-hyprland;
   };
   programs.xwayland.enable = true;
+  security.polkit.enable = true;
 
   fonts.packages = with pkgs; [
     nerd-fonts.droid-sans-mono

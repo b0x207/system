@@ -17,10 +17,7 @@
     ags.url = "github:aylur/ags";
     astal.url = "github:aylur/astal";
     nix-gc-env.url = "github:Julow/nix-gc-env";
-    utpm = {
-      url = "github:typst-community/utpm";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    utpm.url = "github:typst-community/utpm";
     typst = {
       url = "github:typst/typst-flake";
       inputs.typst.follows = "typst-src";
@@ -39,7 +36,7 @@
 	};
 
   nixConfig = {
-    substituters = [];
+    # substituters = [];
   };
 
 	outputs = { self, nixpkgs, home-manager, catppuccin, nix-gc-env, agenix, ... }@inputs: {
