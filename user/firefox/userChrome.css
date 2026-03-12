@@ -1,0 +1,82 @@
+/* TODO: add styling to the right clip popupmenu */
+
+/* Colors */
+:root {
+    --toolbar-bgcolor: #1e1e2e !important;
+    --toolbar-color: #cdd6f4 !important;
+
+    --toolbar-field-background-color: #181825 !important;
+    --toolbar-field-color: var(--toolbar-color) !important;
+    --toolbar-field-focus-background-color: #313244 !important;
+    --toolbar-field-focus-color: var(--toolbar-color) !important;
+
+    /* other UI elements (e.g. bookmark) color */
+    --urlbar-box-text-color: #89b4fa !important;
+    --toolbarbutton-icon-fill-attention: #89b4fa !important;
+
+    --sidebar-background-color: var(--toolbar-bgcolor) !important;
+    --sidebar-border-color: var(--toolbar-bgcolor) !important;
+    --sidebar-text-color: var(--toolbar-color) !important;
+
+    --toolbox-bgcolor: #11111b !important;
+    --toolbox-bgcolor-inactive: var(--toolbar-bgcolor) !important;
+
+    --tab-selected-bgcolor: #313244 !important;
+    --tab-selected-textcolor: var(--toolbar-color) !important;
+    --tab-selected-outline-color: #585b70 !important;
+}
+
+
+/* Remove the top tabs bar */
+#main-window #TabsToolbar > .toolbar-items {
+    overflow: hidden;
+    transition: height 0.3s 0.3s !important;
+}
+/* Default state: Set initial height to enable animation */
+#main-window #TabsToolbar > .toolbar-items { height: 3em !important; }
+#main-window[uidensity="touch"] #TabsToolbar > .toolbar-items { height: 3.35em !important; }
+#main-window[uidensity="compact"] #TabsToolbar > .toolbar-items { height: 2.7em !important; }
+/* Hidden state: Hide native tabs strip */
+#main-window:has(#sidebar-box:not([hidden])) #TabsToolbar > .toolbar-items { height: 0 !important; }
+/* Hidden state: Fix z-index of active pinned tabs */
+#main-window:has(#sidebar-box:not([hidden])) #tabbrowser-tabs { z-index: 0 !important; }
+/* Hidden state: Hide window buttons in tabs-toolbar */
+#main-window:has(#sidebar-box:not([hidden])) #TabsToolbar .titlebar-spacer,
+#main-window:has(#sidebar-box:not([hidden])) #TabsToolbar .titlebar-buttonbox-container {
+    display: none !important;
+}
+
+/* Decrease size of the sidebar header */
+#sidebar-header {
+    font-size: 1.2em !important;
+    padding: 2px 6px 2px 3px !important;
+}
+#sidebar-header #sidebar-close {
+    padding: 3px !important;
+}
+#sidebar-header #sidebar-close .toolbarbutton-icon {
+    width: 14px !important;
+    height: 14px !important;
+    opacity: 0.6 !important;
+}
+
+#browser {
+    background-color: var(--toolbar-bgcolor) !important;
+}
+
+#tabbrowser-tabbox {
+    clip-path: rect(0% 100% 100% 0% round 15px 0 0 0);
+}
+
+#navigator-toolbox {
+    border-bottom: none !important;
+}
+
+#sidebar-splitter {
+    display: none;
+}
+
+/* Popup Styles */
+/* menupopup { */
+/*     background-color: red; */
+/* } */

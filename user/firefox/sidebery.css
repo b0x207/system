@@ -1,0 +1,32 @@
+#root.root {
+    --popup-bg: #313244;
+    --tabs-progress-bg: rgba(205, 214, 244,.086);
+    --tabs-activated-fg: #cdd6f4;
+    --tabs-normal-fg: #cdd6f4;
+    --tabs-activated-bg: #313244;
+    --frame-bg: #1e1e2e;
+    --toolbar-bg: #1e1e2e;
+    --ctx-menu-fg: #ff0000;
+    --active-el-bg: #313244;
+    --windows-popup-window-border: #313244;
+    --ctx-menu-bg: #313244;
+    --tabs-pinned-height: 32px;
+    --tabs-pinned-width: 36px;
+}
+
+#root.root .PinnedTabsBar .tab-wrapper {
+  width: auto;
+  flex-grow: 1;
+}
+#root.root .PinnedTabsBar .tab-wrapper .Tab {
+  --tabs-activated-shadow: inset 0 0 0 1px #fff2;
+  --tabs-activated-bg: #fff2;
+  width: 100%;
+  min-width: var(--tabs-pinned-width);
+}
+#root.root .PinnedTabsBar .tab-wrapper .Tab .body {
+  --tabs-normal-bg: #ffffff0f;
+}
+#root.root .PinnedTabsBar .tab-wrapper .Tab[data-discarded="true"] .body {
+  --tabs-normal-bg: #ffffff06;
+}

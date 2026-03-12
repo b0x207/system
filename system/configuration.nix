@@ -1,36 +1,71 @@
 { config, lib, pkgs, inputs, flake, ... }:
 let
   system = pkgs.stdenv.hostPlatform.system;
+  pkgs-intel-compiler = import inputs.nixpkgs-intel-compiler { inherit system; };
+  pkgs-modrinth = import inputs.nixpkgs-modrinth { inherit system; config.allowUnfree = true; };
 in {
   imports = [
     ./hardware-configuration.nix
     ./secrets.nix
     ./vpn.nix
+    ./fingerprint.nix
+    ./firmware.nix
+    ./yggdrasil.nix
   ];
 
   networking.hostName = "laptop";
 
   nix.settings = {
-    # substituters = [];
+    #substituters = [];
     max-jobs = 1;
     cores = 12;
     auto-optimise-store = true;
     trusted-users = [ "ben" ];
     experimental-features = [ "nix-command" "flakes" ];
     ssl-cert-file = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+    # extra-sandbox-paths = [ config.programs.ccache.cacheDir ];
   };
-  nix.gc = {
-    automatic = true;
-    dates = "daily";
+
+  # To prevent long-running nix updates from impacting system responsiveness
+  nix.daemonCPUSchedPolicy = "idle";
+  nix.daemonIOSchedClass = "idle";
+
+  # nix.gc = {
+    # automatic = false;
+    # dates = "daily";
     # Keep a reasonable number of generations to allow for experimentation while still keeping a
     # safety net
-    delete_generations = "+15";
+    # delete_generations = "+50";
+  # };
+  nixpkgs.config = {
+    allowUnfree = true;
+    useCChace = true;
   };
-  nixpkgs.config.allowUnfree = true;
 
-  # nixpkgs.overlays = [
-  #   (import ../overlay/root.nix)
-  # ];
+  nixpkgs.overlays = [
+    inputs.nur.overlays.default
+    inputs.dolphin-overlay.overlays.default
+
+    # Custom packages
+    (final: prev: {
+    })
+  ];
+
+  services.nginx = {
+    enable = true;
+    virtualHosts."localhost" = {
+      listenAddresses = [
+        "127.0.0.1"
+        "[203:8d0:fcc8:fe01:cfac:e2f9:54b6:fa75]"
+      ];
+      locations."/" = {
+        return = "200 '<html>Hi</html>'";
+        extraConfig = ''
+          default_type text/html;
+        '';
+      };
+    };
+  };
 
   # Quick patch for compatibility while migrating
   programs.nix-ld = {
@@ -38,11 +73,40 @@ in {
     libraries = with pkgs; [
       libxcrypt
       libGL
+      ocl-icd
+      level-zero
+      intel-compute-runtime
+      stdenv.cc.cc
     ];
   };
 
-  networking.networkmanager.enable = true;
-  networking.nameservers = [ "1.1.1.1" "8.8.8.8" ];
+  networking = {
+    networkmanager = {
+      enable = true;
+      unmanaged = ["qemu-tap"];
+    };
+    nameservers = [ "1.1.1.1" "8.8.8.8" ];
+    firewall = {
+      enable = true;
+      interfaces.ygg0.allowedTCPPorts = [ 80 443 ];
+    };
+  };
+  systemd.network = {
+    netdevs = {
+      "qemu-tap" = {
+        enable = true;
+        netdevConfig = {
+          Kind = "tap";
+          Name = "qemu-tap";
+        };
+        tapConfig = {
+          User = "ben";
+        };
+      };
+    };
+  };
+
+  systemd.sleep.extraConfig = "AllowHibernation=no";
 
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
@@ -51,7 +115,7 @@ in {
     ben = {
       uid = 1000;
       isNormalUser = true;
-      extraGroups = [ "wheel" "docker" ];
+      extraGroups = [ "wheel" "docker" "libvirtd" "wireshark" ];
       shell = pkgs.zsh;
     };
   };
@@ -65,6 +129,7 @@ in {
     };
     useUserPackages = true;
     useGlobalPkgs = true;
+    backupFileExtension = "hm-backup";
     extraSpecialArgs = { inherit inputs; };
   };
 
@@ -79,7 +144,7 @@ in {
     modrinth-app
     appimage-run
     python314
-    superTuxKart
+    supertuxkart
     librewolf
     docker-compose
     intentrace
@@ -95,6 +160,23 @@ in {
     warzone2100
     thunderbird
     nodejs
+    xmake
+    pika-backup
+    libdrm.dev
+    libdrm
+    cloudflared
+    pkgs-intel-compiler.intel-llvm
+    usbutils
+    virtualbox
+    (hunspell.withDicts (dicts: with dicts; [ en-us ]))
+    (aspellWithDicts (dicts: with dicts; [ en en-computers en-science ]))
+    lmstudio
+    alfis
+    nix-output-monitor
+    nh
+    dust
+    libnotify
+    jellyfin-desktop
 
     # School
     inputs.typst.packages.${system}.default
@@ -107,6 +189,7 @@ in {
     jdk
 
     # Desktop environment
+    pika-backup
     btop
     ghostty
     quickshell
@@ -119,11 +202,28 @@ in {
     inputs.hyprshutdown.packages.${system}.default
     dex
     thunar
+    kdePackages.dolphin
     satty
     inputs.HyprQuickFrame.packages.${system}.default
     hyprpolkitagent
+    kdePackages.breeze-icons
+    kdePackages.breeze
+    kdePackages.ark
+    libreoffice
+    wl-clipboard
+
+    # According to the wiki:
+    # > By default, dolphin by itself is not packaged with support for SVG icons.
+    kdePackages.qtsvg
 
     # Core system
+    zip
+    unzip
+    man-pages
+    man-pages-posix
+    clang
+    clang-tools
+    glibc.dev
     python314
     cacert
     ffmpeg-full
@@ -137,9 +237,35 @@ in {
     pavucontrol
   ];
 
+  programs.ccache.enable = true;
+
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "--keep-since 10d --keep 15";
+    flake = "/home/ben/config"; # TODO: make better
+  };
+
   programs.firefox.enable = true;
   programs.zsh.enable = true;
   environment.pathsToLink = [ "/share/zsh" ];
+
+  programs.wireshark = {
+    enable = false;
+    package = pkgs.wireshark;
+    usbmon.enable = true;
+  };
+
+  documentation = {
+    enable = true;
+    dev.enable = true;
+    man = {
+      enable = true;
+      cache.enable = true;
+    };
+  };
+
+  services.tumbler.enable = true;
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
@@ -155,16 +281,52 @@ in {
       ENABLE_OPENAI_API = "True";
       OPENAI_API_BASE_URL = "http://localhost:10000";
       OPENAI_API_KEY = "";
+
+      WEBUI_AUTH = "False";
+
+      ENABLE_RAG_WEB_SEARCH = "True";
+      RAG_WEB_SEARCH_ENGINE = "searxng";
+      RAG_WEB_SEARCH_RESULT_COUNT = "3";
+      RAG_WEB_SEARCH_CONCURRENT_REQUESTS = "10";
+      SEARXNG_QUERY_URL = "http://localhost:9091/search?q=<query>";
     };
   };
 
+  services.searx = {
+    enable = true;
+    settings = {
+      server.port = 9091;
+      server.secret_key = "oogabooga";
+      search.formats = [ "html" "json" ];
+    };
+    limiterSettings = {
+      botdetection.ip_lists = {
+        block_ip = [];
+        pass_ip = [];
+      };
+      botdetection.ip_limit.link_token = false;
+    };
+  };
+
+  systemd.oomd = {
+    enable = false;
+  };
+  services.nohang = {
+    enable = true;
+    configPath = ./nohang-profile.conf;
+  };
+
+  programs.kdeconnect.enable = true;
+
   programs.hyprland = {
     enable = true;
+    withUWSM = true;
     package = inputs.hyprland.packages.${system}.hyprland;
     portalPackage = inputs.hyprland.packages.${system}.xdg-desktop-portal-hyprland;
   };
   programs.xwayland.enable = true;
   security.polkit.enable = true;
+  services.seatd.enable = true;
 
   fonts.packages = with pkgs; [
     nerd-fonts.droid-sans-mono
@@ -181,9 +343,12 @@ in {
   services.auto-cpufreq.enable = true;
 
   # Audio
+  security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
     pulse.enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
   };
 
   # Bluetooth
@@ -191,10 +356,10 @@ in {
   services.blueman.enable = true;
 
   services.i2pd = {
-    enable = false;
+    enable = true;
     bandwidth = 1024;
     enableIPv6 = true;
-    ifname = "enp0s31f6";
+    #ifname = "enp0s31f6";
 
     proto = {
       socksProxy.enable = true;
@@ -233,13 +398,16 @@ in {
   };
 
   virtualisation.docker.enable = true;
-  # virtualisation.virtualbox = {
-  #   host.enable = true;
-  #   guest = {
-  #     clipboard = true;
-  #     dragAndDrop = true;
-  #   };
-  # };
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
+  virtualisation.virtualbox = {
+    host.enable = true;
+    guest = {
+      clipboard = true;
+      dragAndDrop = true;
+    };
+  };
+  users.extraGroups.vboxusers.members = [ "ben" ];
 
   # btop needs the CAP_PERFMON capability in order to display GPU usage statistics
   security.wrappers.btop = {
@@ -256,6 +424,12 @@ in {
       intel-media-driver
       intel-vaapi-driver
       vpl-gpu-rt
+      intel-compute-runtime
+      ocl-icd
+      level-zero
+      intel-npu-driver
+      intel-graphics-compiler
+      pkgs-intel-compiler.intel-llvm
     ];
   };
 
@@ -267,61 +441,10 @@ in {
       enable = true;
       efiSupport = true;
       device = "nodev";
+      useOSProber = true;
       configurationLimit = 5;
-      extraEntries = ''
-        menuentry "Windows Boot Manager" --class windows --id windows {
-          insmod part_gpt
-            insmod fat
-            search --no-floppy --fs-uuid --set=root 924F-952F
-            chainloader ($\{root})/EFI/Microsoft/Boot/bootmgfw.efi
-        }
-
-        # Gentoo Holdover
-
-        menuentry 'Gentoo GNU/Linux' --class gentoo --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple-abb2f538-2ec5-4fa9-b168-811574181bff' {
-          load_video
-            insmod gzio
-            insmod part_gpt
-            insmod fat
-            search --no-floppy --fs-uuid --set=root B99A-F204
-            echo	'Loading Linux 6.12.63-gentoo-dist ...'
-            linux	/kernel-6.12.63-gentoo-dist root=UUID=abb2f538-2ec5-4fa9-b168-811574181bff ro rootflags=subvol=@gentoo  
-            echo	'Loading initial ramdisk ...'
-            initrd	/intel-ucode.img /initramfs-6.12.63-gentoo-dist.img
-        }
-      submenu 'Advanced options for Gentoo GNU/Linux' $menuentry_id_option 'gnulinux-advanced-abb2f538-2ec5-4fa9-b168-811574181bff' {
-        menuentry 'Gentoo GNU/Linux, with Linux 6.12.63-gentoo-dist' --class gentoo --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-6.12.63-gentoo-dist-advanced-abb2f538-2ec5-4fa9-b168-811574181bff' {
-          load_video
-            insmod gzio
-            insmod part_gpt
-            insmod fat
-            search --no-floppy --fs-uuid --set=root B99A-F204
-            echo	'Loading Linux 6.12.63-gentoo-dist ...'
-            linux	/kernel-6.12.63-gentoo-dist root=UUID=abb2f538-2ec5-4fa9-b168-811574181bff ro rootflags=subvol=@gentoo  
-            echo	'Loading initial ramdisk ...'
-            initrd	/intel-ucode.img /initramfs-6.12.63-gentoo-dist.img
-        }
-        menuentry 'Gentoo GNU/Linux, with Linux 6.12.63-gentoo-dist (recovery mode)' --class gentoo --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-6.12.63-gentoo-dist-recovery-abb2f538-2ec5-4fa9-b168-811574181bff' {
-          load_video
-            insmod gzio
-            insmod part_gpt
-            insmod fat
-            search --no-floppy --fs-uuid --set=root B99A-F204
-            echo	'Loading Linux 6.12.63-gentoo-dist ...'
-            linux	/kernel-6.12.63-gentoo-dist root=UUID=abb2f538-2ec5-4fa9-b168-811574181bff ro single rootflags=subvol=@gentoo 
-            echo	'Loading initial ramdisk ...'
-            initrd	/intel-ucode.img /initramfs-6.12.63-gentoo-dist.img
-        }
-      }
-      '';
     };
   };
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  networking.firewall.enable = true;
 
   system.configurationRevision = toString(flake.rev or flake.dirtyRev or "unknown");
 

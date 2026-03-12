@@ -1,0 +1,15 @@
+diff --git a/browser/modules/AboutNewTab.sys.mjs b/browser/modules/AboutNewTab.sys.mjs
+index 66ec2a2d83..18afc93dd4 100644
+--- a/browser/modules/AboutNewTab.sys.mjs
++++ b/browser/modules/AboutNewTab.sys.mjs
+@@ -42,8 +42,8 @@ export const AboutNewTab = {
+ 
+   _cachedTopSites: null,
+ 
+-  _newTabURL: ABOUT_URL,
+-  _newTabURLOverridden: false,
++  _newTabURL: "https://b0x207.dev",
++  _newTabURLOverridden: true,
+ 
+   /**
+    * init - Initializes an instance of Activity Stream if one doesn't exist already.

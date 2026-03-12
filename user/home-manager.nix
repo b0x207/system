@@ -1,26 +1,39 @@
 { config, lib, inputs, pkgs, ... }:
 {
+  imports = [
+    ./firefox.nix
+  ];
+
   home.username = "ben";
   home.homeDirectory = "/home/ben";
   home.stateVersion = "25.11";
 
   programs.home-manager.enable = true;
 
-  programs.vesktop = {
-    enable = true;
-  };
   programs.discord = {
     enable = true;
     settings.SKIP_HOST_UPDATE = true;
+  };
+
+  programs.direnv = {
+    enable = true;
+    enableBashIntegration = true;
+    nix-direnv.enable = true;
+    config = {
+      warn_timeout = 0;
+    };
   };
 
   programs.ghostty = {
     enable = true;
     enableBashIntegration = true;
     settings = {
+      auto-update = "off";
       background-opacity = 0.9;
-      link-url = false;
-      # link-preview = false; # wait for newer ghostty version
+      link-previews = "osc8";
+      clipboard-read = "allow";
+      clipboard-write = "allow";
+      gtk-single-instance = false;
     };
   };
 
@@ -49,6 +62,7 @@
            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDnyx15yATERx55O38TsVldST7u2eXX8fAsv15L6AhLE";
   };
 
+  home.shell.enableZshIntegration = true;
   programs.zsh = {
     enable = true;
     enableVteIntegration = true;
@@ -63,6 +77,10 @@
       bindkey "^[[1;5C" forward-word
       bindkey "^[[1;5D" backward-word
       bindkey \^U backward-kill-line
+
+      if [[ ! -n $DISPLAY ]] && uwsm check may-start && uwsm select; then
+        exec uwsm start default
+      fi
     '';
     plugins = [
       {
@@ -95,16 +113,29 @@
     flavor = "mocha";
     ghostty.enable = true;
     swaync = { enable = true; font = "JetBrainsMono Nerd Font"; };
-    qt5ct.enable = true;
+    kvantum.enable = true;
     rofi.enable = true;
     atuin.enable = true;
-    cursors = {
-      enable = true;
-      accent = "dark";
-    };
+    # cursors = {
+    #   enable = true;
+    #   accent = "dark";
+    # };
     fzf.enable = true;
     #gtk.icon.enable = true;
     zsh-syntax-highlighting.enable = true;
+  };
+
+  home.pointerCursor = {
+    package = pkgs.kdePackages.breeze-icons;
+    name = "breeze_cursors";
+    size = 24;
+    gtk.enable = true;
+    hyprcursor = {
+      enable = true;
+      size = 24;
+    };
+    dotIcons.enable = true;
+    x11.enable = true;
   };
 
   gtk = {
@@ -117,6 +148,12 @@
       name = "catppuccin-mocha-dark-cursors";
       size = 18;
     };
+  };
+
+  qt = {
+    enable = true;
+    platformTheme.name = "qt6ct";
+    style.name = "kvantum";
   };
 
   programs.fastfetch = let
@@ -181,7 +218,7 @@
         {
           type = "display";
           key = "${side} Display";
-          format = "{name} {width}x{height} @ {refresh-rate} Hz {inch}\" [{type}]";
+          format = "{width}x{height} @ {refresh-rate} Hz {inch}\" [{type}] - {name}";
         }
         {
           type = "btrfs";

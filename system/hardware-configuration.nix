@@ -10,10 +10,18 @@
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "vmd" "nvme" "usbhid" "rtsx_pci_sdmmc" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.initrd.systemd.enable = true;
+  boot.kernelModules = [ "kvm-intel" "usbmon" ];
   boot.extraModulePackages = [ ];
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  #boot.kernelPackages = pkgs.linuxPackages_latest;
   hardware.enableRedistributableFirmware = true;
+  boot.kernel.sysctl."vm.swappiness" = 5;
+  # boot.kernelParams = [
+  #   "zswap.enabled=1"
+  #   "zswap.compressor=lz4"
+  #   "zswap.max_pool_percent=20"
+  #   "zswap.shrinker_enabled=1"
+  # ];
   # boot.blacklistedKernelModules = [ "i915" ];
   # boot.kernelParams = [
   #   "i915.force_probe=!"
@@ -45,7 +53,15 @@
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
-  swapDevices = [ ];
+  zramSwap = {
+    enable = true;
+    priority = 5;
+  };
+
+  # swapDevices = [{
+  #   device = "/dev/disk/by-partuuid/17ad8cfd-74dc-46e1-90ad-13d2dfc733c8";
+  #   randomEncryption.enable = true;
+  # }];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
