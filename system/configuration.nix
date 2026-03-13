@@ -11,6 +11,8 @@ in {
     ./fingerprint.nix
     ./firmware.nix
     ./yggdrasil.nix
+    ./llm-exploration.nix
+    ./virtualbox.nix
   ];
 
   networking.hostName = "laptop";
@@ -23,20 +25,12 @@ in {
     trusted-users = [ "ben" ];
     experimental-features = [ "nix-command" "flakes" ];
     ssl-cert-file = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-    # extra-sandbox-paths = [ config.programs.ccache.cacheDir ];
   };
 
   # To prevent long-running nix updates from impacting system responsiveness
   nix.daemonCPUSchedPolicy = "idle";
   nix.daemonIOSchedClass = "idle";
 
-  # nix.gc = {
-    # automatic = false;
-    # dates = "daily";
-    # Keep a reasonable number of generations to allow for experimentation while still keeping a
-    # safety net
-    # delete_generations = "+50";
-  # };
   nixpkgs.config = {
     allowUnfree = true;
     useCChace = true;
@@ -50,22 +44,6 @@ in {
     (final: prev: {
     })
   ];
-
-  services.nginx = {
-    enable = true;
-    virtualHosts."localhost" = {
-      listenAddresses = [
-        "127.0.0.1"
-        "[203:8d0:fcc8:fe01:cfac:e2f9:54b6:fa75]"
-      ];
-      locations."/" = {
-        return = "200 '<html>Hi</html>'";
-        extraConfig = ''
-          default_type text/html;
-        '';
-      };
-    };
-  };
 
   # Quick patch for compatibility while migrating
   programs.nix-ld = {
@@ -106,7 +84,9 @@ in {
     };
   };
 
-  systemd.sleep.extraConfig = "AllowHibernation=no";
+  systemd.sleep.settings.Sleep = {
+    AllowHibernation = "no";
+  };
 
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
@@ -167,7 +147,6 @@ in {
     cloudflared
     pkgs-intel-compiler.intel-llvm
     usbutils
-    virtualbox
     (hunspell.withDicts (dicts: with dicts; [ en-us ]))
     (aspellWithDicts (dicts: with dicts; [ en en-computers en-science ]))
     lmstudio
@@ -177,6 +156,7 @@ in {
     dust
     libnotify
     jellyfin-desktop
+    ncurses
 
     # School
     inputs.typst.packages.${system}.default
@@ -265,48 +245,11 @@ in {
     };
   };
 
+  # Thumbnails
   services.tumbler.enable = true;
 
+  # For building the homelab config
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-
-  services.open-webui = {
-    enable = true;
-    port = 9090;
-    host = "127.0.0.1";
-    environment = {
-      ANONYMIZED_TELEMETRY = "False";
-      DO_NOT_TRACK = "True";
-      SCARF_NO_ANALYTICS = "True";
-
-      ENABLE_OPENAI_API = "True";
-      OPENAI_API_BASE_URL = "http://localhost:10000";
-      OPENAI_API_KEY = "";
-
-      WEBUI_AUTH = "False";
-
-      ENABLE_RAG_WEB_SEARCH = "True";
-      RAG_WEB_SEARCH_ENGINE = "searxng";
-      RAG_WEB_SEARCH_RESULT_COUNT = "3";
-      RAG_WEB_SEARCH_CONCURRENT_REQUESTS = "10";
-      SEARXNG_QUERY_URL = "http://localhost:9091/search?q=<query>";
-    };
-  };
-
-  services.searx = {
-    enable = true;
-    settings = {
-      server.port = 9091;
-      server.secret_key = "oogabooga";
-      search.formats = [ "html" "json" ];
-    };
-    limiterSettings = {
-      botdetection.ip_lists = {
-        block_ip = [];
-        pass_ip = [];
-      };
-      botdetection.ip_limit.link_token = false;
-    };
-  };
 
   systemd.oomd = {
     enable = false;
@@ -355,8 +298,8 @@ in {
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
 
-  services.i2pd = {
-    enable = true;
+  /*services.i2pd = {
+    enable = false;
     bandwidth = 1024;
     enableIPv6 = true;
     #ifname = "enp0s31f6";
@@ -366,7 +309,8 @@ in {
       httpProxy.enable = true;
       http.enable = true;
     };
-  };
+  };*/
+  services.i2p.enable = true;
 
   # Keyboard remapping
   services.keyd = {
@@ -400,14 +344,6 @@ in {
   virtualisation.docker.enable = true;
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
-  virtualisation.virtualbox = {
-    host.enable = true;
-    guest = {
-      clipboard = true;
-      dragAndDrop = true;
-    };
-  };
-  users.extraGroups.vboxusers.members = [ "ben" ];
 
   # btop needs the CAP_PERFMON capability in order to display GPU usage statistics
   security.wrappers.btop = {
