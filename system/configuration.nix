@@ -18,7 +18,7 @@ in {
   networking.hostName = "laptop";
 
   nix.settings = {
-    #substituters = [];
+    # substituters = [];
     max-jobs = 1;
     cores = 12;
     auto-optimise-store = true;
@@ -39,10 +39,6 @@ in {
   nixpkgs.overlays = [
     inputs.nur.overlays.default
     inputs.dolphin-overlay.overlays.default
-
-    # Custom packages
-    (final: prev: {
-    })
   ];
 
   # Quick patch for compatibility while migrating
@@ -55,6 +51,11 @@ in {
       level-zero
       intel-compute-runtime
       stdenv.cc.cc
+
+      # For Minecraft
+      libxrender
+      libxtst
+      libxi
     ];
   };
 
@@ -63,10 +64,18 @@ in {
       enable = true;
       unmanaged = ["qemu-tap"];
     };
-    nameservers = [ "1.1.1.1" "8.8.8.8" ];
+    nameservers = [ "1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" ];
     firewall = {
       enable = true;
       interfaces.ygg0.allowedTCPPorts = [ 80 443 ];
+    };
+  };
+  services.resolved = {
+    enable = true;
+    settings.Resolve = {
+      DNSOverTLS = true;
+      # DNSSEC = true;  # too many verification problems
+      DNS = [ "1.1.1.1" "8.8.8.8" ];
     };
   };
   systemd.network = {
@@ -83,13 +92,32 @@ in {
       };
     };
   };
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    nssmdns6 = true;
+    openFirewall = true;
+    publish = {
+      enable = true;
+      addresses = true;
+      domain = true;
+      hinfo = true;
+      userServices = true;
+      workstation = true;
+    };
+  };
 
   systemd.sleep.settings.Sleep = {
+    # Hibernation can cause weird problems with no physical swap device
     AllowHibernation = "no";
   };
 
-  # Set your time zone.
   time.timeZone = "America/Los_Angeles";
+
+  services.timesyncd = {
+    enable = true;
+    servers = [ "0.pool.ntp.org" "1.pool.ntp.org" ];
+  };
 
   users.users = {
     ben = {
@@ -157,6 +185,14 @@ in {
     libnotify
     jellyfin-desktop
     ncurses
+    biglybt
+    jdk21 # for minecraft
+    glib
+    supertux
+
+    # Dumb GPG bullshit
+    gnupg
+    pinentry-tty
 
     # School
     inputs.typst.packages.${system}.default
@@ -195,6 +231,15 @@ in {
     # According to the wiki:
     # > By default, dolphin by itself is not packaged with support for SVG icons.
     kdePackages.qtsvg
+    kdePackages.kio-admin # For the 'open as admin' in dolphin
+
+    # Extra thumbnail generators
+    ffmpeg-headless
+    ffmpegthumbnailer
+    gdk-pixbuf
+    libheif.bin # provides heif-thumbnailer (the program that generates HEIF thumbnails)
+    libheif.out # provides heif.thumbnailer (allows for the viewing of HEIF thumbnails)
+    webp-pixbuf-loader
 
     # Core system
     zip
@@ -216,6 +261,11 @@ in {
     blueman
     pavucontrol
   ];
+
+  programs.gnupg.agent = {
+    enable = true;
+    pinentryPackage = pkgs.pinentry-tty;
+  };
 
   programs.ccache.enable = true;
 
@@ -263,7 +313,7 @@ in {
 
   programs.hyprland = {
     enable = true;
-    withUWSM = true;
+    # withUWSM = true;
     package = inputs.hyprland.packages.${system}.hyprland;
     portalPackage = inputs.hyprland.packages.${system}.xdg-desktop-portal-hyprland;
   };
@@ -279,7 +329,21 @@ in {
     nerd-fonts.symbols-only
     noto-fonts
     roboto
+    dejavu_fonts
   ];
+  
+  services.karakeep = {
+    enable = false;
+    extraEnvironment = {
+      OPENAI_BASE_URL = "http://127.0.0.1:1234/v1";
+      DISABLE_SIGNUPS = "true";
+      DISABLE_NEW_RELEASE_CHECK = "true";
+      PORT = "5353";
+      OPENAI_API_KEY = "lm_studio";
+      INFERENCE_IMAGE_MODEL = "smollm3-3b";
+      EMBEDDING_TEXT_MODEL = "gemma3-4b";
+    };
+  };
 
   # Battery/Power
   services.upower.enable = true;
@@ -344,6 +408,7 @@ in {
   virtualisation.docker.enable = true;
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
+  virtualisation.containerd.enable = true;
 
   # btop needs the CAP_PERFMON capability in order to display GPU usage statistics
   security.wrappers.btop = {
@@ -368,6 +433,9 @@ in {
       pkgs-intel-compiler.intel-llvm
     ];
   };
+
+  # Enable periodic trim to help improve SSD lifespan and performance
+  services.fstrim.enable = true;
 
   boot.loader = {
     efi = {

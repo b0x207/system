@@ -13,7 +13,7 @@
   boot.initrd.systemd.enable = true;
   boot.kernelModules = [ "kvm-intel" "usbmon" ];
   boot.extraModulePackages = [ ];
-  #boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_latest;  # Have to wait for virtualbox to be fixed
   hardware.enableRedistributableFirmware = true;
   boot.kernel.sysctl."vm.swappiness" = 5;
   # boot.kernelParams = [
@@ -56,6 +56,8 @@
   zramSwap = {
     enable = true;
     priority = 5;
+    memoryMax = 2 * 1024 * 1024 * 1024; # 2GiB
+    algorithm = "lz4";
   };
 
   # swapDevices = [{

@@ -106,9 +106,9 @@
       bindkey "^[[1;5D" backward-word
       bindkey \^U backward-kill-line
 
-      if [[ ! -n $DISPLAY ]] && uwsm check may-start && uwsm select; then
-        exec uwsm start default
-      fi
+      #if [[ ! -n $DISPLAY ]] && uwsm check may-start && uwsm select; then
+      #  exec uwsm start default
+      #fi
     '';
     plugins = [
       {

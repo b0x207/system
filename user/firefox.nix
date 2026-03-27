@@ -30,9 +30,8 @@
           sidebery
           vimium
           redirect-shorts-to-youtube
-          lockedin-yt
           tasks-for-canvas
-          theater-mode-for-youtube
+          karakeep
         ];
         settings."uBlock0@raymondhill.net".settings = {
           selectedFilterLists = [
