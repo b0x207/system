@@ -10,6 +10,11 @@
 
   programs.home-manager.enable = true;
 
+  home.file.".config/nvim" = {
+    source = ./nvim;
+    target = ".config/nvim";
+  };
+
   programs.zathura = {
     enable = true;
     extraConfig = ''
