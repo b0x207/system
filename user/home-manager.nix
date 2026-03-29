@@ -10,10 +10,10 @@
 
   programs.home-manager.enable = true;
 
-  home.file.".config/nvim" = {
-    source = ./nvim;
-    target = ".config/nvim";
-  };
+  # home.file.".config/nvim" = {
+  #   source = ./nvim;
+  #   target = ".config/nvim";
+  # };
 
   programs.zathura = {
     enable = true;
@@ -172,6 +172,7 @@
   };
 
   gtk = {
+    enable = true;
     colorScheme = "dark";
     iconTheme = {
       package = pkgs.adwaita-icon-theme;
@@ -181,6 +182,7 @@
       name = "catppuccin-mocha-dark-cursors";
       size = 18;
     };
+    gtk4.theme = null;
   };
 
   qt = {

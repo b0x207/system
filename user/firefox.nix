@@ -9,7 +9,7 @@
       name = "Default";
       settings = {
         "identity.fxaccounts.enabled" = true;
-        "identity.fxaccounts.account.device.name" = "laptop";
+        "identity.fxaccounts.account.device.name" = "desktop";
         "extensions.autoDisableScopes" = 0;
         "extensions.update.autoUpdateDefault" = false;
         "extensions.update.enabled" = false;

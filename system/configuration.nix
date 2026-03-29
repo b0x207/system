@@ -15,7 +15,7 @@ in {
     ./virtualbox.nix
   ];
 
-  networking.hostName = "laptop";
+  networking.hostName = "desktop";
 
   nix.settings = {
     # substituters = [];
@@ -64,7 +64,7 @@ in {
       enable = true;
       unmanaged = ["qemu-tap"];
     };
-    nameservers = [ "1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" ];
+    nameservers = [ "1.1.1.1" "8.8.8.8" ];
     firewall = {
       enable = true;
       interfaces.ygg0.allowedTCPPorts = [ 80 443 ];
@@ -107,11 +107,6 @@ in {
     };
   };
 
-  systemd.sleep.settings.Sleep = {
-    # Hibernation can cause weird problems with no physical swap device
-    AllowHibernation = "no";
-  };
-
   time.timeZone = "America/Los_Angeles";
 
   services.timesyncd = {
@@ -126,6 +121,9 @@ in {
       extraGroups = [ "wheel" "docker" "libvirtd" "wireshark" ];
       shell = pkgs.zsh;
     };
+  };
+  users.groups.ben = {
+    gid = 1000;
   };
 
   home-manager = {
@@ -143,6 +141,12 @@ in {
 
   i18n.defaultLocale = "en_US.UTF-8";
 
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+    GBM_BACKEND = "nvidia-drm";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    LIBVA_DRIVER_NAME = "nvidia";
+  };
   environment.systemPackages = with pkgs; [
     inputs.neovim-nightly.packages.${system}.default
     ripgrep
@@ -299,7 +303,7 @@ in {
   services.tumbler.enable = true;
 
   # For building the homelab config
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  # boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
   systemd.oomd = {
     enable = false;
@@ -422,31 +426,36 @@ in {
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
-      intel-media-driver
-      intel-vaapi-driver
-      vpl-gpu-rt
-      intel-compute-runtime
-      ocl-icd
-      level-zero
-      intel-npu-driver
-      intel-graphics-compiler
-      pkgs-intel-compiler.intel-llvm
+      # intel-media-driver
+      # intel-vaapi-driver
+      # vpl-gpu-rt
+      # intel-compute-runtime
+      # ocl-icd
+      # level-zero
+      # intel-npu-driver
+      # intel-graphics-compiler
+      # pkgs-intel-compiler.intel-llvm
     ];
   };
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.nvidia.open = true;
+  hardware.nvidia.modesetting.enable = true;
+  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.latest;
 
   # Enable periodic trim to help improve SSD lifespan and performance
   services.fstrim.enable = true;
 
   boot.loader = {
     efi = {
-      canTouchEfiVariables = true;
+      #canTouchEfiVariables = true;
     };
     grub = {
       enable = true;
       efiSupport = true;
       device = "nodev";
-      useOSProber = true;
-      configurationLimit = 5;
+      #device = "/dev/disk/by-id/nvme-SAMSUNG_MZVL21T0HCLR-00B00_S676NF0R330811_1-part1";
+      # useOSProber = true;
+      efiInstallAsRemovable = true;
     };
   };
 
