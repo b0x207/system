@@ -39,20 +39,41 @@
       url = "github:rumboon/dolphin-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    todo-tree.url = "github:alexandretrotel/todo-tree";
 	};
 
   # nixConfig.substituters = [];
 
-	outputs = { self, nixpkgs, home-manager, catppuccin, nix-gc-env, agenix, ... }@inputs: {
+	outputs = { self, nixpkgs, ... }@inputs: let
+    system = "x86_64-linux";
+    # TODO: find a way to make this be a full replacement of `nixpkgs.lib.nixosSystem`
+    patched-nixpkgs = (import nixpkgs { inherit system; }).applyPatches {
+      name = "patched-nixpkgs";
+      src = nixpkgs;
+      patches = [
+        ./nixpkgs-patches/qt-6.patch
+        ./nixpkgs-patches/kservice.patch
+      ];
+    };
+  in {
+    packages.x86_64-linux = {
+      default = self.nixosConfigurations.builder-vm.config.microvm.declaredRunner;
+    };
+
 		nixosConfigurations.system = nixpkgs.lib.nixosSystem {
 			modules = [
 				./system/configuration.nix
-        home-manager.nixosModules.home-manager
-        catppuccin.nixosModules.catppuccin
-        # nix-gc-env.nixosModules.default
-        agenix.nixosModules.default
+        inputs.home-manager.nixosModules.home-manager
+        inputs.catppuccin.nixosModules.catppuccin
+        # inputs.nix-gc-env.nixosModules.default
+        inputs.agenix.nixosModules.default
 			];
-			specialArgs = { flake = self; inherit inputs; };
+			specialArgs = {
+        inherit system;
+        flake = self;
+        inputs = inputs // { inherit patched-nixpkgs; };
+      };
 		};
 	};
 }

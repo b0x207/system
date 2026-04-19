@@ -1,0 +1,12 @@
+diff --git a/config.tests/x86_simd/main.cpp b/config.tests/x86_simd/main.cpp
+index 8634e29c..9980b059 100644
+--- a/config.tests/x86_simd/main.cpp
++++ b/config.tests/x86_simd/main.cpp
+@@ -18,6 +18,7 @@ attribute_target("avx512vl,avx512vbmi2") void test_avx512vbmi2()
+     /* AVX512 Vector Byte Manipulation Instructions 2 */
+     __m128i a = _mm_maskz_compress_epi16(-1, _mm_set1_epi16(1));
+     __m128i b = _mm_shrdi_epi32(a, a, 7);
++#error "PLEASE DON'T ENABLE AVX512"
+ }
+ #endif
+ 

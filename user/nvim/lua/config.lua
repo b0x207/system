@@ -18,7 +18,8 @@ opt.incsearch = true
 opt.termguicolors = true
 
 opt.scrolloff = 8
-opt.updatetime = 50 opt.colorcolumn = "100"
+opt.updatetime = 50
+opt.colorcolumn = "100"
 -- Make undo persistent
 opt.undofile = true
 

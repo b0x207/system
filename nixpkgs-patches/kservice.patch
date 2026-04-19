@@ -1,0 +1,16 @@
+diff --git a/pkgs/kde/frameworks/kservice/default.nix b/pkgs/kde/frameworks/kservice/default.nix
+index ed773cee5147..258669374e23 100644
+--- a/pkgs/kde/frameworks/kservice/default.nix
++++ b/pkgs/kde/frameworks/kservice/default.nix
+@@ -2,6 +2,11 @@
+ mkKdeDerivation {
+   pname = "kservice";
+ 
++  extraCmakeFlags = [
++    # WTF, adding verbosity seems to make sycoa not disappear
++    "--trace"
++  ];
++
+   # FIXME(later): the whole sycoca situation is very bad
+   patches = [
+     # explode less when sycoca is deleted

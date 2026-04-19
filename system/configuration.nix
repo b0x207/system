@@ -1,8 +1,17 @@
-{ config, lib, pkgs, inputs, flake, ... }:
+{ config, lib, pkgs, inputs, flake, system, ... }:
 let
-  system = pkgs.stdenv.hostPlatform.system;
   pkgs-intel-compiler = import inputs.nixpkgs-intel-compiler { inherit system; };
-  pkgs-modrinth = import inputs.nixpkgs-modrinth { inherit system; config.allowUnfree = true; };
+
+  common-nixpkgs-config.hostPlatform = {
+    gcc.arch = "arrowlake";
+    gcc.tune = "arrowlake";
+    inherit system;
+  };
+
+  patched-pkgs = import inputs.patched-nixpkgs {
+    inherit system;
+    inherit (common-nixpkgs-config) hostPlatform;
+  };
 in {
   imports = [
     ./hardware-configuration.nix
@@ -25,7 +34,22 @@ in {
     trusted-users = [ "ben" ];
     experimental-features = [ "nix-command" "flakes" ];
     ssl-cert-file = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+
+    # Attempt to enable more optimizations
+    system-features = [
+      # Present by default
+      "nixos-test"
+      "benchmark"
+      "big-parallel"
+      "kvm"
+
+      # Custom
+      #"gccarch-x86-64-v3"
+      "gccarch-arrowlake"
+    ];
   };
+
+  nixpkgs.hostPlatform = common-nixpkgs-config.hostPlatform;
 
   # To prevent long-running nix updates from impacting system responsiveness
   nix.daemonCPUSchedPolicy = "idle";
@@ -39,6 +63,10 @@ in {
   nixpkgs.overlays = [
     inputs.nur.overlays.default
     inputs.dolphin-overlay.overlays.default
+    (import ./overlays/compile-fixes.nix {
+      inherit (inputs) nixpkgs;
+      inherit patched-pkgs;
+    })
   ];
 
   # Quick patch for compatibility while migrating
@@ -50,12 +78,13 @@ in {
       ocl-icd
       level-zero
       intel-compute-runtime
-      stdenv.cc.cc
 
       # For Minecraft
       libxrender
       libxtst
       libxi
+      vulkan-loader
+      libglvnd
     ];
   };
 
@@ -144,6 +173,7 @@ in {
   i18n.defaultLocale = "en_US.UTF-8";
 
   environment.systemPackages = with pkgs; [
+    kdiskmark
     inputs.neovim-nightly.packages.${system}.default
     ripgrep
     tmux
@@ -166,7 +196,7 @@ in {
     nodejs
     beyond-all-reason
     warzone2100
-    thunderbird
+    thunderbird-bin
     nodejs
     xmake
     pika-backup
@@ -189,6 +219,8 @@ in {
     jdk21 # for minecraft
     glib
     supertux
+    inputs.todo-tree.packages.${pkgs.stdenv.hostPlatform.system}.todo-tree
+    tree-sitter
 
     # Dumb GPG bullshit
     gnupg
@@ -203,18 +235,22 @@ in {
     plantuml
     jq
     jdk
+    (mars-mips.overrideAttrs {
+      jre = javaPackages.compiler.openjdk11;
+    })
 
     # Desktop environment
     pika-backup
     btop
     ghostty
     quickshell
-    swww
+    awww
     swaynotificationcenter
     rofi-calc
     rofi
     hyprshot
     vimiv-qt
+    mpv
     inputs.hyprshutdown.packages.${system}.default
     dex
     thunar
@@ -227,6 +263,7 @@ in {
     kdePackages.ark
     libreoffice
     wl-clipboard
+    brightnessctl
 
     # According to the wiki:
     # > By default, dolphin by itself is not packaged with support for SVG icons.
@@ -276,7 +313,11 @@ in {
     flake = "/home/ben/config"; # TODO: make better
   };
 
-  programs.firefox.enable = true;
+  programs.firefox = {
+    enable = true;
+    package = pkgs.firefox-bin;
+    languagePacks = [ "en-US" ];
+  };
   programs.zsh.enable = true;
   environment.pathsToLink = [ "/share/zsh" ];
 

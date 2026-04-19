@@ -55,7 +55,15 @@ vim.api.nvim_create_autocmd({ "WinEnter", "BufWinEnter", "TermOpen" }, {
 -- Set indentation to 2 spaces for certain file types
 augroup("setIndent", { clear = true })
 autocmd("Filetype", {
-  group = "setIndent",
-  pattern = { "nix" },
-  command = "setlocal shiftwidth=2 tabstop=2"
+    group = "setIndent",
+    pattern = { "nix" },
+    command = "setlocal shiftwidth=2 tabstop=2"
+})
+
+-- For different maximum line lengths
+augroup("setColorColumn", { clear = true })
+autocmd("FileType", {
+    group = "setColorColumn",
+    pattern = { "cpp", "c" },
+    command = "setlocal colorcolumn=80"
 })

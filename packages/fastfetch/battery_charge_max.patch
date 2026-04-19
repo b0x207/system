@@ -36,13 +36,13 @@ index 0da4f12d..ec722f82 100644
 --- a/src/modules/battery/battery.c
 +++ b/src/modules/battery/battery.c
 @@ -110,6 +110,7 @@ static void printBattery(FFBatteryOptions* options, FFBatteryResult* result, uin
-             FF_FORMAT_ARG(result->modelName, "model-name"),
-             FF_FORMAT_ARG(result->technology, "technology"),
-             FF_FORMAT_ARG(capacityNum, "capacity"),
-+            FF_FORMAT_ARG(result->chargeFull, "charge_full"),
-             FF_FORMAT_ARG(result->status, "status"),
-             FF_FORMAT_ARG(tempStr, "temperature"),
-             FF_FORMAT_ARG(result->cycleCount, "cycle-count"),
+             FF_ARG(result->modelName, "model-name"),
+             FF_ARG(result->technology, "technology"),
+             FF_ARG(capacityNum, "capacity"),
++            FF_ARG(result->chargeFull, "charge_full"),
+             FF_ARG(result->status, "status"),
+             FF_ARG(tempStr, "temperature"),
+             FF_ARG(result->cycleCount, "cycle-count"),
 @@ -216,6 +217,7 @@ bool ffGenerateBatteryJsonResult(FFBatteryOptions* options, yyjson_mut_doc* doc,
      {
          yyjson_mut_val* obj = yyjson_mut_arr_add_obj(doc, arr);

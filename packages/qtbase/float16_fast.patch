@@ -1,0 +1,71 @@
+diff --git a/mkspecs/common/gcc-base.conf b/mkspecs/common/gcc-base.conf
+index fa65c1dd..3a634bd9 100644
+--- a/mkspecs/common/gcc-base.conf
++++ b/mkspecs/common/gcc-base.conf
+@@ -121,7 +121,7 @@ QMAKE_CFLAGS_MIPS_DSP  += -mdsp
+ QMAKE_CFLAGS_MIPS_DSPR2 += -mdspr2
+ 
+ # -march=haswell is supported as of GCC 4.9 and Clang 3.6
+-QMAKE_CFLAGS_ARCH_HASWELL           = -march=core-avx2
++QMAKE_CFLAGS_ARCH_HASWELL           = -march=avx2
+ 
+ # Wrapper tools that understand .o/.a files with GIMPLE instead of machine code
+ QMAKE_AR_LTCG           = gcc-ar cqs
+diff --git a/src/corelib/global/qfloat16.cpp b/src/corelib/global/qfloat16.cpp
+index c9733174..922d5fbe 100644
+--- a/src/corelib/global/qfloat16.cpp
++++ b/src/corelib/global/qfloat16.cpp
+@@ -198,7 +198,7 @@ int qfloat16::fpClassify() const noexcept
+     exactness is stronger the smaller the numbers are.
+  */
+ 
+-#if QT_COMPILER_SUPPORTS(F16C)
++#if 1
+ static inline bool hasFastF16()
+ {
+     // All processors with F16C also support AVX, but YMM registers
+@@ -220,12 +220,12 @@ f16cextern void qFloatFromFloat16_fast(float *out, const quint16 *in, qsizetype
+ }
+ 
+ #elif defined(__ARM_FP16_FORMAT_IEEE) && defined(__ARM_NEON__) && (__ARM_FP & 2)
+-static inline bool hasFastF16()
++static inline bool hasFastF16_arm_wrong()
+ {
+     return true;
+ }
+ 
+-static void qFloatToFloat16_fast(quint16 *out, const float *in, qsizetype len) noexcept
++static void qFloatToFloat16_fast_arm_wrong(quint16 *out, const float *in, qsizetype len) noexcept
+ {
+     __fp16 *out_f16 = reinterpret_cast<__fp16 *>(out);
+     qsizetype i = 0;
+@@ -235,7 +235,7 @@ static void qFloatToFloat16_fast(quint16 *out, const float *in, qsizetype len) n
+         out_f16[i] = __fp16(in[i]);
+ }
+ 
+-static void qFloatFromFloat16_fast(float *out, const quint16 *in, qsizetype len) noexcept
++static void qFloatFromFloat16_fast_arm_wrong(float *out, const quint16 *in, qsizetype len) noexcept
+ {
+     const __fp16 *in_f16 = reinterpret_cast<const __fp16 *>(in);
+     qsizetype i = 0;
+@@ -245,17 +245,17 @@ static void qFloatFromFloat16_fast(float *out, const quint16 *in, qsizetype len)
+         out[i] = float(in_f16[i]);
+ }
+ #else
+-static inline bool hasFastF16()
++static inline bool hasFastF16_wrong()
+ {
+     return false;
+ }
+ 
+-static void qFloatToFloat16_fast(quint16 *, const float *, qsizetype) noexcept
++static void qFloatToFloat16_fast_wrong(quint16 *, const float *, qsizetype) noexcept
+ {
+     Q_UNREACHABLE();
+ }
+ 
+-static void qFloatFromFloat16_fast(float *, const quint16 *, qsizetype) noexcept
++static void qFloatFromFloat16_fast_wrong(float *, const quint16 *, qsizetype) noexcept
+ {
+     Q_UNREACHABLE();
+ }

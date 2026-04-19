@@ -1,0 +1,14 @@
+{
+  "tags": [
+    "TODO",
+    "TRACK"
+  ],
+  "include": [],
+  "exclude": [],
+  "json": false,
+  "flat": false,
+  "no_color": false,
+  "custom_pattern": null,
+  "ignore_case": false,
+  "require_colon": true
+}

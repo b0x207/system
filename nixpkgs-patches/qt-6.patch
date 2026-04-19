@@ -1,0 +1,31 @@
+diff --git a/pkgs/development/libraries/qt-6/modules/qtbase/avx512.patch b/pkgs/development/libraries/qt-6/modules/qtbase/avx512.patch
+new file mode 100644
+index 000000000000..a52181b8be73
+--- /dev/null
++++ b/pkgs/development/libraries/qt-6/modules/qtbase/avx512.patch
+@@ -0,0 +1,11 @@
++diff --git a/config.tests/x86_simd/main.cpp b/config.tests/x86_simd/main.cpp
++index 8634e29c..9980b059 100644
++--- a/config.tests/x86_simd/main.cpp
+++++ b/config.tests/x86_simd/main.cpp
++@@ -18,6 +18,7 @@ attribute_target("avx512vl,avx512vbmi2") void test_avx512vbmi2()
++     /* AVX512 Vector Byte Manipulation Instructions 2 */
++     __m128i a = _mm_maskz_compress_epi16(-1, _mm_set1_epi16(1));
++     __m128i b = _mm_shrdi_epi32(a, a, 7);
+++#error "PLEASE DON'T ENABLE AVX512"
++ }
++ #endif
+diff --git a/pkgs/development/libraries/qt-6/modules/qtbase/default.nix b/pkgs/development/libraries/qt-6/modules/qtbase/default.nix
+index d195d42a6d56..13e65b9a0abf 100644
+--- a/pkgs/development/libraries/qt-6/modules/qtbase/default.nix
++++ b/pkgs/development/libraries/qt-6/modules/qtbase/default.nix
+@@ -244,6 +244,9 @@ stdenv.mkDerivation {
+     ./qmlimportscanner-import-path.patch
+     # don't pass qtbase's QML directory to qmlimportscanner if it's empty
+     ./skip-missing-qml-directory.patch
++
++    # Don't enable support for AVX512
++    ./avx512.patch
+   ];
+ 
+   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

@@ -1,0 +1,183 @@
+{ nixpkgs, patched-pkgs }:
+final: prev:
+let
+  plain-pkgs = import nixpkgs { system = "x86_64-linux"; };
+in {
+  # Some packages are just not worth the effort
+  deno = plain-pkgs.deno; # Takes forever to compile+hogs ram. I tend to avoid JS
+                    # applications anyways.
+  uv = plain-pkgs.uv;
+  librewolf = plain-pkgs.librewolf;
+
+  # Apr 18 2026:
+  # Build currently fails with 'File sizes do not match' stemming from a check in
+  # `combile_two_binaries.py` on line 96. For now, it's not worth accidentally introducing bugs,
+  # so fall back on the plain version of xen.
+  # This mailing list thread might be useful:
+  # https://lists.xenproject.org/archives/html/xen-devel/2025-01/msg00441.html
+  #
+  # TODO: take a closer look into this an see what's actually wrong.
+  xen = plain-pkgs.xen;
+
+  # Apr 18 2026:
+  # Build currently fails due to a bug in GCC's vector optimizations.
+  #
+  # TRACK: https://github.com/NixOS/nixpkgs/issues/440270
+  assimp = plain-pkgs.assimp;
+
+  # Apr 18 2026:
+  # Test scipy/signal/tests/test_spectral.py::TestSTFT::test_roundtrip_scaling
+  # fails. Since it builds correctly on normal nixpkgs, we'll assume that
+  # the test failure is due to a bug in GCC.
+  #
+  # The package also likes to ignore parallelism requirements. We can put it
+  # back into shape with a fairly simple fix, though.
+  #
+  # TRACK: https://github.com/NixOS/nixpkgs/issues/216033
+  pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+    (python-final: python-prev: {
+      scipy = python-prev.scipy.overridePythonAttrs (prevAttrs: {
+        preBuild = (prevAttrs.preBuild or "") + ''
+          appendToVar pypaBuildFlags "-Ccompile-args=-j$NIX_BUILD_CORES"
+        '';
+
+        disabledTests = (prevAttrs.disabledTests or []) ++ [
+          "test_roundtrip_scaling"
+        ];
+      });
+    })
+  ];
+
+  # Apr 18 2026:
+  # Resolves a GCC AVX2 casting error.
+  #
+  # TRACK: Can be removed when mesa 26.1.0 is available in nixpkgs
+  mesa = prev.mesa.overrideAttrs (oldAttrs: {
+    patches = (oldAttrs.patches or []) ++ [
+      (prev.fetchpatch {
+        url = "https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/39951.patch";
+        hash = "sha256-p5Dl9o6j7QZNTY/7vUteIhcKNyKtUlKpVZ3Xq0w9Xhs=";
+      })
+    ];
+  });
+
+  # Apr 17 2026:
+  # What a waste of literal days of my life. I've tried everything under the sun, but I can't seem
+  # to get the overlay for qtbase to work right with `-march`. So, I give up. Perhaps I will return
+  # at a later date (when some other problem inevitable crops up from this choice).
+  #
+  # For QT5, the qtbase package has problems with conditional compilation selecting multiple
+  # implementations.
+  #
+  # On QT6, the configure phase produces results such as:
+  # ```
+  # -- Performing Test AVX512VBMI2 intrinsics
+  # -- Performing Test AVX512VBMI2 intrinsics - Success
+  # ```
+  # Which is simply wrong. Unfortunately, this results in the generated binaries using AVX512 which
+  # then fail with illegal instruction errors for obvious reasons.
+  #
+  # Apr 18 2026:
+  # This is a better solution for QT6, however, it is dependent upon overrideScope preserving the
+  # override attribute.
+  # ```nix
+  # qt6 = prev.qt6.overrideScope (scope-final: scope-prev: {
+  #   qtbase = scope-prev.qtbase.overrideAttrs (prevAttrs: {
+  #     env.NIX_CFLAGS_COMPILE = plain-pkgs.lib.debug.traceVal (
+  #       prevAttrs.env.NIX_CFLAGS_COMPILE
+  #     );
+  #     patches = (prevAttrs.patches or []) ++ [
+  #       ../../packages/qtbase/avx512.patch
+  #     ];
+  #
+  #     cmakeFlags = plain-pkgs.lib.debug.traceVal (prevAttrs.cmakeFlags or []) ++ [
+  #       "-DQT_FEATURE_avx512f=OFF"
+  #     ];
+  #
+  #     postPatch= ''
+  #     echo -e "\n\n\n\nfoo\n\n\n\n"
+  #
+  #     '' + (prevAttrs.postPatch or "");
+  #   });
+  # });
+  # ```
+  #
+  # TRACK: https://github.com/NixOS/nixpkgs/issues/447012
+  qt5 = prev.qt5.overrideScope (qt-final: qt-prev: {
+    qtbase = plain-pkgs.qt5.qtbase;
+  });
+  qt6 = patched-pkgs.qt6;
+
+  # Apr 18 2026:
+  # There were some problems building kservice and patching at the nixpkgs level was much easier.
+  # See the comments on QT6 for why.
+  kdePackages = patched-pkgs.kdePackages;
+
+  # Apr 18 2026:
+  # Currently, the test `TestRedLock.test_locking_dogpile[redis_cache]` fails. The easy way out is
+  # to just disable the test.
+  aiocache = prev.aiocache.overrideAttrs (oldAttrs: {
+    disabledTestPaths = (oldAttrs.disabledTestPaths or []) ++ [
+      "tests/acceptance/test_lock.py"
+    ];
+  });
+
+  # Apr 18 2026:
+  # When building, LLVM, the check phase will attempt to find .git and halt (but not fail) if it
+  # cannot do so. This just disables that behavior
+  triton-llvm = prev.triton-llvm.overrideAttrs (oldAttrs: {
+    cmakeFlags = (oldAttrs.cmakeFlags or []) ++ [
+      "-DLLVM_APPEND_VC_REV=OFF"
+    ];
+  });
+
+  # Apr 19 2026:
+  # Building with SSE support enabled causes errors due to invalid casting of SSE intrinsic types.
+  #
+  # TRACK: https://github.com/dyne/frei0r/issues/228
+  #        https://github.com/dyne/frei0r/issues/239
+  #        Note that the first one is closed by the maintainer, yet the problem persists.
+  frei0r = prev.frei0r.overrideAttrs (oldAttrs: {
+    patches = (oldAttrs.patches or []) ++ [
+      ../../packages/frei0r/sse-cast.patch
+    ];
+  });
+
+  # Patches adding in additional source mirrors
+  autogen = prev.autogen.overrideAttrs {
+    patches = prev.lib.lists.imap0 (i: v:
+      if i == 7 then
+        (plain-pkgs.fetchpatch {
+          name = "guile-3.patch";
+          urls = [
+            "https://raw.githubusercontent.com/gentoo/gentoo/refs/heads/master/sys-devel/autogen/files/autogen-5.18.16-guile-3.patch"
+            "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-devel/autogen/files/autogen-5.18.16-guile-3.patch?id=43bcc61c56a5a7de0eaf806efec7d8c0e4c01ae7"
+          ];
+          sha256 = "18d7y1f6164dm1wlh7rzbacfygiwrmbc35a7qqsbdawpkhydm5lr";
+        })
+      else
+        v)
+      prev.autogen.patches;
+  };
+  libssh = prev.libssh.overrideAttrs {
+    src = null;
+    srcs = [
+      prev.libssh.src
+      (plain-pkgs.fetchurl {
+        url = "https://files.b0x207.dev/public/mirror/libssh/libssh-${prev.libssh.version}.tar.xz";
+        hash = "sha256-fYoTYbsJTsP1EZZOeKWk26aJtZhuESr6vk9NDWxhJcM=";
+      })
+    ];
+  };
+  pyside6 = prev.pyside6.overrideAttrs {
+    patches = [
+      (plain-pkgs.fetchurl {
+        urls = [
+          "https://code.qt.io/cgit/pyside/pyside-setup.git/patch/?id=05e328476f2d6ef8a0f3f44aca1e5b1cdb7499fc"
+          "https://github.com/qtproject/pyside-pyside-setup/commit/05e328476f2d6ef8a0f3f44aca1e5b1cdb7499fc.patch"
+        ];
+        hash = "sha256-PPLV5K+xp7ZdG0Tah1wpBdNWN7fsXvZh14eBzO0R55c=";
+      })
+    ];
+  };
+}
