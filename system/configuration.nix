@@ -1,18 +1,4 @@
-{ config, lib, pkgs, inputs, flake, system, ... }:
-let
-  pkgs-intel-compiler = import inputs.nixpkgs-intel-compiler { inherit system; };
-
-  common-nixpkgs-config.hostPlatform = {
-    gcc.arch = "arrowlake";
-    gcc.tune = "arrowlake";
-    inherit system;
-  };
-
-  patched-pkgs = import inputs.patched-nixpkgs {
-    inherit system;
-    inherit (common-nixpkgs-config) hostPlatform;
-  };
-in {
+{ config, lib, pkgs, inputs, flake, system, ... }: {
   imports = [
     ./hardware-configuration.nix
     ./secrets.nix
@@ -28,8 +14,8 @@ in {
 
   nix.settings = {
     # substituters = [];
-    max-jobs = 1;
-    cores = 12;
+    max-jobs = 2;
+    cores = 4;
     auto-optimise-store = true;
     trusted-users = [ "ben" ];
     experimental-features = [ "nix-command" "flakes" ];
@@ -44,12 +30,15 @@ in {
       "kvm"
 
       # Custom
-      #"gccarch-x86-64-v3"
       "gccarch-arrowlake"
     ];
   };
 
-  nixpkgs.hostPlatform = common-nixpkgs-config.hostPlatform;
+  nixpkgs.hostPlatform = {
+    # gcc.arch = "arrowlake";
+    # gcc.tune = "arrowlake";
+    inherit system;
+  };
 
   # To prevent long-running nix updates from impacting system responsiveness
   nix.daemonCPUSchedPolicy = "idle";
@@ -63,10 +52,8 @@ in {
   nixpkgs.overlays = [
     inputs.nur.overlays.default
     inputs.dolphin-overlay.overlays.default
-    (import ./overlays/compile-fixes.nix {
-      inherit (inputs) nixpkgs;
-      inherit patched-pkgs;
-    })
+    (import ./overlays/compile-fixes.nix { inherit (inputs) nixpkgs; })
+    (import ./overlays/valkey.nix {})
   ];
 
   # Quick patch for compatibility while migrating
@@ -174,7 +161,7 @@ in {
 
   environment.systemPackages = with pkgs; [
     kdiskmark
-    inputs.neovim-nightly.packages.${system}.default
+    neovim
     ripgrep
     tmux
     rustup
@@ -203,7 +190,7 @@ in {
     libdrm.dev
     libdrm
     cloudflared
-    pkgs-intel-compiler.intel-llvm
+    intel-llvm
     usbutils
     (hunspell.withDicts (dicts: with dicts; [ en-us ]))
     (aspellWithDicts (dicts: with dicts; [ en en-computers en-science ]))
@@ -212,6 +199,9 @@ in {
     nix-output-monitor
     nh
     dust
+    qalculate-qt
+    libqalculate
+    fend
     libnotify
     jellyfin-desktop
     ncurses
@@ -221,6 +211,7 @@ in {
     supertux
     inputs.todo-tree.packages.${pkgs.stdenv.hostPlatform.system}.todo-tree
     tree-sitter
+    krita
 
     # Dumb GPG bullshit
     gnupg
@@ -403,19 +394,17 @@ in {
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
 
-  /*services.i2pd = {
-    enable = false;
+  services.i2pd = {
+    enable = true;
     bandwidth = 1024;
     enableIPv6 = true;
-    #ifname = "enp0s31f6";
 
     proto = {
       socksProxy.enable = true;
       httpProxy.enable = true;
       http.enable = true;
     };
-  };*/
-  services.i2p.enable = true;
+  };
 
   # Keyboard remapping
   services.keyd = {
@@ -471,7 +460,7 @@ in {
       level-zero
       intel-npu-driver
       intel-graphics-compiler
-      pkgs-intel-compiler.intel-llvm
+      intel-llvm
     ];
   };
 

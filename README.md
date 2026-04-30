@@ -17,7 +17,14 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
       - `jetbrains-jdk-jcef-21.0.9-b`
       - `python3.13-django-5.2.12`
       - `rapidocr-onnxruntime`
+      - `nix-store-tests`
+      - `triton-llvm`
   - Packages having problems due to `.git` being missing (see: a lot of the LLVM packages)
+  - Some packages don't build in parallel
+    - `lager`
 - Status bar:
   - Low battery color indication
   - nohang activity indicator module
+- Make nohang never kill hyprland
+- Mount basically everything with `nosuid`.
+  See [this](https://discourse.nixos.org/t/get-size-of-nix-store-efficiently/51354/8).

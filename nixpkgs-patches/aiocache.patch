@@ -1,0 +1,13 @@
+diff --git a/pkgs/development/python-modules/aiocache/default.nix b/pkgs/development/python-modules/aiocache/default.nix
+index c4af88bf2cbf..03beb7158d3f 100644
+--- a/pkgs/development/python-modules/aiocache/default.nix
++++ b/pkgs/development/python-modules/aiocache/default.nix
+@@ -77,6 +77,8 @@ buildPythonPackage rec {
+ 
+     # TypeError: object MagicMock can't be used in 'await' expression
+     "tests/ut/backends/test_redis.py::TestRedisBackend::test_close"
++
++    "tests/acceptance/test_lock.py"
+   ];
+ 
+   __darwinAllowLocalNetworking = true;

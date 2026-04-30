@@ -1,4 +1,4 @@
-{ nixpkgs, patched-pkgs }:
+{ nixpkgs }:
 final: prev:
 let
   plain-pkgs = import nixpkgs { system = "x86_64-linux"; };
@@ -7,7 +7,6 @@ in {
   deno = plain-pkgs.deno; # Takes forever to compile+hogs ram. I tend to avoid JS
                     # applications anyways.
   uv = plain-pkgs.uv;
-  librewolf = plain-pkgs.librewolf;
 
   # Apr 18 2026:
   # Build currently fails with 'File sizes do not match' stemming from a check in
@@ -106,25 +105,32 @@ in {
   qt5 = prev.qt5.overrideScope (qt-final: qt-prev: {
     qtbase = plain-pkgs.qt5.qtbase;
   });
-  qt6 = patched-pkgs.qt6;
-
-  # Apr 18 2026:
-  # There were some problems building kservice and patching at the nixpkgs level was much easier.
-  # See the comments on QT6 for why.
-  kdePackages = patched-pkgs.kdePackages;
 
   # Apr 18 2026:
   # Currently, the test `TestRedLock.test_locking_dogpile[redis_cache]` fails. The easy way out is
   # to just disable the test.
-  aiocache = prev.aiocache.overrideAttrs (oldAttrs: {
-    disabledTestPaths = (oldAttrs.disabledTestPaths or []) ++ [
-      "tests/acceptance/test_lock.py"
-    ];
-  });
+  #
+  # Apr 27 2026:
+  # The tests on this package are simply causing too many problems. For now, disable checks
+  # entirely and maybe revisit this decision sometime in the future.
+  #
+  # Apr 29 2026:
+  # Moved to nixpkgs patch
+
+  # aiocache = prev.aiocache.overrideAttrs (oldAttrs: {
+  #   doCheck = false;
+  #   pytestCheckPhase = ''
+  #   '';
+  #   disabledTestPaths = (oldAttrs.disabledTestPaths or []) ++ [
+  #     "tests/acceptance/test_lock.py"
+  #   ];
+  # });
 
   # Apr 18 2026:
   # When building, LLVM, the check phase will attempt to find .git and halt (but not fail) if it
   # cannot do so. This just disables that behavior
+  #
+  # TRACK: https://github.com/NixOS/nixpkgs/issues/447012
   triton-llvm = prev.triton-llvm.overrideAttrs (oldAttrs: {
     cmakeFlags = (oldAttrs.cmakeFlags or []) ++ [
       "-DLLVM_APPEND_VC_REV=OFF"
@@ -140,6 +146,21 @@ in {
   frei0r = prev.frei0r.overrideAttrs (oldAttrs: {
     patches = (oldAttrs.patches or []) ++ [
       ../../packages/frei0r/sse-cast.patch
+    ];
+  });
+
+  # Apr 27 2026:
+  # The hashes on the patches for unity-test are incorrect
+  unity-test = prev.unity-test.overrideAttrs (oldAttrs: {
+    patches = [
+      (prev.fetchpatch2 {
+        url = "https://patch-diff.githubusercontent.com/raw/ThrowTheSwitch/Unity/pull/771.patch";
+        hash = "sha256-viNwaqZ+hjIY4qnlLN55/TMzqmoNAgc1Eq5Yv17tr7c=";
+      })
+      (prev.fetchpatch2 {
+        url = "https://patch-diff.githubusercontent.com/raw/ThrowTheSwitch/Unity/pull/790.patch";
+        hash = "sha256-GRz7/0cAUWHPMMaclzyvObBpGaA6HcXY2OCKDFitrE4=";
+      })
     ];
   });
 
@@ -160,14 +181,13 @@ in {
       prev.autogen.patches;
   };
   libssh = prev.libssh.overrideAttrs {
-    src = null;
-    srcs = [
-      prev.libssh.src
-      (plain-pkgs.fetchurl {
-        url = "https://files.b0x207.dev/public/mirror/libssh/libssh-${prev.libssh.version}.tar.xz";
-        hash = "sha256-fYoTYbsJTsP1EZZOeKWk26aJtZhuESr6vk9NDWxhJcM=";
-      })
-    ];
+    src = prev.fetchurl {
+      inherit (prev.libssh.src) hash;
+      urls = [
+        prev.libssh.src.url
+        "https://files.b0x207.dev/public/mirror/libssh/libssh-${prev.libssh.version}.tar.xz"
+      ];
+    };
   };
   pyside6 = prev.pyside6.overrideAttrs {
     patches = [

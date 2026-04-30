@@ -10,7 +10,7 @@
   boot.initrd.systemd.enable = true;
   boot.kernelModules = [ "kvm-intel" "usbmon" ];
   boot.extraModulePackages = [ ];
-  # boot.kernelPackages = pkgs.linuxPackages_latest;  # Have to wait for virtualbox to be fixed
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   hardware.enableRedistributableFirmware = true;
   boot.kernel.sysctl."vm.swappiness" = 5;
   boot.kernelParams = [
@@ -54,18 +54,11 @@
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
-  zramSwap = {
-    enable = true;
-    priority = 5;
-    memoryMax = 2 * 1024 * 1024 * 1024; # 2GiB
-    algorithm = "lz4";
-  };
-
-  # swapDevices = [{
-  #   device = "/dev/disk/by-partuuid/17ad8cfd-74dc-46e1-90ad-13d2dfc733c8";
-  #   randomEncryption.enable = true;
-  #   priority = 0;
-  # }];
+  swapDevices = [{
+    device = "/dev/disk/by-partuuid/17ad8cfd-74dc-46e1-90ad-13d2dfc733c8";
+    randomEncryption.enable = true;
+    priority = 0;
+  }];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

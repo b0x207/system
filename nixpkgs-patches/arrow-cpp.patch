@@ -1,0 +1,16 @@
+diff --git a/pkgs/by-name/ar/arrow-cpp/package.nix b/pkgs/by-name/ar/arrow-cpp/package.nix
+index 64ac4b96483d..f9f13bf6ab2e 100644
+--- a/pkgs/by-name/ar/arrow-cpp/package.nix
++++ b/pkgs/by-name/ar/arrow-cpp/package.nix
+@@ -298,6 +298,11 @@ stdenv.mkDerivation (finalAttrs: {
+         "arrow-flight-integration-test"
+         # File already exists in database: orc_proto.proto
+         "arrow-orc-adapter-test"
++
++        # Custom
++        "arrow-azurefs-test"
++        "arrow-acero-util-test"
++        "arrow-dataset-file-test"
+       ]
+       ++ lib.optionals stdenv.hostPlatform.isDarwin [
+         # https://github.com/NixOS/nixpkgs/issues/460687

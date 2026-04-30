@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ config, pkgs, ... }:
 {
   programs.firefox = {
     enable = true;
@@ -6,6 +6,7 @@
     policies = {
       DisableAppUpdate = true;
     };
+    configPath = "${config.xdg.configHome}/mozilla/firefox";
     profiles.default = {
       name = "Default";
       settings = {
@@ -56,7 +57,7 @@
           settings = {
             autoExpandTabs = true;
             autoExpandTabsOnNew = true;
-            colorizeTabs = true;
+            colorizeTabs = false;
             colorizeTabsBranchesSrc = "domain";
             colorizeTabsSrc = "container";
             ctxMenuNative = true;
@@ -66,6 +67,9 @@
             tabsPanelSwitchActMove = true;
             markWindow = true;
             markWindowPreface = "[Sidebery]";
+            syncName = "laptop";
+            syncUseFirefox = true;
+            newTabCtxReopen = true;
           };
           sidebarCSS = builtins.readFile ./firefox/sidebery.css;
         };
