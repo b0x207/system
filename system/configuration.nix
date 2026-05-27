@@ -1,13 +1,20 @@
-{ config, lib, pkgs, inputs, flake, system, ... }: {
+{ config, lib, pkgs, inputs, flake, system, patched-nixpkgs, ... }: {
   imports = [
     ./hardware-configuration.nix
     ./secrets.nix
     ./vpn.nix
     ./fingerprint.nix
     ./firmware.nix
-    ./yggdrasil.nix
+    # ./yggdrasil.nix
     ./llm-exploration.nix
     ./virtualbox.nix
+    ./i2p.nix
+    ./file-manager.nix
+    ./email.nix
+    ./jellyfin.nix
+    ./stylix.nix
+
+    ../modules/theme/system.nix
   ];
 
   networking.hostName = "laptop";
@@ -34,6 +41,15 @@
     ];
   };
 
+  nix.registry.nixpkgs = {
+    exact = true;
+    from = {
+      type = "indirect";
+      id = "nixpkgs";
+    };
+    flake = patched-nixpkgs;
+  };
+
   nixpkgs.hostPlatform = {
     # gcc.arch = "arrowlake";
     # gcc.tune = "arrowlake";
@@ -46,14 +62,13 @@
 
   nixpkgs.config = {
     allowUnfree = true;
-    useCChace = true;
   };
 
   nixpkgs.overlays = [
     inputs.nur.overlays.default
-    inputs.dolphin-overlay.overlays.default
     (import ./overlays/compile-fixes.nix { inherit (inputs) nixpkgs; })
     (import ./overlays/valkey.nix {})
+    (import ./overlays/dolphin.nix {})
   ];
 
   # Quick patch for compatibility while migrating
@@ -139,7 +154,7 @@
     ben = {
       uid = 1000;
       isNormalUser = true;
-      extraGroups = [ "wheel" "docker" "libvirtd" "wireshark" ];
+      extraGroups = [ "wheel" "libvirtd" "wireshark" "render" "video" ];
       shell = pkgs.zsh;
     };
   };
@@ -160,6 +175,10 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   environment.systemPackages = with pkgs; [
+    level-zero
+    intel-compute-runtime
+    intel-gpu-tools
+
     kdiskmark
     neovim
     ripgrep
@@ -167,23 +186,21 @@
     rustup
     gh
     modrinth-app
+    tor-browser
     appimage-run
     python314
     supertuxkart
     librewolf
-    docker-compose
     intentrace
-    jetbrains.idea
     xonotic
     intel-gpu-tools
     distrobox
-    ladybird
+    # ladybird
     mission-center
     inputs.utpm.packages.${system}.default
     nodejs
     beyond-all-reason
     warzone2100
-    thunderbird-bin
     nodejs
     xmake
     pika-backup
@@ -195,7 +212,6 @@
     (hunspell.withDicts (dicts: with dicts; [ en-us ]))
     (aspellWithDicts (dicts: with dicts; [ en en-computers en-science ]))
     lmstudio
-    alfis
     nix-output-monitor
     nh
     dust
@@ -212,6 +228,7 @@
     inputs.todo-tree.packages.${pkgs.stdenv.hostPlatform.system}.todo-tree
     tree-sitter
     krita
+    obs-studio
 
     # Dumb GPG bullshit
     gnupg
@@ -220,7 +237,6 @@
     # School
     inputs.typst.packages.${system}.default
     inputs.typst-plantuml.packages.${system}.default
-    jetbrains.pycharm
     uv
     sqlitebrowser
     plantuml
@@ -242,10 +258,8 @@
     hyprshot
     vimiv-qt
     mpv
-    inputs.hyprshutdown.packages.${system}.default
+    hyprshutdown
     dex
-    thunar
-    kdePackages.dolphin
     satty
     inputs.HyprQuickFrame.packages.${system}.default
     hyprpolkitagent
@@ -255,19 +269,7 @@
     libreoffice
     wl-clipboard
     brightnessctl
-
-    # According to the wiki:
-    # > By default, dolphin by itself is not packaged with support for SVG icons.
-    kdePackages.qtsvg
-    kdePackages.kio-admin # For the 'open as admin' in dolphin
-
-    # Extra thumbnail generators
-    ffmpeg-headless
-    ffmpegthumbnailer
-    gdk-pixbuf
-    libheif.bin # provides heif-thumbnailer (the program that generates HEIF thumbnails)
-    libheif.out # provides heif.thumbnailer (allows for the viewing of HEIF thumbnails)
-    webp-pixbuf-loader
+    kdePackages.breeze
 
     # Core system
     zip
@@ -287,6 +289,8 @@
     gnumake
     unixtools.xxd
     blueman
+    bluejay
+    kdePackages.bluedevil
     pavucontrol
   ];
 
@@ -294,8 +298,6 @@
     enable = true;
     pinentryPackage = pkgs.pinentry-tty;
   };
-
-  programs.ccache.enable = true;
 
   programs.nh = {
     enable = true;
@@ -309,14 +311,9 @@
     package = pkgs.firefox-bin;
     languagePacks = [ "en-US" ];
   };
+
   programs.zsh.enable = true;
   environment.pathsToLink = [ "/share/zsh" ];
-
-  programs.wireshark = {
-    enable = false;
-    package = pkgs.wireshark;
-    usbmon.enable = true;
-  };
 
   documentation = {
     enable = true;
@@ -326,9 +323,6 @@
       cache.enable = true;
     };
   };
-
-  # Thumbnails
-  services.tumbler.enable = true;
 
   # For building the homelab config
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
@@ -341,17 +335,38 @@
     configPath = ./nohang-profile.conf;
   };
 
+  services.nixseparatedebuginfod2.enable = true;
+
   programs.kdeconnect.enable = true;
 
   programs.hyprland = {
     enable = true;
     # withUWSM = true;
-    package = inputs.hyprland.packages.${system}.hyprland;
-    portalPackage = inputs.hyprland.packages.${system}.xdg-desktop-portal-hyprland;
   };
   programs.xwayland.enable = true;
   security.polkit.enable = true;
   services.seatd.enable = true;
+
+  xdg.portal = {
+    enable = true;
+    configPackages = [
+      pkgs.xdg-desktop-portal-hyprland
+      pkgs.kdePackages.xdg-desktop-portal-kde
+    ];
+    config = {
+      common = {
+        default = [ "hyprland" "kde" ];
+        "org.freedesktop.impl.portal.FileChooser" = "kde";
+      };
+
+      hyprland = {
+        default = [
+          "hyprland"
+          "kde"
+        ];
+      };
+    };
+  };
 
   fonts.packages = with pkgs; [
     nerd-fonts.droid-sans-mono
@@ -394,18 +409,6 @@
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
 
-  services.i2pd = {
-    enable = true;
-    bandwidth = 1024;
-    enableIPv6 = true;
-
-    proto = {
-      socksProxy.enable = true;
-      httpProxy.enable = true;
-      http.enable = true;
-    };
-  };
-
   # Keyboard remapping
   services.keyd = {
     enable = true;
@@ -435,7 +438,6 @@
     tty.enable = true;
   };
 
-  virtualisation.docker.enable = true;
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
   virtualisation.containerd.enable = true;

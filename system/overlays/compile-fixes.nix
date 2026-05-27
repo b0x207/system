@@ -8,6 +8,14 @@ in {
                     # applications anyways.
   uv = plain-pkgs.uv;
 
+  # May 3 2026:
+  # openldap checks time out
+  #
+  # TRACK: https://github.com/NixOS/nixpkgs/issues/514113
+  openldap = prev.openldap.overrideAttrs (oldAttrs: {
+    doCheck = false;
+  });
+
   # Apr 18 2026:
   # Build currently fails with 'File sizes do not match' stemming from a check in
   # `combile_two_binaries.py` on line 96. For now, it's not worth accidentally introducing bugs,
@@ -15,7 +23,7 @@ in {
   # This mailing list thread might be useful:
   # https://lists.xenproject.org/archives/html/xen-devel/2025-01/msg00441.html
   #
-  # TODO: take a closer look into this an see what's actually wrong.
+  # TODO: take a closer look into this and see what's actually wrong.
   xen = plain-pkgs.xen;
 
   # Apr 18 2026:
@@ -24,17 +32,35 @@ in {
   # TRACK: https://github.com/NixOS/nixpkgs/issues/440270
   assimp = plain-pkgs.assimp;
 
-  # Apr 18 2026:
-  # Test scipy/signal/tests/test_spectral.py::TestSTFT::test_roundtrip_scaling
-  # fails. Since it builds correctly on normal nixpkgs, we'll assume that
-  # the test failure is due to a bug in GCC.
+  # May 7 2026
+  # Upstream bug with ValveSoftware/gamescope that hasn't made its way into a fixed point release.
+  # Needs a release after Apr 27 2026
   #
-  # The package also likes to ignore parallelism requirements. We can put it
-  # back into shape with a fairly simple fix, though.
-  #
-  # TRACK: https://github.com/NixOS/nixpkgs/issues/216033
+  # TRACK: https://github.com/ValveSoftware/gamescope/issues/2110
+  gamescope = prev.gamescope.overrideAttrs (oldAttrs:
+    assert oldAttrs.version == "3.16.23";
+    {
+      src = prev.fetchFromGitHub {
+        owner = "ValveSoftware";
+        repo = "gamescope";
+        rev = "96376e4773574a929b59f53f021cf0923189c993";
+        fetchSubmodules = true;
+        hash = "sha256-JAuapmAJrTERWuocmPfAD/ZVy3CYATkm47nP6d92fxA=";
+      };
+    }
+  );
+
   pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
     (python-final: python-prev: {
+      # Apr 18 2026:
+      # Test scipy/signal/tests/test_spectral.py::TestSTFT::test_roundtrip_scaling
+      # fails. Since it builds correctly on normal nixpkgs, we'll assume that
+      # the test failure is due to a bug in GCC.
+      #
+      # The package also likes to ignore parallelism requirements. We can put it
+      # back into shape with a fairly simple fix, though.
+      #
+      # TRACK: https://github.com/NixOS/nixpkgs/issues/216033
       scipy = python-prev.scipy.overridePythonAttrs (prevAttrs: {
         preBuild = (prevAttrs.preBuild or "") + ''
           appendToVar pypaBuildFlags "-Ccompile-args=-j$NIX_BUILD_CORES"
@@ -44,21 +70,24 @@ in {
           "test_roundtrip_scaling"
         ];
       });
+
+      # May 7 2026
+      # Test `test_gradient_sync_cpu_multi` fails
+      accelerate = python-prev.accelerate.overridePythonAttrs (prevAttrs: {
+        disabledTests = (prevAttrs.disabledTests or []) ++ [
+          "test_gradient_sync_cpu_multi"
+        ];
+      });
+
+      # May 7 2026
+      # Test `test_execution_state` fails
+      jupyter-server = python-prev.jupyter-server.overridePythonAttrs (prevAttrs: {
+        disabledTests = (prevAttrs.disabledTests or []) ++ [
+          "test_execution_state"
+        ];
+      });
     })
   ];
-
-  # Apr 18 2026:
-  # Resolves a GCC AVX2 casting error.
-  #
-  # TRACK: Can be removed when mesa 26.1.0 is available in nixpkgs
-  mesa = prev.mesa.overrideAttrs (oldAttrs: {
-    patches = (oldAttrs.patches or []) ++ [
-      (prev.fetchpatch {
-        url = "https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/39951.patch";
-        hash = "sha256-p5Dl9o6j7QZNTY/7vUteIhcKNyKtUlKpVZ3Xq0w9Xhs=";
-      })
-    ];
-  });
 
   # Apr 17 2026:
   # What a waste of literal days of my life. I've tried everything under the sun, but I can't seem
@@ -184,8 +213,8 @@ in {
     src = prev.fetchurl {
       inherit (prev.libssh.src) hash;
       urls = [
-        prev.libssh.src.url
         "https://files.b0x207.dev/public/mirror/libssh/libssh-${prev.libssh.version}.tar.xz"
+        prev.libssh.src.url
       ];
     };
   };

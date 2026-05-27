@@ -22,6 +22,21 @@
 
         # Always ask for a location before saving a download
         "browser.download.useDownloadDir" = false;
+
+        # Keep AI out of my browser please
+        "browser.ai.control.default" = "blocked";
+
+        # Use my preferred file picker instead
+        # Note: values are 0=never, 1=always, 2=auto which really means flatpak
+        "widget.use-xdg-desktop-portal.file-picker" = 1;
+
+        "browser.urlbar.suggest.engines" = false;
+        "browser.urlbar.suggest.history" = false;
+        "browser.urlbar.suggest.openpage" = false;
+        "browser.urlbar.suggest.quickactions" = false;
+        "browser.urlbar.suggest.recentsearches" = false;
+        "browser.urlbar.suggest.searches" = false;
+        "browser.urlbar.suggest.trending" = false;
       };
       extensions = {
         force = true;
@@ -42,6 +57,7 @@
             "ublock-privacy"
             "ublock-unbreak"
             "ublock-quick-fixes"
+            "easylist"
           ];
           privateAllowed = true;
         };

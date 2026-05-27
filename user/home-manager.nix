@@ -3,13 +3,48 @@
   imports = [
     ./firefox.nix
     ./fastfetch.nix
+    ../modules/theme/home-manager.nix
   ];
 
   home.username = "ben";
   home.homeDirectory = "/home/ben";
-  home.stateVersion = "25.11";
+  home.stateVersion = "26.05";
 
   programs.home-manager.enable = true;
+
+  stylix.targets = {
+    # I spent way too long on this, DON'T TOUCH IT
+    firefox.enable = false;
+
+    mpv.enable = true;
+
+    # kde = {
+    #   enable = true;
+    #   applicationStyle = "BreezeDark";
+    #   widgetStyle = "BreezeDark";
+    # };
+
+    # gtk.enable = true;
+    # qt = {
+    #   enable = true;
+    #   # platform = "kvantum";
+    #   standardDialogs = "xdgdesktopportal";
+    # };
+    # kde = {
+    #   enable = true;
+    #   widgetStyle = "BreezeDark";
+    #   applicationStyle = "BreezeDark";
+    # };
+    fontconfig.enable = true;
+  };
+  programs.btop = {
+    enable = true;
+    settings = {
+      disks_filter = "/boot /";
+    };
+  };
+
+  programs.mpv.enable = true;
 
   # home.file.".config/nvim" = {
   #   source = ./nvim;
@@ -46,7 +81,7 @@
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
+    settings = {
       "*" = {
         addKeysToAgent = "yes";
         hashKnownHosts = false;
@@ -102,6 +137,7 @@
       clipboard-write = "allow";
       gtk-single-instance = false;
       shell-integration-features = "ssh-terminfo,ssh-env,sudo";
+      font-family = "JetBrainsMono Nerd Font Mono";
     };
   };
 
@@ -189,50 +225,83 @@
     flavor = "mocha";
     ghostty.enable = true;
     swaync = { enable = true; font = "JetBrainsMono Nerd Font"; };
-    kvantum.enable = true;
+    # kvantum.enable = true;
     rofi.enable = true;
     atuin.enable = true;
     # cursors = {
     #   enable = true;
     #   accent = "dark";
     # };
+    gtk.icon.enable = true;
     fzf.enable = true;
-    #gtk.icon.enable = true;
     zsh-syntax-highlighting.enable = true;
   };
 
   home.pointerCursor = {
     package = pkgs.kdePackages.breeze-icons;
     name = "breeze_cursors";
-    size = 24;
+    size = 12;
     gtk.enable = true;
     hyprcursor = {
       enable = true;
-      size = 24;
+      size = 12;
     };
     dotIcons.enable = true;
     x11.enable = true;
   };
 
-  gtk = {
+  /* gtk = {
     colorScheme = "dark";
     iconTheme = {
-      package = pkgs.adwaita-icon-theme;
-      name = "Adwaita";
+      package = pkgs.kdePackages.breeze-icons;
+      name = "breeze-dark";
     };
     cursorTheme = {
       name = "catppuccin-mocha-dark-cursors";
-      size = 18;
+      size = 12;
     };
-  };
+    # theme = {
+    #   name = "Breeze-Dark";
+    #   package = pkgs.kdePackages.breeze-gtk;
+    # };
+    # theme = {
+    #   name = "Adwaita-dark";
+    #   package = pkgs.gnome-themes-extra;
+    # };
+    # theme = {
+    #   name = "adw-gtk3-dark";
+    #   package = pkgs.adw-gtk3;
+    # };
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+  }; */
 
-  qt = {
-    enable = true;
-    platformTheme.name = "qt6ct";
-    kvantum = {
-      enable = true;
-    };
-    style.name = "kvantum";
-    style.package = pkgs.kdePackages.qtstyleplugin-kvantum;
-  };
+  # qt = {
+  #   enable = true;
+  #   platformTheme.name = "qtct";
+  #   style = {
+  #     name = "Breeze-Dark";
+  #     package = pkgs.kdePackages.breeze;
+  #   };
+  #   qt6ctSettings = {
+  #     Appearance = {
+  #       icon_theme = "breeze-dark";
+  #       standard_dialogs = "default";
+  #       style = "Breeze";
+  #     };
+  #     Fonts = {
+  #       fixed = "\"JetBrainsMono Nerd Font Mono,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular,0,0\"";
+  #       general = "\"DejaVu Sans,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Book,0,0\"";
+  #     };
+  #   };
+  #   # kvantum = {
+  #   #   enable = true;
+  #   # };
+  #   # style.name = "kvantum";
+  #   # style.package = pkgs.kdePackages.qtstyleplugin-kvantum;
+  # };
 }

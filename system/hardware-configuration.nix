@@ -13,10 +13,6 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
   hardware.enableRedistributableFirmware = true;
   boot.kernel.sysctl."vm.swappiness" = 5;
-  boot.kernelParams = [
-    "pcie_aspm=off"
-    "nvme_core.default_ps_max_latency_us=0"
-  ];
   # boot.kernelParams = [
   #   "zswap.enabled=1"
   #   "zswap.compressor=lz4"
