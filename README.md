@@ -4,12 +4,21 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
 
 ## To Do
 
-- Fingerprint reader
-- Split config out for desktop versus laptop
-- Flake parts?
-- Grub UEFI settings entry
-- Switch to limine?
+### Short Term
+
+- Flake parts
+  - Split config out for desktop versus laptop
+- Redo everything on my desktop system
+  - Figure out disk encryption
+  - Figure out best use for HDD+SSD
+- Finally add a lock screen to hyprland
+- Switch to limine
   - Make sure it works in removable/fallback mode for desktop (dumb MSI bios)
+- Make nohang never kill hyprland
+
+### Long Term
+
+- Fingerprint reader
 - Revisit fingerprint reader + PAM
 - Package Problems:
   - Packages don't respect `NIX_BUILD_CORES`
@@ -25,6 +34,5 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
 - Status bar:
   - Low battery color indication
   - nohang activity indicator module
-- Make nohang never kill hyprland
 - Mount basically everything with `nosuid`.
   See [this](https://discourse.nixos.org/t/get-size-of-nix-store-efficiently/51354/8).
