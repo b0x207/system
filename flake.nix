@@ -1,7 +1,7 @@
 {
-	description = "System config flake";
-	inputs = {
-		nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable-small";
+  description = "System config flake";
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable-small";
 
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -40,26 +40,33 @@
       url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-	};
+  };
 
-	outputs = { self, nixpkgs, flake-parts, ... }@inputs: let
+  outputs = {
+    self,
+    nixpkgs,
+    flake-parts,
+    ...
+  } @ inputs: let
     system = "x86_64-linux";
 
     # TODO: find a way to make this be a full replacement of `nixpkgs.lib.nixosSystem`
-    patched-nixpkgs = import ./patched-nixpkgs.nix { inherit system nixpkgs; };
+    patched-nixpkgs = import ./patched-nixpkgs.nix {inherit system nixpkgs;};
   in {
-		nixosConfigurations.system = patched-nixpkgs.lib.nixosSystem {
-			modules = [
-				./system/configuration.nix
+    nixosConfigurations.system = patched-nixpkgs.lib.nixosSystem {
+      modules = [
+        ./system/configuration.nix
         inputs.home-manager.nixosModules.home-manager
         inputs.catppuccin.nixosModules.catppuccin
         inputs.agenix.nixosModules.default
         inputs.stylix.nixosModules.stylix
-			];
-			specialArgs = {
+      ];
+      specialArgs = {
         inherit system inputs patched-nixpkgs;
         flake = self;
       };
-		};
-	};
+    };
+
+    formatter.${system} = patched-nixpkgs.legacyPackages.${system}.alejandra;
+  };
 }

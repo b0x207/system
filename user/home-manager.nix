@@ -1,5 +1,10 @@
-{ config, lib, inputs, pkgs, ... }:
 {
+  config,
+  lib,
+  inputs,
+  pkgs,
+  ...
+}: {
   imports = [
     ./firefox.nix
     ./fastfetch.nix
@@ -54,27 +59,27 @@
   programs.zathura = {
     enable = true;
     extraConfig = ''
-    # For some reason, default-bg must be specified using HTML notation
-    set default-bg "#000000ff"
-    set default-fg "#ff0000"
+      # For some reason, default-bg must be specified using HTML notation
+      set default-bg "#000000ff"
+      set default-fg "#ff0000"
 
-    #set scroll-page-aware true
-    set adjust-open width
+      #set scroll-page-aware true
+      set adjust-open width
 
-    set recolor true
-    set recolor-darkcolor "#ffffff"
-    set recolor-lightcolor rgba(0,0,0,0.9)
-    set recolor-keephue true
+      set recolor true
+      set recolor-darkcolor "#ffffff"
+      set recolor-lightcolor rgba(0,0,0,0.9)
+      set recolor-keephue true
 
-    # Keep original image colors
-    set recolor-reverse-video true
+      # Keep original image colors
+      set recolor-reverse-video true
 
-    set database "sqlite"
+      set database "sqlite"
 
-    # Show a vertical scrollbar
-    set guioptions 'v'
+      # Show a vertical scrollbar
+      set guioptions 'v'
 
-    set selection-clipboard clipboard
+      set selection-clipboard clipboard
     '';
   };
 
@@ -170,8 +175,9 @@
   xdg.configFile."git/allowed-signers" = {
     enable = true;
     force = true;
-    text = "${config.programs.git.settings.user.email} " +
-           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDnyx15yATERx55O38TsVldST7u2eXX8fAsv15L6AhLE";
+    text =
+      "${config.programs.git.settings.user.email} "
+      + "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDnyx15yATERx55O38TsVldST7u2eXX8fAsv15L6AhLE";
   };
 
   home.shell.enableZshIntegration = true;
@@ -184,7 +190,7 @@
     syntaxHighlighting.enable = true;
     initContent = lib.mkOrder 1000 ''
       export EDITOR=nvim
-      
+
       # Because wth ZSH???
       bindkey "^[[1;5C" forward-word
       bindkey "^[[1;5D" backward-word
@@ -200,7 +206,7 @@
         src = pkgs.fetchFromGitHub {
           owner = "sindresorhus";
           repo = "pure";
-          rev  = "v1.27.1";
+          rev = "v1.27.1";
           sha256 = "sha256-Fhk4nlVPS09oh0coLsBnjrKncQGE6cUEynzDO2Skiq8=";
         };
       }
@@ -214,7 +220,7 @@
     daemon.enable = true;
     enableBashIntegration = true;
     enableZshIntegration = true;
-    flags = [ "--disable-up-arrow" ];
+    flags = ["--disable-up-arrow"];
   };
 
   services.swaync = {
@@ -224,7 +230,10 @@
   catppuccin = {
     flavor = "mocha";
     ghostty.enable = true;
-    swaync = { enable = true; font = "JetBrainsMono Nerd Font"; };
+    swaync = {
+      enable = true;
+      font = "JetBrainsMono Nerd Font";
+    };
     # kvantum.enable = true;
     rofi.enable = true;
     atuin.enable = true;
@@ -250,7 +259,8 @@
     x11.enable = true;
   };
 
-  /* gtk = {
+  /*
+  gtk = {
     colorScheme = "dark";
     iconTheme = {
       package = pkgs.kdePackages.breeze-icons;
@@ -278,7 +288,8 @@
     gtk4.extraConfig = {
       gtk-application-prefer-dark-theme = 1;
     };
-  }; */
+  };
+  */
 
   # qt = {
   #   enable = true;

@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{pkgs, ...}:
 pkgs.firefox-unwrapped.overrideAttrs (old: {
-  patches = (old.patches or []) ++ [ ./newtab.patch ];
+  patches = (old.patches or []) ++ [./newtab.patch];
   # extraNativeBuildInputs = (old.extraNativeBuildInputs or []) ++ [ pkgs.mold ];
 
   # Compiling Firefox can be pretty memory intensive.

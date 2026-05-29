@@ -1,5 +1,9 @@
-{ config, pkgs, lib, ... }:
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
   listen_port = 4167;
 in {
   services.yggdrasil = {
@@ -24,12 +28,13 @@ in {
     enable = true;
   };
 
-  /* systemd.services.yggstack = {
+  /*
+  systemd.services.yggstack = {
     enable = false;
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" ];
     description = "Yggdrasil as SOCKS proxy / port forwarder";
-    serviceConfig = let 
+    serviceConfig = let
       yggstack = "${pkgs.yggstack}/bin/yggstack";
 
       # We need access the path to yggdrasil's config
@@ -38,5 +43,6 @@ in {
     in {
       ExecStart = "${yggstack} -useconf ${yggdrasil-config} -socks 127.0.0.1:1080";
     };
-  }; */
+  };
+  */
 }

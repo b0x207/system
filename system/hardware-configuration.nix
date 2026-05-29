@@ -1,15 +1,29 @@
-{ config, lib, pkgs, modulesPath, ... }:
-
 {
-  imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
-    ];
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}: {
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "vmd" "nvme" "usbhid" "rtsx_pci_sdmmc" ];
-  boot.initrd.kernelModules = [ ];
+  boot.initrd.availableKernelModules = [
+    "xhci_pci"
+    "thunderbolt"
+    "vmd"
+    "nvme"
+    "usbhid"
+    "rtsx_pci_sdmmc"
+  ];
+  boot.initrd.kernelModules = [];
   boot.initrd.systemd.enable = true;
-  boot.kernelModules = [ "kvm-intel" "usbmon" ];
-  boot.extraModulePackages = [ ];
+  boot.kernelModules = [
+    "kvm-intel"
+    "usbmon"
+  ];
+  boot.extraModulePackages = [];
   boot.kernelPackages = pkgs.linuxPackages_latest;
   hardware.enableRedistributableFirmware = true;
   boot.kernel.sysctl."vm.swappiness" = 5;
@@ -25,36 +39,44 @@
   #   "xe.force_probe=*"
   # ];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/abb2f538-2ec5-4fa9-b168-811574181bff";
-      fsType = "btrfs";
-      options = [ "subvol=@linux" ];
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/abb2f538-2ec5-4fa9-b168-811574181bff";
+    fsType = "btrfs";
+    options = ["subvol=@linux"];
+  };
 
-  fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/abb2f538-2ec5-4fa9-b168-811574181bff";
-      fsType = "btrfs";
-      neededForBoot = true;
-      options = [ "subvol=@nix" "noatime" ];
-    };
+  fileSystems."/nix" = {
+    device = "/dev/disk/by-uuid/abb2f538-2ec5-4fa9-b168-811574181bff";
+    fsType = "btrfs";
+    neededForBoot = true;
+    options = [
+      "subvol=@nix"
+      "noatime"
+    ];
+  };
 
-  fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/abb2f538-2ec5-4fa9-b168-811574181bff";
-      fsType = "btrfs";
-      options = [ "subvol=@home" ];
-    };
+  fileSystems."/home" = {
+    device = "/dev/disk/by-uuid/abb2f538-2ec5-4fa9-b168-811574181bff";
+    fsType = "btrfs";
+    options = ["subvol=@home"];
+  };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/B99A-F204";
-      fsType = "vfat";
-      options = [ "fmask=0077" "dmask=0077" ];
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/B99A-F204";
+    fsType = "vfat";
+    options = [
+      "fmask=0077"
+      "dmask=0077"
+    ];
+  };
 
-  swapDevices = [{
-    device = "/dev/disk/by-partuuid/17ad8cfd-74dc-46e1-90ad-13d2dfc733c8";
-    randomEncryption.enable = true;
-    priority = 0;
-  }];
+  swapDevices = [
+    {
+      device = "/dev/disk/by-partuuid/17ad8cfd-74dc-46e1-90ad-13d2dfc733c8";
+      randomEncryption.enable = true;
+      priority = 0;
+    }
+  ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

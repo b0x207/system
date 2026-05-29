@@ -1,5 +1,8 @@
-{ config, pkgs, ... }:
 {
+  config,
+  pkgs,
+  ...
+}: {
   programs.firefox = {
     enable = true;
     package = pkgs.firefox-bin;
@@ -69,26 +72,28 @@
         settings."{3c078156-979c-498b-8990-85f7987dd929}".settings = let
           # TODO: confirm that the path provided is actually in the nix store and not impure
           baseConfig = builtins.fromJSON (builtins.readFile ./firefox/sidebery-config.json);
-        in baseConfig // {
-          settings = {
-            autoExpandTabs = true;
-            autoExpandTabsOnNew = true;
-            colorizeTabs = false;
-            colorizeTabsBranchesSrc = "domain";
-            colorizeTabsSrc = "container";
-            ctxMenuNative = true;
-            fontSize = "s";
-            hideInact = true;
-            previewTabs = true;
-            tabsPanelSwitchActMove = true;
-            markWindow = true;
-            markWindowPreface = "[Sidebery]";
-            syncName = "laptop";
-            syncUseFirefox = true;
-            newTabCtxReopen = true;
+        in
+          baseConfig
+          // {
+            settings = {
+              autoExpandTabs = true;
+              autoExpandTabsOnNew = true;
+              colorizeTabs = false;
+              colorizeTabsBranchesSrc = "domain";
+              colorizeTabsSrc = "container";
+              ctxMenuNative = true;
+              fontSize = "s";
+              hideInact = true;
+              previewTabs = true;
+              tabsPanelSwitchActMove = true;
+              markWindow = true;
+              markWindowPreface = "[Sidebery]";
+              syncName = "laptop";
+              syncUseFirefox = true;
+              newTabCtxReopen = true;
+            };
+            sidebarCSS = builtins.readFile ./firefox/sidebery.css;
           };
-          sidebarCSS = builtins.readFile ./firefox/sidebery.css;
-        };
       };
       userChrome = builtins.readFile ./firefox/userChrome.css;
     };

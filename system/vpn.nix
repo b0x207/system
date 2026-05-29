@@ -1,11 +1,14 @@
-{ config, pkgs, ... }:
-let
+{
+  config,
+  pkgs,
+  ...
+}: let
   csd-wrapper-cisco = pkgs.fetchurl {
     url = "https://gitlab.com/openconnect/openconnect/-/raw/master/trojans/csd-wrapper.sh";
     hash = "sha256-N4TkFiETrEYu2LvhxvaKRMg5W3mlJKJFNi3ln1+vTJM=";
   };
 in {
-  imports = [ ./secrets.nix ];
+  imports = [./secrets.nix];
 
   services.tailscale.enable = true;
 

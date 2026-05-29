@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   environment.systemPackages = with pkgs; [
     thunderbird-bin
 
@@ -30,6 +29,6 @@
   };
 
   environment.sessionVariables = {
-    XDG_DATA_DIRS = [ "${pkgs.kdePackages.kdepim-runtime}/share" ];
+    XDG_DATA_DIRS = ["${pkgs.kdePackages.kdepim-runtime}/share"];
   };
 }

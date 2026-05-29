@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   services.jellyfin = {
     enable = true;
     user = "ben";
@@ -15,7 +14,10 @@
     };
   };
 
-  users.users.ben.extraGroups = [ "video" "render" ];
+  users.users.ben.extraGroups = [
+    "video"
+    "render"
+  ];
 
   hardware.graphics.extraPackages = with pkgs; [
     vpl-gpu-rt

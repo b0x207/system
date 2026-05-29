@@ -1,6 +1,5 @@
 # One must try things to have an informed opinion
-
-{ ... }: {
+{...}: {
   services.open-webui = {
     enable = true;
     port = 9090;
@@ -29,7 +28,10 @@
     settings = {
       server.port = 9091;
       server.secret_key = "oogabooga";
-      search.formats = [ "html" "json" ];
+      search.formats = [
+        "html"
+        "json"
+      ];
     };
     limiterSettings = {
       botdetection.ip_lists = {

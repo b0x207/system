@@ -1,9 +1,12 @@
-{ pkgs, config, ... }:
 {
+  pkgs,
+  config,
+  ...
+}: {
   programs.fastfetch = let
     color = "{#blue}";
-    top =    "{#}┏━━━━━━━━━━┫${color}";
-    side =   "{#}┃${color}";
+    top = "{#}┏━━━━━━━━━━┫${color}";
+    side = "{#}┃${color}";
     bottom = "{#}┗━━━━━━━━━━";
   in {
     enable = true;
@@ -28,18 +31,45 @@
           type = "title";
           format = "${top} {user-name}@{host-name}";
         }
-        { type = "os"; key = "${side} OS"; }
-        { type = "kernel"; key = "${side} Kernel"; }
-        { type = "host"; key = "${side} Host"; }
-        { type = "packages"; key = "${side} Packages"; }
-        { type = "uptime"; key = "${side} Uptime"; }
+        {
+          type = "os";
+          key = "${side} OS";
+        }
+        {
+          type = "kernel";
+          key = "${side} Kernel";
+        }
+        {
+          type = "host";
+          key = "${side} Host";
+        }
+        {
+          type = "packages";
+          key = "${side} Packages";
+        }
+        {
+          type = "uptime";
+          key = "${side} Uptime";
+        }
         # { type = "bios"; key = "${side} BIOS Version"; }
-        { type = "custom"; format = bottom; }
+        {
+          type = "custom";
+          format = bottom;
+        }
 
         "break"
-        { type = "custom"; format = "${top} System Resources"; }
-        { type = "cpu"; key = "${side} CPU"; }
-        { type = "gpu"; key = "${side} GPU"; }
+        {
+          type = "custom";
+          format = "${top} System Resources";
+        }
+        {
+          type = "cpu";
+          key = "${side} CPU";
+        }
+        {
+          type = "gpu";
+          key = "${side} GPU";
+        }
         {
           type = "memory";
           key = "${side} Memory";
@@ -54,11 +84,20 @@
           key = "${side} Battery";
           format = "{model-name} {technology} - {charge_full} mAh ({cycle-count} cycles)";
         }
-        { type = "physicaldisk"; key = "${side} Physical Disk"; }
-        { type = "custom"; format = bottom; }
+        {
+          type = "physicaldisk";
+          key = "${side} Physical Disk";
+        }
+        {
+          type = "custom";
+          format = bottom;
+        }
 
         "break"
-        { type = "custom"; format = "${top} Peripherals"; }
+        {
+          type = "custom";
+          format = "${top} Peripherals";
+        }
         {
           type = "display";
           key = "${side} Display";
@@ -81,17 +120,41 @@
           };
         }
         "poweradapter"
-        { type = "custom"; format = bottom; }
+        {
+          type = "custom";
+          format = bottom;
+        }
 
         "break"
-        { type = "custom"; format = "${top} Environment"; }
-        { type = "wm"; key = "${side} Window Manager"; }
+        {
+          type = "custom";
+          format = "${top} Environment";
+        }
+        {
+          type = "wm";
+          key = "${side} Window Manager";
+        }
         # { type = "vulkan"; key = "${side} Vulkan"; }
-        { type = "theme"; key = "${side} Theme"; }
-        { type = "icons"; key = "${side} Icon Theme"; }
-        { type = "cursor"; key = "${side} Cursor"; }
-        { type = "font"; key = "${side} Font"; }
-        { type = "custom"; format = bottom; }
+        {
+          type = "theme";
+          key = "${side} Theme";
+        }
+        {
+          type = "icons";
+          key = "${side} Icon Theme";
+        }
+        {
+          type = "cursor";
+          key = "${side} Cursor";
+        }
+        {
+          type = "font";
+          key = "${side} Font";
+        }
+        {
+          type = "custom";
+          format = bottom;
+        }
       ];
     };
   };

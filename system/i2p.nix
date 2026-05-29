@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   services.i2pd = {
     enable = true;
     bandwidth = 1024;
@@ -26,17 +25,21 @@
     enable = false;
     enablePHP = true;
     virtualHosts.eepsite = {
-      listen = [ {
-        ip = "127.0.0.1";
-        port = 9191;
-      } ];
+      listen = [
+        {
+          ip = "127.0.0.1";
+          port = 9191;
+        }
+      ];
       locations."/" = {
         index = "index.php index.html";
       };
-      servedDirs = [ {
-        dir = "/var/www";
-        urlPath = "/";
-      } ];
+      servedDirs = [
+        {
+          dir = "/var/www";
+          urlPath = "/";
+        }
+      ];
     };
   };
 

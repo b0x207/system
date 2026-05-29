@@ -1,4 +1,13 @@
-{ config, lib, pkgs, inputs, flake, system, patched-nixpkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  flake,
+  system,
+  patched-nixpkgs,
+  ...
+}: {
   imports = [
     ./hardware-configuration.nix
     ./secrets.nix
@@ -24,8 +33,11 @@
     max-jobs = 2;
     cores = 4;
     auto-optimise-store = true;
-    trusted-users = [ "ben" ];
-    experimental-features = [ "nix-command" "flakes" ];
+    trusted-users = ["ben"];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
     ssl-cert-file = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
 
     # Attempt to enable more optimizations
@@ -66,7 +78,7 @@
 
   nixpkgs.overlays = [
     inputs.nur.overlays.default
-    (import ./overlays/compile-fixes.nix { inherit (inputs) nixpkgs; })
+    (import ./overlays/compile-fixes.nix {inherit (inputs) nixpkgs;})
     (import ./overlays/valkey.nix {})
     (import ./overlays/dolphin.nix {})
   ];
@@ -95,10 +107,16 @@
       enable = true;
       unmanaged = ["qemu-tap"];
     };
-    nameservers = [ "1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" ];
+    nameservers = [
+      "1.1.1.1#one.one.one.one"
+      "1.0.0.1#one.one.one.one"
+    ];
     firewall = {
       enable = true;
-      interfaces.ygg0.allowedTCPPorts = [ 80 443 ];
+      interfaces.ygg0.allowedTCPPorts = [
+        80
+        443
+      ];
     };
   };
   services.resolved = {
@@ -106,7 +124,10 @@
     settings.Resolve = {
       DNSOverTLS = true;
       # DNSSEC = true;  # too many verification problems
-      DNS = [ "1.1.1.1" "8.8.8.8" ];
+      DNS = [
+        "1.1.1.1"
+        "8.8.8.8"
+      ];
     };
   };
   systemd.network = {
@@ -147,14 +168,23 @@
 
   services.timesyncd = {
     enable = true;
-    servers = [ "0.pool.ntp.org" "1.pool.ntp.org" ];
+    servers = [
+      "0.pool.ntp.org"
+      "1.pool.ntp.org"
+    ];
   };
 
   users.users = {
     ben = {
       uid = 1000;
       isNormalUser = true;
-      extraGroups = [ "wheel" "libvirtd" "wireshark" "render" "video" ];
+      extraGroups = [
+        "wheel"
+        "libvirtd"
+        "wireshark"
+        "render"
+        "video"
+      ];
       shell = pkgs.zsh;
     };
   };
@@ -169,7 +199,7 @@
     useUserPackages = true;
     useGlobalPkgs = true;
     backupFileExtension = "hm-backup";
-    extraSpecialArgs = { inherit inputs; };
+    extraSpecialArgs = {inherit inputs;};
   };
 
   i18n.defaultLocale = "en_US.UTF-8";
@@ -209,8 +239,15 @@
     cloudflared
     intel-llvm
     usbutils
-    (hunspell.withDicts (dicts: with dicts; [ en-us ]))
-    (aspellWithDicts (dicts: with dicts; [ en en-computers en-science ]))
+    (hunspell.withDicts (dicts: with dicts; [en-us]))
+    (aspellWithDicts (
+      dicts:
+        with dicts; [
+          en
+          en-computers
+          en-science
+        ]
+    ))
     lmstudio
     nix-output-monitor
     nh
@@ -309,11 +346,11 @@
   programs.firefox = {
     enable = true;
     package = pkgs.firefox-bin;
-    languagePacks = [ "en-US" ];
+    languagePacks = ["en-US"];
   };
 
   programs.zsh.enable = true;
-  environment.pathsToLink = [ "/share/zsh" ];
+  environment.pathsToLink = ["/share/zsh"];
 
   documentation = {
     enable = true;
@@ -325,7 +362,7 @@
   };
 
   # For building the homelab config
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  boot.binfmt.emulatedSystems = ["aarch64-linux"];
 
   systemd.oomd = {
     enable = false;
@@ -355,7 +392,10 @@
     ];
     config = {
       common = {
-        default = [ "hyprland" "kde" ];
+        default = [
+          "hyprland"
+          "kde"
+        ];
         "org.freedesktop.impl.portal.FileChooser" = "kde";
       };
 
@@ -378,7 +418,7 @@
     roboto
     dejavu_fonts
   ];
-  
+
   services.karakeep = {
     enable = false;
     extraEnvironment = {
@@ -413,7 +453,7 @@
   services.keyd = {
     enable = true;
     keyboards.default = {
-      ids = [ "*" ];
+      ids = ["*"];
       settings = {
         main = {
           # capslock = "overload(control, esc)"
@@ -482,7 +522,7 @@
     };
   };
 
-  system.configurationRevision = toString(flake.rev or flake.dirtyRev or "unknown");
+  system.configurationRevision = toString (flake.rev or flake.dirtyRev or "unknown");
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
@@ -508,4 +548,3 @@
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "25.11"; # Did you read the comment?
 }
-
