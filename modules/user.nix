@@ -1,0 +1,39 @@
+{
+  inputs,
+  self,
+  ...
+}: {
+  flake.nixosModules.user = {pkgs, ...}: {
+    users.users = {
+      ben = {
+        uid = 1000;
+        isNormalUser = true;
+        extraGroups = [
+          "wheel"
+          "libvirtd"
+          "wireshark"
+          "render"
+          "video"
+        ];
+        shell = pkgs.zsh;
+      };
+    };
+
+    programs.zsh.enable = true;
+    environment.pathsToLink = ["/share/zsh"];
+
+    home-manager = {
+      users.ben = {
+        imports = [
+          ../user/home-manager.nix
+          inputs.catppuccin.homeModules.catppuccin
+          self.homeManagerModules.btop
+        ];
+      };
+      useUserPackages = true;
+      useGlobalPkgs = true;
+      backupFileExtension = "hm-backup";
+      extraSpecialArgs = {inherit inputs;};
+    };
+  };
+}

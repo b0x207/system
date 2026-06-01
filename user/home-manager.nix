@@ -8,7 +8,7 @@
   imports = [
     ./firefox.nix
     ./fastfetch.nix
-    ../modules/theme/home-manager.nix
+    ../theme/home-manager.nix
   ];
 
   home.username = "ben";
@@ -17,44 +17,7 @@
 
   programs.home-manager.enable = true;
 
-  stylix.targets = {
-    # I spent way too long on this, DON'T TOUCH IT
-    firefox.enable = false;
-
-    mpv.enable = true;
-
-    # kde = {
-    #   enable = true;
-    #   applicationStyle = "BreezeDark";
-    #   widgetStyle = "BreezeDark";
-    # };
-
-    # gtk.enable = true;
-    # qt = {
-    #   enable = true;
-    #   # platform = "kvantum";
-    #   standardDialogs = "xdgdesktopportal";
-    # };
-    # kde = {
-    #   enable = true;
-    #   widgetStyle = "BreezeDark";
-    #   applicationStyle = "BreezeDark";
-    # };
-    fontconfig.enable = true;
-  };
-  programs.btop = {
-    enable = true;
-    settings = {
-      disks_filter = "/boot /";
-    };
-  };
-
   programs.mpv.enable = true;
-
-  # home.file.".config/nvim" = {
-  #   source = ./nvim;
-  #   target = ".config/nvim";
-  # };
 
   programs.zathura = {
     enable = true;
@@ -241,7 +204,7 @@
     #   enable = true;
     #   accent = "dark";
     # };
-    gtk.icon.enable = true;
+    # gtk.icon.enable = true;
     fzf.enable = true;
     zsh-syntax-highlighting.enable = true;
   };
@@ -249,70 +212,13 @@
   home.pointerCursor = {
     package = pkgs.kdePackages.breeze-icons;
     name = "breeze_cursors";
-    size = 12;
+    size = 24;
     gtk.enable = true;
     hyprcursor = {
       enable = true;
-      size = 12;
+      size = 24;
     };
     dotIcons.enable = true;
     x11.enable = true;
   };
-
-  /*
-  gtk = {
-    colorScheme = "dark";
-    iconTheme = {
-      package = pkgs.kdePackages.breeze-icons;
-      name = "breeze-dark";
-    };
-    cursorTheme = {
-      name = "catppuccin-mocha-dark-cursors";
-      size = 12;
-    };
-    # theme = {
-    #   name = "Breeze-Dark";
-    #   package = pkgs.kdePackages.breeze-gtk;
-    # };
-    # theme = {
-    #   name = "Adwaita-dark";
-    #   package = pkgs.gnome-themes-extra;
-    # };
-    # theme = {
-    #   name = "adw-gtk3-dark";
-    #   package = pkgs.adw-gtk3;
-    # };
-    gtk3.extraConfig = {
-      gtk-application-prefer-dark-theme = 1;
-    };
-    gtk4.extraConfig = {
-      gtk-application-prefer-dark-theme = 1;
-    };
-  };
-  */
-
-  # qt = {
-  #   enable = true;
-  #   platformTheme.name = "qtct";
-  #   style = {
-  #     name = "Breeze-Dark";
-  #     package = pkgs.kdePackages.breeze;
-  #   };
-  #   qt6ctSettings = {
-  #     Appearance = {
-  #       icon_theme = "breeze-dark";
-  #       standard_dialogs = "default";
-  #       style = "Breeze";
-  #     };
-  #     Fonts = {
-  #       fixed = "\"JetBrainsMono Nerd Font Mono,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular,0,0\"";
-  #       general = "\"DejaVu Sans,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Book,0,0\"";
-  #     };
-  #   };
-  #   # kvantum = {
-  #   #   enable = true;
-  #   # };
-  #   # style.name = "kvantum";
-  #   # style.package = pkgs.kdePackages.qtstyleplugin-kvantum;
-  # };
 }

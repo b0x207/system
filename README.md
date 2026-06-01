@@ -8,6 +8,7 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
 
 - Flake parts
   - Split config out for desktop versus laptop
+  - Modularize home manager config
 - Redo everything on my desktop system
   - Figure out disk encryption
   - Figure out best use for HDD+SSD
@@ -20,6 +21,10 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
 
 - Fingerprint reader
 - Revisit fingerprint reader + PAM
+- Fix the evaluation warning: 
+  ```
+  pkgs.buildEnv warning: colliding subpath (ignored): `/nix/store/788mx070y81zjlg5ipcl0cra3afviw9k-gcc-wrapper-15.2.0/bin/cpp' and `/nix/store/86ghvdw2dyw702cyb8c6hs86ilp1kwyn-clang-wrapper-21.1.8/bin/cpp'
+  ```
 - Package Problems:
   - Packages don't respect `NIX_BUILD_CORES`
       - `firmware-manager`

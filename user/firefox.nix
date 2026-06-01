@@ -5,7 +5,6 @@
 }: {
   programs.firefox = {
     enable = true;
-    package = pkgs.firefox-bin;
     policies = {
       DisableAppUpdate = true;
     };
@@ -40,6 +39,9 @@
         "browser.urlbar.suggest.recentsearches" = false;
         "browser.urlbar.suggest.searches" = false;
         "browser.urlbar.suggest.trending" = false;
+
+        # Just in case GTK dark mode doesn't work
+        "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
       };
       extensions = {
         force = true;
@@ -51,7 +53,7 @@
           vimium
           redirect-shorts-to-youtube
           tasks-for-canvas
-          karakeep
+          violentmonkey
         ];
         settings."uBlock0@raymondhill.net".settings = {
           selectedFilterLists = [

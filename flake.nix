@@ -9,6 +9,7 @@
     };
 
     flake-parts.url = "github:hercules-ci/flake-parts";
+    import-tree.url = "github:denful/import-tree";
 
     catppuccin = {
       url = "github:catppuccin/nix/main";
@@ -35,38 +36,62 @@
     };
 
     todo-tree.url = "github:alexandretrotel/todo-tree";
-
-    stylix = {
-      url = "github:nix-community/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = {
+  outputs = base-inputs @ {
     self,
     nixpkgs,
     flake-parts,
     ...
-  } @ inputs: let
+  }: let
     system = "x86_64-linux";
 
-    # TODO: find a way to make this be a full replacement of `nixpkgs.lib.nixosSystem`
+    # TODO: find a way to make this work without IFD
     patched-nixpkgs = import ./patched-nixpkgs.nix {inherit system nixpkgs;};
-  in {
-    nixosConfigurations.system = patched-nixpkgs.lib.nixosSystem {
-      modules = [
-        ./system/configuration.nix
-        inputs.home-manager.nixosModules.home-manager
-        inputs.catppuccin.nixosModules.catppuccin
-        inputs.agenix.nixosModules.default
-        inputs.stylix.nixosModules.stylix
+
+    inputs =
+      base-inputs
+      // {
+        nixpkgs = patched-nixpkgs;
+        base-nixpkgs = nixpkgs;
+      };
+  in
+    flake-parts.lib.mkFlake {inherit inputs;} {
+      imports = [
+        (inputs.import-tree ./modules)
       ];
-      specialArgs = {
-        inherit system inputs patched-nixpkgs;
-        flake = self;
+
+      flake = {
+        formatter.${system} = let
+          pkgs = import patched-nixpkgs {inherit system;};
+        in
+          pkgs.alejandra;
       };
     };
+  /*
+    imports = [
+      inputs.flake-parts.flakeModules.modules
+      ./modules/ladybird.nix
+    ];
 
-    formatter.${system} = patched-nixpkgs.legacyPackages.${system}.alejandra;
-  };
+    flake = {
+      nixosConfigurations.laptop = inputs.nixpkgs.lib.nixosSystem {
+        modules = [
+          ./system/configuration.nix
+          inputs.home-manager.nixosModules.home-manager
+          inputs.catppuccin.nixosModules.catppuccin
+          inputs.agenix.nixosModules.default
+          inputs.stylix.nixosModules.stylix
+        ];
+        specialArgs = {
+          inherit system inputs patched-nixpkgs;
+          flake = self;
+        };
+      };
+
+      formatter.${system} = patched-nixpkgs.legacyPackages.${system}.alejandra;
+    };
+    systems = [ "x86_64-linux" ];
+  });
+  */
 }
