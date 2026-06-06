@@ -59,6 +59,7 @@
       self.nixosModules.audio
       self.nixosModules.intel-igpu
       self.nixosModules.nohang-oomd
+      self.nixosModules.btrfs-beesd
       self.nixosModules.core-system
       self.nixosModules.tz-and-locale
       self.nixosModules.nix-ld
@@ -153,7 +154,10 @@
     fileSystems."/" = {
       device = "/dev/disk/by-uuid/abb2f538-2ec5-4fa9-b168-811574181bff";
       fsType = "btrfs";
-      options = ["subvol=@linux"];
+      options = [
+        "subvol=@linux"
+        # "compress=zstd"
+      ];
     };
 
     fileSystems."/nix" = {

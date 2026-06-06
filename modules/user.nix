@@ -27,7 +27,8 @@
         imports = [
           ../user/home-manager.nix
           inputs.catppuccin.homeModules.catppuccin
-          self.homeManagerModules.btop
+          self.homeModules.btop
+          self.homeModules.theme
         ];
       };
       useUserPackages = true;

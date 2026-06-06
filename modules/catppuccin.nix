@@ -5,6 +5,9 @@
     ];
 
     catppuccin = {
+      autoEnable = false;
+      enable = true;
+
       accent = "blue";
       flavor = "mocha";
       grub.enable = true;

@@ -8,20 +8,13 @@
   patched-nixpkgs-src = pkgs.stdenv.mkDerivation (
     let
       patches = [
-        ./nixpkgs-patches/llvm.patch
         ./nixpkgs-patches/arrow-cpp.patch
         ./nixpkgs-patches/aiocache.patch
 
-        # TRACK: https://github.com/NixOS/nixpkgs/pull/503903.patch
+        # TRACK: https://github.com/NixOS/nixpkgs/pull/503903
         (pkgs.fetchpatch2 {
           url = "https://github.com/NixOS/nixpkgs/pull/503903.patch";
           hash = "sha256-fgf0/qJMwi6BOV/DfLDjTCk3KGqCQzcmwnptlx3mPo8=";
-        })
-
-        # TRACK: https://github.com/NixOS/nixpkgs/pull/523175
-        (pkgs.fetchpatch2 {
-          url = "https://github.com/NixOS/nixpkgs/pull/523175.patch";
-          hash = "sha256-OLKc5M7FCYGRRRcuV7QHdLZOjSI2HcCchcpUAUHGSJM=";
         })
       ];
     in {

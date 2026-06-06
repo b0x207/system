@@ -191,13 +191,16 @@
   };
 
   catppuccin = {
+    autoEnable = false;
+    enable = true;
+
     flavor = "mocha";
+    accent = "blue";
     ghostty.enable = true;
     swaync = {
       enable = true;
       font = "JetBrainsMono Nerd Font";
     };
-    # kvantum.enable = true;
     rofi.enable = true;
     atuin.enable = true;
     # cursors = {

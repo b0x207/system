@@ -1,6 +1,11 @@
 # One must try things to have an informed opinion
 {...}: {
-  flake.nixosModules.local-ai = {...}: {
+  flake.nixosModules.local-ai = {pkgs, ...}: {
+    environment.systemPackages = with pkgs; [
+      uv
+      nodejs
+    ];
+
     services.open-webui = {
       enable = true;
       port = 9090;

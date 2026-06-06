@@ -59,6 +59,7 @@
     flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
         (inputs.import-tree ./modules)
+        inputs.home-manager.flakeModules.home-manager
       ];
 
       flake = {
@@ -68,30 +69,4 @@
           pkgs.alejandra;
       };
     };
-  /*
-    imports = [
-      inputs.flake-parts.flakeModules.modules
-      ./modules/ladybird.nix
-    ];
-
-    flake = {
-      nixosConfigurations.laptop = inputs.nixpkgs.lib.nixosSystem {
-        modules = [
-          ./system/configuration.nix
-          inputs.home-manager.nixosModules.home-manager
-          inputs.catppuccin.nixosModules.catppuccin
-          inputs.agenix.nixosModules.default
-          inputs.stylix.nixosModules.stylix
-        ];
-        specialArgs = {
-          inherit system inputs patched-nixpkgs;
-          flake = self;
-        };
-      };
-
-      formatter.${system} = patched-nixpkgs.legacyPackages.${system}.alejandra;
-    };
-    systems = [ "x86_64-linux" ];
-  });
-  */
 }
