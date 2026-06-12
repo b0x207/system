@@ -5,6 +5,9 @@
 
       cycle = true;
       location = "center";
+      extraConfig = {
+        scroll-method = 1; # 1 = continuous scroll
+      };
 
       plugins = [ pkgs.rofi-calc ];
       
