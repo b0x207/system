@@ -29,6 +29,7 @@
           inputs.catppuccin.homeModules.catppuccin
           self.homeModules.btop
           self.homeModules.theme
+          self.homeModules.rofi
         ];
       };
       useUserPackages = true;

@@ -10,12 +10,7 @@
       patches = [
         ./nixpkgs-patches/arrow-cpp.patch
         ./nixpkgs-patches/aiocache.patch
-
-        # TRACK: https://github.com/NixOS/nixpkgs/pull/503903
-        (pkgs.fetchpatch2 {
-          url = "https://github.com/NixOS/nixpkgs/pull/503903.patch";
-          hash = "sha256-fgf0/qJMwi6BOV/DfLDjTCk3KGqCQzcmwnptlx3mPo8=";
-        })
+        # ./nixpkgs-patches/qtbase-qt6.patch
       ];
     in {
       pname = "patched-nixpkgs";

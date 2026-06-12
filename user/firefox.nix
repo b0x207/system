@@ -12,15 +12,20 @@
     profiles.default = {
       name = "Default";
       settings = {
+        # I want my bookmarks on my phone... I'll self host a better solution eventually
         "identity.fxaccounts.enabled" = true;
         "identity.fxaccounts.account.device.name" = "laptop";
+
         "extensions.autoDisableScopes" = 0;
         "extensions.update.autoUpdateDefault" = false;
         "extensions.update.enabled" = false;
         "devtools.toolbox.host" = "right";
-        #"browser.startup.homepage" = "file://" + (toString ./firefox/start.html);
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
         "browser.download.open_pdf_attachments_inline" = true;
+
+        # These never help and only cause annoying problems
+        "browser.gesture.swipe.left" = "";
+        "browser.gesture.swipe.right" = "";
 
         # Always ask for a location before saving a download
         "browser.download.useDownloadDir" = false;
@@ -63,6 +68,13 @@
             "ublock-unbreak"
             "ublock-quick-fixes"
             "easylist"
+          ];
+          netWhiteList = [
+            "chrome-extension-scheme"
+            "moz-extension-scheme"
+            "b0x207.dev"
+            "files.b0x207.dev"
+            "git.b0x207.dev"
           ];
           privateAllowed = true;
         };

@@ -39,6 +39,10 @@
       man = {
         enable = true;
         cache.enable = true;
+
+        # Building the man cache takes a long time and doesn't change that often.
+        # Rather than burden the build times, move the cost to a runtime systemd service
+        cache.generateAtRuntime = true;
       };
     };
   };

@@ -36,6 +36,8 @@
     };
 
     todo-tree.url = "github:alexandretrotel/todo-tree";
+
+    pinix.url = "github:remi-dupre/pinix";
   };
 
   outputs = base-inputs @ {

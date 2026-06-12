@@ -5,7 +5,6 @@
     ...
   }: {
     nix.settings = {
-      # substituters = [];
       max-jobs = 2;
       cores = 4;
       auto-optimise-store = true;
@@ -39,8 +38,8 @@
     };
 
     nixpkgs.hostPlatform = {
-      # gcc.arch = "arrowlake";
-      # gcc.tune = "arrowlake";
+      gcc.arch = "arrowlake";
+      gcc.tune = "arrowlake";
       system = "x86_64-linux";
     };
 

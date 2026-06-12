@@ -1,0 +1,166 @@
+diff --git a/pkgs/development/libraries/qt-6/modules/qtbase/avx512-old.patch b/pkgs/development/libraries/qt-6/modules/qtbase/avx512-old.patch
+new file mode 100644
+index 000000000000..c44da3078129
+--- /dev/null
++++ b/pkgs/development/libraries/qt-6/modules/qtbase/avx512-old.patch
+@@ -0,0 +1,49 @@
++diff --git a/config.tests/x86_simd/main.cpp b/config.tests/x86_simd/main.cpp
++index 8634e29cf20..9980b059630 100644
++--- a/config.tests/x86_simd/main.cpp
+++++ b/config.tests/x86_simd/main.cpp
++@@ -18,6 +18,7 @@ attribute_target("avx512vl,avx512vbmi2") void test_avx512vbmi2()
++     /* AVX512 Vector Byte Manipulation Instructions 2 */
++     __m128i a = _mm_maskz_compress_epi16(-1, _mm_set1_epi16(1));
++     __m128i b = _mm_shrdi_epi32(a, a, 7);
+++#error "PLEASE DON'T ENABLE AVX512"
++ }
++ #endif
++
++diff --git a/src/corelib/global/qsimd.cpp b/src/corelib/global/qsimd.cpp
++index 3169d28e094..2b45e7d4b87 100644
++--- a/src/corelib/global/qsimd.cpp
+++++ b/src/corelib/global/qsimd.cpp
++@@ -629,13 +629,19 @@ QT_FUNCTION_TARGET_BASELINE
++ uint64_t QT_MANGLE_NAMESPACE(qDetectCpuFeatures)()
++ {
++     auto minFeatureTest = minFeature;
+++    fprintf(stderr, "\n\n");
++ #if defined(Q_PROCESSOR_X86_64) && defined(cpu_feature_shstk)
++     // Controlflow Enforcement Technology (CET) is an OS-assisted
++     // hardware-feature, meaning the CPUID bit may be disabled if the OS
++     // doesn't support it, but that's ok.
++     minFeatureTest &= ~CpuFeatureSHSTK;
+++    fprintf(stderr, "SHSTK enabled: %x and %x\n", CpuFeatureSHSTK, ~CpuFeatureSHSTK);
++ #endif
++     QCpuFeatureType f = detectProcessorFeatures();
+++    fprintf(stderr, "QCpuFeatureType: %x\n", f);
+++    fprintf(stderr, "minFeature: %x\n", minFeature);
+++    fprintf(stderr, "QT_NO_CPU_FEATURE: %s\n", getenv("QT_NO_CPU_FEATURE"));
+++    fprintf(stderr, "\n\n");
++
++     // Intentionally NOT qgetenv (this code runs too early)
++     if (char *disable = getenv("QT_NO_CPU_FEATURE"); disable && *disable) {
++diff --git a/src/corelib/global/qsimd_x86_p.h b/src/corelib/global/qsimd_x86_p.h
++index ae834abe08b..b7f2023b17d 100644
++--- a/src/corelib/global/qsimd_x86_p.h
+++++ b/src/corelib/global/qsimd_x86_p.h
++@@ -138,7 +138,7 @@
++ #define cpu_adl                 (cpu_grt)
++ #define cpu_rpl                 (cpu_grt)
++ #define cpu_mtl                 (cpu_cmt)
++-#define cpu_arl                 (cpu_cmt)
+++#define cpu_arl                 (cpu_grt)  // Arrowlake doesn't have AVX512
++ #define cpu_lnl                 (cpu_cmt)
++ #define cpu_icx                 (cpu_snc)
++ #define cpu_spr                 (cpu_glc)
+diff --git a/pkgs/development/libraries/qt-6/modules/qtbase/avx512.patch b/pkgs/development/libraries/qt-6/modules/qtbase/avx512.patch
+new file mode 100644
+index 000000000000..fa9998b88567
+--- /dev/null
++++ b/pkgs/development/libraries/qt-6/modules/qtbase/avx512.patch
+@@ -0,0 +1,60 @@
++diff --git a/config.tests/x86_simd/main.cpp b/config.tests/x86_simd/main.cpp
++index 8634e29cf20..9980b059630 100644
++--- a/config.tests/x86_simd/main.cpp
+++++ b/config.tests/x86_simd/main.cpp
++@@ -18,6 +18,7 @@ attribute_target("avx512vl,avx512vbmi2") void test_avx512vbmi2()
++     /* AVX512 Vector Byte Manipulation Instructions 2 */
++     __m128i a = _mm_maskz_compress_epi16(-1, _mm_set1_epi16(1));
++     __m128i b = _mm_shrdi_epi32(a, a, 7);
+++#error "PLEASE DON'T ENABLE AVX512"
++ }
++ #endif
++ 
++diff --git a/src/corelib/global/qsimd.cpp b/src/corelib/global/qsimd.cpp
++index 3169d28e094..4c545f60714 100644
++--- a/src/corelib/global/qsimd.cpp
+++++ b/src/corelib/global/qsimd.cpp
++@@ -629,13 +629,22 @@ QT_FUNCTION_TARGET_BASELINE
++ uint64_t QT_MANGLE_NAMESPACE(qDetectCpuFeatures)()
++ {
++     auto minFeatureTest = minFeature;
+++    fprintf(stderr, "\n\n");
++ #if defined(Q_PROCESSOR_X86_64) && defined(cpu_feature_shstk)
++     // Controlflow Enforcement Technology (CET) is an OS-assisted
++     // hardware-feature, meaning the CPUID bit may be disabled if the OS
++     // doesn't support it, but that's ok.
++     minFeatureTest &= ~CpuFeatureSHSTK;
+++    fprintf(stderr, "SHSTK enabled: %x and %x\n", CpuFeatureSHSTK, ~CpuFeatureSHSTK);
++ #endif
++     QCpuFeatureType f = detectProcessorFeatures();
+++    fprintf(stderr, "QCpuFeatureType: %llx\n", f);
+++    fprintf(stderr, "minFeature: %llx\n", minFeatureTest);
+++    fprintf(stderr, "delta: %llx\n", (f & minFeatureTest));
+++    fprintf(stderr, "avxifma: %llx\n", cpu_feature_avxifma);
+++    fprintf(stderr, "cmpccxadd: %llx\n", cpu_feature_cmpccxadd);
+++    fprintf(stderr, "QT_NO_CPU_FEATURE: %s\n", getenv("QT_NO_CPU_FEATURE"));
+++    fprintf(stderr, "\n\n");
++ 
++     // Intentionally NOT qgetenv (this code runs too early)
++     if (char *disable = getenv("QT_NO_CPU_FEATURE"); disable && *disable) {
++@@ -661,6 +670,7 @@ uint64_t QT_MANGLE_NAMESPACE(qDetectCpuFeatures)()
++ #endif
++     if (Q_UNLIKELY(!runningOnValgrind && minFeatureTest != 0 && (f & minFeatureTest) != minFeatureTest)) {
++         quint64 missing = minFeatureTest & ~quint64(f);
+++        fprintf(stderr, "Missing: %llx\n", missing);
++         fprintf(stderr, "Incompatible processor. This Qt build requires the following features:\n   ");
++         for (uint i = 0; i < arraysize(features_indices); ++i) {
++             if (missing & (Q_UINT64_C(1) << i))
++diff --git a/src/corelib/global/qsimd_x86_p.h b/src/corelib/global/qsimd_x86_p.h
++index ae834abe08b..b7f2023b17d 100644
++--- a/src/corelib/global/qsimd_x86_p.h
+++++ b/src/corelib/global/qsimd_x86_p.h
++@@ -138,7 +138,7 @@
++ #define cpu_adl                 (cpu_grt)
++ #define cpu_rpl                 (cpu_grt)
++ #define cpu_mtl                 (cpu_cmt)
++-#define cpu_arl                 (cpu_cmt)
+++#define cpu_arl                 (cpu_grt)  // Arrowlake doesn't have AVX512
++ #define cpu_lnl                 (cpu_cmt)
++ #define cpu_icx                 (cpu_snc)
++ #define cpu_spr                 (cpu_glc)
+diff --git a/pkgs/development/libraries/qt-6/modules/qtbase/default.nix b/pkgs/development/libraries/qt-6/modules/qtbase/default.nix
+index fa3ae210d281..f855a61d53e8 100644
+--- a/pkgs/development/libraries/qt-6/modules/qtbase/default.nix
++++ b/pkgs/development/libraries/qt-6/modules/qtbase/default.nix
+@@ -246,6 +246,9 @@ stdenv.mkDerivation {
+     # don't pass qtbase's QML directory to qmlimportscanner if it's empty
+     ./skip-missing-qml-directory.patch
+ 
++    # Disable AVX512
++    ./avx512.patch
++
+     # backport crash fix
+     (fetchpatch {
+       url = "https://github.com/qt/qtbase/commit/1466f88633b2c29a6159a0c2eacd0c0d6601aa5e.diff";
+@@ -298,6 +301,8 @@ stdenv.mkDerivation {
+     # don't leak OS version into the final output
+     # https://bugreports.qt.io/browse/QTBUG-136060
+     "-DCMAKE_SYSTEM_VERSION="
++    "-DCMAKE_VERBOSE_MAKEFILE=ON"
++    "-G Ninja"
+   ]
+   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+     "-DQT_FEATURE_sctp=ON"
+@@ -319,6 +324,21 @@ stdenv.mkDerivation {
+     qttranslations != null && !isCrossBuild
+   ) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations";
+ 
++  buildPhase = ''
++  ls -la
++  #find . | grep ninja
++  echo -e '\n\n\nBUILD\n\n\n'
++  ninja -t targets all | grep qtwaylandscanner
++  ninja qtwaylandscanner -j$NIX_BUILD_CORES --verbose
++  echo -e '\n\n\nPROVE\n\n\n'
++  QT_NO_CPU_FEATURE=cmpccxadd,avxifma ./libexec/qtwaylandscanner --help
++  # ninjaBuildPhase
++  echo -e '\n\n\nEXIT\n\n\n'
++  exit 1
++  '';
++
++  ninjaFlags = [ "-t targets all" ];
++
+   env.NIX_CFLAGS_COMPILE = "-DNIXPKGS_QT_PLUGIN_PREFIX=\"${qtPluginPrefix}\"";
+ 
+   outputs = [

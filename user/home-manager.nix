@@ -159,6 +159,8 @@
       bindkey "^[[1;5D" backward-word
       bindkey \^U backward-kill-line
 
+      # alias pix="pinix --pix-command nix --pix-log-history 0 --pix-record /tmp/pix.log"
+
       #if [[ ! -n $DISPLAY ]] && uwsm check may-start && uwsm select; then
       #  exec uwsm start default
       #fi
@@ -201,7 +203,6 @@
       enable = true;
       font = "JetBrainsMono Nerd Font";
     };
-    rofi.enable = true;
     atuin.enable = true;
     # cursors = {
     #   enable = true;

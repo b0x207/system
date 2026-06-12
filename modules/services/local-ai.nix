@@ -1,6 +1,6 @@
 # One must try things to have an informed opinion
 {...}: {
-  flake.nixosModules.local-ai = {pkgs, ...}: {
+  flake.nixosModules.local-ai = {pkgs, genericPkgs, ...}: {
     environment.systemPackages = with pkgs; [
       uv
       nodejs

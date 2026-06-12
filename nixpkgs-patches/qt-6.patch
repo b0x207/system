@@ -57,16 +57,17 @@ diff --git a/pkgs/development/libraries/qt-6/modules/qtbase/default.nix b/pkgs/d
 index cdbe8f0740d1..0065a7dee6a2 100644
 --- a/pkgs/development/libraries/qt-6/modules/qtbase/default.nix
 +++ b/pkgs/development/libraries/qt-6/modules/qtbase/default.nix
-@@ -238,6 +238,9 @@ stdenv.mkDerivation rec {
+@@ -247,7 +247,10 @@ stdenv.mkDerivation {
      ./qmlimportscanner-import-path.patch
      # don't pass qtbase's QML directory to qmlimportscanner if it's empty
      ./skip-missing-qml-directory.patch
-+
+
 +    # Disable AVX512
 +    ./avx512.patch
-   ];
- 
-   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
++
+     # backport crash fix
+     (fetchpatch {
+       url = "https://github.com/qt/qtbase/commit/1466f88633b2c29a6159a0c2eacd0c0d6601aa5e.diff";
 @@ -285,6 +288,8 @@ stdenv.mkDerivation rec {
      # don't leak OS version into the final output
      # https://bugreports.qt.io/browse/QTBUG-136060

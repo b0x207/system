@@ -29,7 +29,6 @@
       self.nixosModules.pika-backup
       self.nixosModules.multimedia-tools
       self.nixosModules.homelab
-      self.nixosModules.mars-mips
       self.nixosModules.kdeconnect
 
       self.nixosModules.hyprland
@@ -46,10 +45,10 @@
       self.nixosModules.quickshell
       self.nixosModules.awww
       self.nixosModules.sway-notification-center
-      self.nixosModules.rofi
       self.nixosModules.hyprquickframe
       self.nixosModules.clipboard
 
+      self.nixosModules.pinix
       self.nixosModules.user
       self.nixosModules.catppuccin
       self.nixosModules.fstrim

@@ -1,4 +1,36 @@
-{nixpkgs}: final: prev: {
+{nixpkgs}: final: prev: let
+  # TODO: this needs a complete overhaul to make it work, however, other packages need to be
+  # before more time is spent on picky packages
+  plain-pkgs = import nixpkgs { system = "x86_64-linux"; };
+
+  # A basic replacement GCC with default platform targets
+  genericCC = prev.wrapCCWith {
+    cc = prev.gcc-unwrapped;
+
+    # TODO: decide if this can be refined to -mtune=intel
+    extraBuildCommands = ''
+      echo '-march=x86-64 -mtune=generic ' >> $out/nix-support/cc-cflags
+    '';
+  };
+
+  genericStdenv = prevStdenv: prev.overrideCC prevStdenv genericCC;
+  withGenericStdenv = pkg: pkg.override (oldArgs: { stdenv = genericStdenv oldArgs.stdenv; });
+
+  genericPkgs = import prev.path {
+    inherit (prev.stdenv) system;
+    
+    config = {
+      # TODO: convert to dynamic reference
+      allowUnfree = true;
+    };
+  };
+in {
+  # Jun 11 2026:
+  # There are far too many problems with the ML/LLM python packages and their related dependencies.
+  # To get around this, make the entire tree of derivations for open webui use the generic versions
+  # of the same nixpkgs set.
+  open-webui = genericPkgs.open-webui;
+
   # May 3 2026:
   # openldap checks time out
   #
@@ -21,7 +53,7 @@
   # Build currently fails due to a bug in GCC's vector optimizations.
   #
   # TRACK: https://github.com/NixOS/nixpkgs/issues/440270
-  # assimp = plain-pkgs.assimp;
+  assimp = withGenericStdenv prev.assimp;
 
   # May 7 2026
   # Upstream bug with ValveSoftware/gamescope that hasn't made its way into a fixed point release.
@@ -65,6 +97,7 @@
             (prevAttrs.disabledTests or [])
             ++ [
               "test_roundtrip_scaling"
+              "test_initial_step"
             ];
         });
 
@@ -109,7 +142,8 @@
   # Apr 18 2026:
   # This is a better solution for QT6, however, it is dependent upon overrideScope preserving the
   # override attribute.
-  # ```nix
+  #
+  # TRACK: https://github.com/NixOS/nixpkgs/issues/447012
   # qt6 = prev.qt6.overrideScope (scope-final: scope-prev: {
   #   qtbase = scope-prev.qtbase.overrideAttrs (prevAttrs: {
   #     env.NIX_CFLAGS_COMPILE = plain-pkgs.lib.debug.traceVal (
@@ -129,14 +163,24 @@
   #     '' + (prevAttrs.postPatch or "");
   #   });
   # });
-  # ```
-  #
-  # TRACK: https://github.com/NixOS/nixpkgs/issues/447012
-  # qt5 = prev.qt5.overrideScope (
-  #   qt-final: qt-prev: {
-  #     qtbase = plain-pkgs.qt5.qtbase;
-  #   }
-  # );
+  # qt6 = prev.qt6.overrideScope (scope-final: scope-prev: {
+  #   qtbase = scope-prev.qtbase.overrideAttrs (prevAttrs: {
+  #   });
+  # });
+  qt6 = genericPkgs.qt6; # Unfortunately, really aggressive but necessary without overrideScope
+  qt5 = prev.qt5.overrideScope (
+    qt-final: qt-prev: {
+      qtbase = plain-pkgs.qt5.qtbase;
+    }
+  );
+
+  # Jun 11 2026:
+  # Build failure caused by kdoctools not liking GCC -march
+  kdePackages = prev.kdePackages.overrideScope (
+    kde-final: kde-prev: {
+      kdoctools = genericPkgs.kdePackages.kdoctools;
+    }
+  );
 
   # Apr 18 2026:
   # Currently, the test `TestRedLock.test_locking_dogpile[redis_cache]` fails. The easy way out is
