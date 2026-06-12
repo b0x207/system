@@ -30,6 +30,7 @@
           self.homeModules.btop
           self.homeModules.theme
           self.homeModules.rofi
+          self.homeModules.zathura
         ];
       };
       useUserPackages = true;
