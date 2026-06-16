@@ -33,6 +33,7 @@
           self.homeModules.zathura
           self.homeModules.ssh
           self.homeModules.hyprland
+          self.homeModules.quickshell
         ];
       };
       useUserPackages = true;
