@@ -12,6 +12,9 @@
     profiles.default = {
       name = "Default";
       settings = {
+        "browser.aboutConfig.showWarning" = false;
+        "browser.startup.page" = 1; # Don't reopen closed windows
+
         # I want my bookmarks on my phone... I'll self host a better solution eventually
         "identity.fxaccounts.enabled" = true;
         "identity.fxaccounts.account.device.name" = "laptop";
