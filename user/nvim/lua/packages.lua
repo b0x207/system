@@ -31,6 +31,13 @@ vim.pack.add({
     { src = "https://github.com/chomosuke/typst-preview.nvim", version = "v1.4.1" },
     "https://github.com/jinh0/eyeliner.nvim",
     "https://github.com/sphamba/smear-cursor.nvim",
+
+    -- Debugging
+    "https://github.com/mfussenegger/nvim-dap",
+    -- "https://github.com/igorlfs/nvim-dap-view",
+    "https://github.com/rcarriga/nvim-dap-ui",
+    "https://github.com/nvim-neotest/nvim-nio", -- Dep of nvim-dap-ui
+    "https://github.com/sakhnik/nvim-gdb",
 })
 
 require("catppuccin").setup({

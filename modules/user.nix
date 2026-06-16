@@ -34,6 +34,7 @@
           self.homeModules.ssh
           self.homeModules.hyprland
           self.homeModules.quickshell
+          self.homeModules.neovim
         ];
       };
       useUserPackages = true;
