@@ -1,5 +1,5 @@
-{ ... }: {
-  flake.homeModules.zathura = { pkgs, ... }: {
+{...}: {
+  flake.homeModules.zathura = {pkgs, ...}: {
     programs.zathura = {
       enable = true;
       extraConfig = ''

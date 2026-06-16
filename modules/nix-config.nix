@@ -2,8 +2,15 @@
   flake.nixosModules.nix-config = {
     pkgs,
     system,
+    config,
     ...
-  }: {
+  }: let
+    # TODO: make the handling of host platforms better
+    hostArch =
+      if config.networking.hostName == "laptop"
+      then "arrowlake"
+      else "skylake";
+  in {
     nix.settings = {
       max-jobs = 2;
       cores = 4;
@@ -24,7 +31,7 @@
         "kvm"
 
         # Custom
-        "gccarch-arrowlake"
+        "gccarch-${hostArch}"
       ];
     };
 
@@ -38,8 +45,8 @@
     };
 
     nixpkgs.hostPlatform = {
-      gcc.arch = "arrowlake";
-      gcc.tune = "arrowlake";
+      # gcc.arch = hostArch;
+      # gcc.tune = hostArch;
       system = "x86_64-linux";
     };
 

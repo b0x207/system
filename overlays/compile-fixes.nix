@@ -1,7 +1,7 @@
 {nixpkgs}: final: prev: let
   # TODO: this needs a complete overhaul to make it work, however, other packages need to be
   # before more time is spent on picky packages
-  plain-pkgs = import nixpkgs { system = "x86_64-linux"; };
+  plain-pkgs = import nixpkgs {system = "x86_64-linux";};
 
   # A basic replacement GCC with default platform targets
   genericCC = prev.wrapCCWith {
@@ -14,11 +14,11 @@
   };
 
   genericStdenv = prevStdenv: prev.overrideCC prevStdenv genericCC;
-  withGenericStdenv = pkg: pkg.override (oldArgs: { stdenv = genericStdenv oldArgs.stdenv; });
+  withGenericStdenv = pkg: pkg.override (oldArgs: {stdenv = genericStdenv oldArgs.stdenv;});
 
   genericPkgs = import prev.path {
     inherit (prev.stdenv) system;
-    
+
     config = {
       # TODO: convert to dynamic reference
       allowUnfree = true;

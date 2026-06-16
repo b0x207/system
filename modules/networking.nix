@@ -1,8 +1,6 @@
 {...}: {
   flake.nixosModules.networking = {...}: {
     networking = {
-      hostName = "laptop";
-
       networkmanager = {
         enable = true;
         unmanaged = ["qemu-tap"];

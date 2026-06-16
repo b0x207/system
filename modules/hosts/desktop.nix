@@ -3,20 +3,17 @@
   self,
   ...
 }: {
-  flake.nixosConfigurations.laptop = inputs.nixpkgs.lib.nixosSystem {
+  flake.nixosConfigurations.desktop = inputs.nixpkgs.lib.nixosSystem {
     modules = [
-      self.nixosModules.laptop-hw
-      self.nixosModules.laptop-config
+      self.nixosModules.desktop-hw
+      self.nixosModules.desktop-config
 
       inputs.home-manager.nixosModules.home-manager
-
-      # Disable till secrets are needed
-      # inputs.agenix.nixosModules.default
-
-      self.nixosModules.jellyfin
+      #
+      # self.nixosModules.jellyfin
       self.nixosModules.i2p
-      self.nixosModules.lm-studio
-      self.nixosModules.local-ai
+      # self.nixosModules.lm-studio
+      # self.nixosModules.local-ai
       self.nixosModules.games
       self.nixosModules.xonotic
       self.nixosModules.typst
@@ -48,17 +45,15 @@
       self.nixosModules.hyprquickframe
       self.nixosModules.clipboard
 
-      self.nixosModules.pinix
       self.nixosModules.user
       self.nixosModules.catppuccin
-      self.nixosModules.fstrim
+      # self.nixosModules.fstrim
       self.nixosModules.keyd
-      self.nixosModules.battery
       self.nixosModules.bluetooth
       self.nixosModules.audio
       self.nixosModules.intel-igpu
       self.nixosModules.nohang-oomd
-      self.nixosModules.btrfs-beesd
+      # self.nixosModules.btrfs-beesd
       self.nixosModules.core-system
       self.nixosModules.tz-and-locale
       self.nixosModules.nix-ld
@@ -68,28 +63,20 @@
     ];
   };
 
-  flake.nixosModules.laptop-config = {pkgs, ...}: {
+  flake.nixosModules.desktop-config = {pkgs, ...}: {
     boot.loader = {
       efi = {
         canTouchEfiVariables = true;
       };
-      grub = {
+      limine = {
         enable = true;
-        efiSupport = true;
-        device = "nodev";
-        useOSProber = true;
-        configurationLimit = 5;
+        efiInstallAsRemovable = true;
       };
     };
 
-    networking.hostName = "laptop";
+    networking.hostName = "desktop";
 
     system.configurationRevision = toString (self.rev or self.dirtyRev or "unknown");
-
-    # Copy the NixOS configuration file and link it from the resulting system
-    # (/run/current-system/configuration.nix). This is useful in case you
-    # accidentally delete configuration.nix.
-    # system.copySystemConfiguration = true;
 
     # This option defines the first version of NixOS you have installed on this particular machine,
     # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
@@ -111,7 +98,7 @@
     system.stateVersion = "25.11"; # Did you read the comment?
   };
 
-  flake.nixosModules.laptop-hw = {
+  flake.nixosModules.desktop-hw = {
     config,
     pkgs,
     lib,
@@ -119,78 +106,67 @@
   }: {
     boot.initrd.availableKernelModules = [
       "xhci_pci"
-      "thunderbolt"
-      "vmd"
+      "ahci"
       "nvme"
       "usbhid"
-      "rtsx_pci_sdmmc"
+      "usb_storage"
+      "sd_mod"
     ];
     boot.initrd.kernelModules = [];
     boot.initrd.systemd.enable = true;
     boot.kernelModules = [
       "kvm-intel"
-      "usbmon"
     ];
     boot.extraModulePackages = [];
     boot.kernelPackages = pkgs.linuxPackages_latest;
     hardware.enableRedistributableFirmware = true;
     boot.kernel.sysctl."vm.swappiness" = 5;
-    # boot.kernelParams = [
-    #   "zswap.enabled=1"
-    #   "zswap.compressor=lz4"
-    #   "zswap.max_pool_percent=20"
-    #   "zswap.shrinker_enabled=1"
-    # ];
-    # boot.blacklistedKernelModules = [ "i915" ];
-    # boot.kernelParams = [
-    #   "i915.force_probe=!"
-    #   "xe.force_probe=*"
-    # ];
 
     systemd.sleep.settings.Sleep = {
-      # Hibernation can cause weird problems with no physical swap device
+      # Hibernation can't work when using an encrypted swap
       AllowHibernation = "no";
     };
 
     fileSystems."/" = {
-      device = "/dev/disk/by-uuid/abb2f538-2ec5-4fa9-b168-811574181bff";
+      device = "/dev/mapper/rootfs";
       fsType = "btrfs";
-      options = [
-        "subvol=@linux"
-        # "compress=zstd"
-      ];
+      options = ["subvol=@root" "noatime" "compress=zstd"];
     };
 
+    boot.initrd.luks.devices."rootfs".device = "/dev/disk/by-uuid/9606c000-3a33-4e50-81ee-db61ad4acabe";
+
     fileSystems."/nix" = {
-      device = "/dev/disk/by-uuid/abb2f538-2ec5-4fa9-b168-811574181bff";
+      device = "/dev/mapper/rootfs";
       fsType = "btrfs";
-      neededForBoot = true;
-      options = [
-        "subvol=@nix"
-        "noatime"
-      ];
+      options = ["subvol=@nix" "noatime" "compress=zstd"];
     };
 
     fileSystems."/home" = {
-      device = "/dev/disk/by-uuid/abb2f538-2ec5-4fa9-b168-811574181bff";
+      device = "/dev/mapper/rootfs";
       fsType = "btrfs";
-      options = ["subvol=@home"];
+      options = ["subvol=@home" "noatime" "compress=zstd"];
+    };
+
+    fileSystems."/var/log" = {
+      device = "/dev/mapper/rootfs";
+      fsType = "btrfs";
+      options = ["subvol=@log" "noatime" "compress=zstd"];
+      neededForBoot = true;
     };
 
     fileSystems."/boot" = {
-      device = "/dev/disk/by-uuid/B99A-F204";
+      device = "/dev/disk/by-uuid/8379-2604";
       fsType = "vfat";
-      options = [
-        "fmask=0077"
-        "dmask=0077"
-      ];
+      options = ["fmask=0022" "dmask=0022"];
     };
 
     swapDevices = [
       {
-        device = "/dev/disk/by-partuuid/17ad8cfd-74dc-46e1-90ad-13d2dfc733c8";
-        randomEncryption.enable = true;
-        priority = 0;
+        device = "/dev/disk/by-partuuid/481c8904-1794-4588-ab02-feb7c8a64aa0";
+        randomEncryption = {
+          enable = true;
+          allowDiscards = true;
+        };
       }
     ];
 
