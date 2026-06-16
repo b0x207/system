@@ -86,7 +86,10 @@ Scope {
 
                     VolumeWidget { id: volumeWidget }
                 }
+
                 Rectangle {
+                    visible: Hostname.value != "desktop"
+
                     Layout.minimumWidth: batteryWidget.implicitWidth + window.paddingWidth * 2
                     Layout.fillHeight: true
                     Layout.alignment: Qt.AlignRight
