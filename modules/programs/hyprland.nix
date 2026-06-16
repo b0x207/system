@@ -49,4 +49,10 @@
       };
     };
   };
+
+  flake.homeModules.hyprland = {config, ...}: let
+    nvimPath = "${config.home.homeDirectory}/config/user/hypr";
+  in {
+    xdg.configFile."hypr".source = config.lib.file.mkOutOfStoreSymlink nvimPath;
+  };
 }

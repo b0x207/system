@@ -1,0 +1,10 @@
+-- MODULES (ORDER MATTERS)
+
+require("monitors")
+require("env")
+require("binds")
+require("config")
+require("theme")
+require("animations")
+require("rules")
+require("always_apps")

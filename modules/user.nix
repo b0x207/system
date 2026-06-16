@@ -32,6 +32,7 @@
           self.homeModules.rofi
           self.homeModules.zathura
           self.homeModules.ssh
+          self.homeModules.hyprland
         ];
       };
       useUserPackages = true;
