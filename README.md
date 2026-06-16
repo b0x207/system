@@ -16,6 +16,7 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
 - Switch to limine
   - Make sure it works in removable/fallback mode for desktop (dumb MSI bios)
 - Make nohang never kill hyprland
+- Auto unlock kwallet
 
 ### Long Term
 

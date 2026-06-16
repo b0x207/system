@@ -31,6 +31,7 @@
           self.homeModules.theme
           self.homeModules.rofi
           self.homeModules.zathura
+          self.homeModules.ssh
         ];
       };
       useUserPackages = true;
