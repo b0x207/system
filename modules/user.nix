@@ -35,6 +35,7 @@
           self.homeModules.hyprland
           self.homeModules.quickshell
           self.homeModules.neovim
+          self.homeModules.tmux
         ];
       };
       useUserPackages = true;
