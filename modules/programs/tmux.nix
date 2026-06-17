@@ -5,7 +5,11 @@
     ];
   };
 
-  flake.homeModules.tmux = { config, pkgs, ... }: {
+  flake.homeModules.tmux = {
+    config,
+    pkgs,
+    ...
+  }: {
     programs.tmux = {
       enable = true;
 

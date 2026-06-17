@@ -52,6 +52,7 @@
       self.nixosModules.bluetooth
       self.nixosModules.audio
       self.nixosModules.intel-igpu
+      self.nixosModules.nvidia-gpu
       self.nixosModules.nohang-oomd
       # self.nixosModules.btrfs-beesd
       self.nixosModules.core-system

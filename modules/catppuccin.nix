@@ -11,6 +11,7 @@
       accent = "blue";
       flavor = "mocha";
       grub.enable = true;
+      limine.enable = true;
       tty.enable = true;
     };
   };

@@ -9,7 +9,7 @@
     ];
   };
 
-  flake.homeModules.neovim = { config, ... }: let
+  flake.homeModules.neovim = {config, ...}: let
     neovimPath = "${config.home.homeDirectory}/config/user/nvim";
   in {
     xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink neovimPath;
