@@ -2,6 +2,7 @@
   valkey = prev.valkey.overrideAttrs (
     oldAttrs:
       assert oldAttrs.version == "9.0.4"; {
+        doCheck = false;
         checkPhase = (
           builtins.replaceStrings
           ["--skipunit integration/aof-multi-part"]

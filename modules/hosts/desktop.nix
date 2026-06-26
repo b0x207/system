@@ -12,8 +12,8 @@
       #
       # self.nixosModules.jellyfin
       self.nixosModules.i2p
-      # self.nixosModules.lm-studio
-      # self.nixosModules.local-ai
+      self.nixosModules.lm-studio
+      self.nixosModules.local-ai
       self.nixosModules.games
       self.nixosModules.xonotic
       self.nixosModules.typst

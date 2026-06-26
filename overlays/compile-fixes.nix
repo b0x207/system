@@ -25,6 +25,20 @@
     };
   };
 in {
+  # Jun 19 2026
+  # The firmware-manager package ignores the parallelism options
+  firmware-manager = prev.firmware-manager.overrideAttrs (oldAttrs: {
+    enableParallelBuilding = true;
+
+    # NOTE: a complete replacement of the patchPhase as upstream's use of substituteInPlace is not
+    # correctly done. At some semi-regular basis, upstream should be checked to make sure nothing
+    # new has been added
+    postPatch = ''
+      substituteInPlace Makefile --replace-fail '$(DESTDIR)/etc' '$(DESTDIR)$(prefix)/etc'
+      export CARGO_BUILD_JOBS=$NIX_BUILD_CORES
+    '';
+  });
+
   # Jun 11 2026:
   # There are far too many problems with the ML/LLM python packages and their related dependencies.
   # To get around this, make the entire tree of derivations for open webui use the generic versions

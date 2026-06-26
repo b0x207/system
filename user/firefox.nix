@@ -1,4 +1,5 @@
 {
+  osConfig,
   config,
   pkgs,
   ...
@@ -17,7 +18,7 @@
 
         # I want my bookmarks on my phone... I'll self host a better solution eventually
         "identity.fxaccounts.enabled" = true;
-        "identity.fxaccounts.account.device.name" = "laptop";
+        "identity.fxaccounts.account.device.name" = osConfig.networking.hostName;
 
         "extensions.autoDisableScopes" = 0;
         "extensions.update.autoUpdateDefault" = false;

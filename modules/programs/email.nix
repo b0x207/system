@@ -1,7 +1,8 @@
 {...}: {
   flake.nixosModules.email = {pkgs, ...}: {
     environment.systemPackages = with pkgs; [
-      # thunderbird-bin
+      # TODO: consider switching to from source
+      thunderbird-bin
 
       # Web Accounts
       kdePackages.signond

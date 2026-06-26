@@ -6,6 +6,8 @@
 
     services.i2p.enable = true;
 
+    networking.firewall.allowedUDPPorts = [ 123 ];
+
     # services.i2pd = {
     #   enable = true;
     #   bandwidth = 1024;

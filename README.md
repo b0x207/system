@@ -6,17 +6,21 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
 
 ### Short Term
 
-- Flake parts
-  - Split config out for desktop versus laptop
-  - Modularize home manager config
-- Redo everything on my desktop system
-  - Figure out disk encryption
-  - Figure out best use for HDD+SSD
-- Finally add a lock screen to hyprland
-- Switch to limine
-  - Make sure it works in removable/fallback mode for desktop (dumb MSI bios)
-- Make nohang never kill hyprland
-- Auto unlock kwallet
+- [ ] Flake parts
+  - [x] Split config out for desktop versus laptop
+  - [ ] Modularize home manager config
+- [ ] Redo everything on my desktop system
+  - [x] Figure out disk encryption
+  - [ ] Figure out best use for HDD+SSD
+- [ ] Finally add a lock screen to hyprland
+- [ ] Switch to limine
+  - [x] Make sure it works in removable/fallback mode for desktop (dumb MSI bios)
+  - [ ] Theme it properly
+- [ ] Make nohang never kill hyprland
+- [ ] Figure out the main situation - [ ] Declarative kmail?
+  - [ ] Auto unlock kwallet
+- [ ] Declarative vimium config
+- [ ] Automate upstream checks for changes to packages that are patched/overridden
 
 ### Long Term
 
@@ -28,12 +32,12 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
   ```
 - Package Problems:
   - Packages don't respect `NIX_BUILD_CORES`
-      - `firmware-manager`
-      - `jetbrains-jdk-jcef-21.0.9-b`
-      - `python3.13-django-5.2.12`
-      - `rapidocr-onnxruntime`
-      - `nix-store-tests`
-      - `triton-llvm`
+      - [x] `firmware-manager`
+      - [ ] `jetbrains-jdk-jcef-21.0.9-b`
+      - [ ] `python3.13-django-5.2.12`
+      - [ ] `rapidocr-onnxruntime`
+      - [ ] `nix-store-tests`
+      - [ ] `triton-llvm`
   - Packages having problems due to `.git` being missing (see: a lot of the LLVM packages)
   - Some packages don't build in parallel
     - `lager`
@@ -42,3 +46,5 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
   - nohang activity indicator module
 - Mount basically everything with `nosuid`.
   See [this](https://discourse.nixos.org/t/get-size-of-nix-store-efficiently/51354/8).
+
+sudo nixos-install --flake /mnt/home/ben/config#desktop --log-format bar-with-logs --max-jobs 1 --cores 16

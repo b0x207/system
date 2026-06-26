@@ -15,12 +15,12 @@ require("binds")
 require("config")
 require("theme")
 require("animations")
-
 require("rules")
+require("always_apps")
+
 if get_hostname() == "desktop" then
+    require("env_desktop")
     require("rules_desktop")
 else
     require("rules_laptop")
 end
-
-require("always_apps")

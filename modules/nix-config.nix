@@ -45,8 +45,8 @@
     };
 
     nixpkgs.hostPlatform = {
-      # gcc.arch = hostArch;
-      # gcc.tune = hostArch;
+      gcc.arch = hostArch;
+      gcc.tune = hostArch;
       system = "x86_64-linux";
     };
 
