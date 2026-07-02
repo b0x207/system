@@ -9,6 +9,7 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
 - [ ] Flake parts
   - [x] Split config out for desktop versus laptop
   - [ ] Modularize home manager config
+- [ ] UWSM?
 - [ ] Redo everything on my desktop system
   - [x] Figure out disk encryption
   - [ ] Figure out best use for HDD+SSD
@@ -21,6 +22,9 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
   - [ ] Auto unlock kwallet
 - [ ] Declarative vimium config
 - [ ] Automate upstream checks for changes to packages that are patched/overridden
+- [ ] Proper QT Theming
+  - [ ] Functional Polkit authentication for KDE applications (e.g. partitionmanager)
+    - [ ] Figure out why `QT_STYLE_OVERRIDE=kvantum` breaks `polkit-kde-authentication-agent-1`
 
 ### Long Term
 

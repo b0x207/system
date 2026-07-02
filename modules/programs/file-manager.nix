@@ -12,6 +12,8 @@
       # Extra thumbnail generators
       ffmpeg-headless
       ffmpegthumbnailer
+      kdePackages.kdegraphics-thumbnailers
+      kdePackages.kdesdk-thumbnailers
       gdk-pixbuf
       libheif.bin # provides heif-thumbnailer (the program that generates HEIF thumbnails)
       libheif.out # provides heif.thumbnailer (allows for the viewing of HEIF thumbnails)

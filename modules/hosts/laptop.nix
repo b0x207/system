@@ -30,6 +30,9 @@
       self.nixosModules.multimedia-tools
       self.nixosModules.homelab
       self.nixosModules.kdeconnect
+      self.nixosModules.iphone
+      self.nixosModules.disk-tools
+      self.nixosModules.matrix-client
 
       self.nixosModules.hyprland
       self.nixosModules.theme
