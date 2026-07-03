@@ -18,8 +18,10 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
   - [x] Make sure it works in removable/fallback mode for desktop (dumb MSI bios)
   - [ ] Theme it properly
 - [ ] Make nohang never kill hyprland
-- [ ] Figure out the main situation - [ ] Declarative kmail?
-  - [ ] Auto unlock kwallet
+- [ ] Figure out the mail situation
+  - [ ] Thunderbird run in background?
+  - [x] ~~Declarative kmail?~~
+  - [x] ~~Auto unlock kwallet~~
 - [ ] Declarative vimium config
 - [ ] Automate upstream checks for changes to packages that are patched/overridden
 - [ ] Proper QT Theming

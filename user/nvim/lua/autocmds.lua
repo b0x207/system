@@ -65,5 +65,15 @@ augroup("setColorColumn", { clear = true })
 autocmd("FileType", {
     group = "setColorColumn",
     pattern = { "cpp", "c" },
-    command = "setlocal colorcolumn=80"
+    callback = function ()
+        -- The editorconfig values are applied after the FileType autocmd runs so we have to defer
+        -- the main logic until after
+        vim.schedule(function()
+            if vim.b.editorconfig and vim.b.editorconfig.max_line_length then
+                vim.opt_local.colorcolumn = vim.b.editorconfig.max_line_length
+            else
+                vim.opt_local.colorcolumn = "80"
+            end
+        end)
+    end
 })
