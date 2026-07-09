@@ -8,8 +8,8 @@
   patched-nixpkgs-src = pkgs.stdenv.mkDerivation (
     let
       patches = [
-        ./nixpkgs-patches/arrow-cpp.patch
-        ./nixpkgs-patches/aiocache.patch
+        # ./nixpkgs-patches/arrow-cpp.patch
+        # ./nixpkgs-patches/aiocache.patch
         # ./nixpkgs-patches/qtbase-qt6.patch
       ];
     in {

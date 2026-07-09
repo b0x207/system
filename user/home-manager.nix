@@ -156,6 +156,7 @@
   };
 
   home.pointerCursor = {
+    enable = true;
     package = pkgs.kdePackages.breeze-icons;
     name = "breeze_cursors";
     size = 24;
