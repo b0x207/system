@@ -117,7 +117,10 @@
     ];
   };
 
-  programs.fzf.enable = true;
+  programs.fzf = {
+    enable = true;
+    historyWidget.command = "";
+  };
 
   programs.atuin = {
     enable = true;

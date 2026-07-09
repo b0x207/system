@@ -54,8 +54,8 @@
     inputs =
       base-inputs
       // {
-        nixpkgs = patched-nixpkgs;
-        base-nixpkgs = nixpkgs;
+        # nixpkgs = patched-nixpkgs;
+        # base-nixpkgs = nixpkgs;
       };
   in
     flake-parts.lib.mkFlake {inherit inputs;} {

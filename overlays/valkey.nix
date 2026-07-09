@@ -1,7 +1,7 @@
 {}: final: prev: {
   valkey = prev.valkey.overrideAttrs (
     oldAttrs:
-      assert oldAttrs.version == "9.0.4"; {
+      assert oldAttrs.version == "9.1.0"; {
         doCheck = false;
         checkPhase = (
           builtins.replaceStrings

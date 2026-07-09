@@ -51,7 +51,7 @@
       self.nixosModules.hyprquickframe
       self.nixosModules.clipboard
 
-      self.nixosModules.pinix
+      self.nixosModules.scanner
       self.nixosModules.user
       self.nixosModules.catppuccin
       self.nixosModules.fstrim

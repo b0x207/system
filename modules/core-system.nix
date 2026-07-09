@@ -30,6 +30,7 @@
       git
       unixtools.xxd
       coreutils-full
+      usbutils
     ];
 
     # More extensive system documentation

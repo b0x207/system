@@ -18,7 +18,7 @@
         level-zero
         intel-npu-driver
         intel-graphics-compiler
-        intel-llvm
+        # intel-llvm
       ];
     };
   };

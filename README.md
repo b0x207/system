@@ -17,7 +17,9 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
 - [ ] Switch to limine
   - [x] Make sure it works in removable/fallback mode for desktop (dumb MSI bios)
   - [ ] Theme it properly
-- [ ] Make nohang never kill hyprland
+- [ ] Nohang
+  - [ ] Never kill hyprland
+  - [ ] Never kill nix-daemon (builds are ok)
 - [ ] Figure out the mail situation
   - [ ] Thunderbird run in background?
   - [x] ~~Declarative kmail?~~

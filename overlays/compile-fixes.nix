@@ -1,3 +1,4 @@
+# TODO: reorganize this into a collection of smaller files
 {nixpkgs}: final: prev: let
   # TODO: this needs a complete overhaul to make it work, however, other packages need to be
   # before more time is spent on picky packages
@@ -25,6 +26,22 @@
     };
   };
 in {
+  # Jul 6 2026
+  # The python313Packages.afdko package seems to not like being built with -march. Since it is just
+  # used by nototools, it is far easier to just override all of nototools which doesn't matter
+  # except during builds for fonts
+  nototools = plain-pkgs.nototools;
+
+  # Jul 5 2026
+  # The test `tests/checks/update_completions.fish` fails with a mangled path for the value of
+  # `$python`
+  # TODO: check to make sure there isn't a better fix for this
+  fish = plain-pkgs.fish;
+
+  # Jul 5 2026
+  # Onnxruntime takes too long to build and isn't worth the effort
+  onnxruntime = plain-pkgs.onnxruntime;
+
   # Jun 19 2026
   # The firmware-manager package ignores the parallelism options
   firmware-manager = prev.firmware-manager.overrideAttrs (oldAttrs: {

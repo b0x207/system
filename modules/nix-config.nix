@@ -44,12 +44,6 @@
       flake = inputs.nixpkgs;
     };
 
-    nixpkgs.hostPlatform = {
-      gcc.arch = hostArch;
-      gcc.tune = hostArch;
-      system = "x86_64-linux";
-    };
-
     # To prevent long-running nix updates from impacting system responsiveness
     nix.daemonCPUSchedPolicy = "idle";
     nix.daemonIOSchedClass = "idle";
@@ -60,7 +54,6 @@
 
     nixpkgs.overlays = [
       inputs.nur.overlays.default
-      (import ../overlays/compile-fixes.nix {inherit (inputs) nixpkgs;})
       (import ../overlays/valkey.nix {})
       (import ../overlays/dolphin.nix {})
     ];

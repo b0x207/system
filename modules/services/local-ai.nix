@@ -13,7 +13,7 @@
     services.open-webui = {
       enable = true;
       port = 9090;
-      host = "127.0.0.1";
+      host = "0.0.0.0";
       environment = {
         ANONYMIZED_TELEMETRY = "False";
         DO_NOT_TRACK = "True";
