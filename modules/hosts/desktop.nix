@@ -9,8 +9,7 @@
       self.nixosModules.desktop-config
 
       inputs.home-manager.nixosModules.home-manager
-      #
-      # self.nixosModules.jellyfin
+
       self.nixosModules.i2p
       self.nixosModules.lm-studio
       self.nixosModules.local-ai
@@ -27,6 +26,9 @@
       self.nixosModules.multimedia-tools
       self.nixosModules.homelab
       self.nixosModules.kdeconnect
+      self.nixosModules.iphone
+      self.nixosModules.disk-tools
+      self.nixosModules.matrix-client
 
       self.nixosModules.hyprland
       self.nixosModules.theme

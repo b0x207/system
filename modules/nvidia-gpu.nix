@@ -7,14 +7,9 @@
       open = true;
       branch = "stable";
       modesetting.enable = true;
+      videoAcceleration = true;
     };
 
     services.xserver.videoDrivers = ["nvidia"];
-
-    # hardware.graphics = {
-    #   enable = true;
-    #   extraPackages = with pkgs; [
-    #   ];
-    # };
   };
 }

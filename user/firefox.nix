@@ -52,6 +52,9 @@
 
         # Just in case GTK dark mode doesn't work
         "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
+
+        # Nvidia can be problematic
+        "media.hardware-video-decoding.force-enabled" = true;
       };
       extensions = {
         force = true;

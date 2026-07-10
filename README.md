@@ -29,6 +29,7 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
 - [ ] Proper QT Theming
   - [ ] Functional Polkit authentication for KDE applications (e.g. partitionmanager)
     - [ ] Figure out why `QT_STYLE_OVERRIDE=kvantum` breaks `polkit-kde-authentication-agent-1`
+- [ ] Fix PNPM download text jitter by disabling the standard progress bar. Might need nixpkgs edit
 
 ### Long Term
 
