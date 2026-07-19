@@ -17,8 +17,7 @@
     };
     utpm.url = "github:typst-community/utpm";
     typst = {
-      # TRACK: https://github.com/typst/typst-flake/pull/11
-      url = "github:typst/typst-flake?ref=refs/pull/11/head";
+      url = "github:typst/typst-flake";
       inputs.typst.follows = "typst-src";
     };
     typst-src = {
@@ -35,7 +34,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    todo-tree.url = "github:alexandretrotel/todo-tree";
+    # TODO: See if the newer build can be fixed
+    todo-tree.url = "github:alexandretrotel/todo-tree/b46a07f6a8f0c8a2d3c0b70792cb819f82cb2c1a";
 
     pinix.url = "github:remi-dupre/pinix";
   };
@@ -54,8 +54,8 @@
     inputs =
       base-inputs
       // {
-        # nixpkgs = patched-nixpkgs;
-        # base-nixpkgs = nixpkgs;
+        nixpkgs = patched-nixpkgs;
+        base-nixpkgs = nixpkgs;
       };
   in
     flake-parts.lib.mkFlake {inherit inputs;} {

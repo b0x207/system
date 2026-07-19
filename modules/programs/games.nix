@@ -1,12 +1,17 @@
 {...}: {
   flake.nixosModules.games = {pkgs, ...}: {
     environment.systemPackages = with pkgs; [
-      modrinth-app
+      # modrinth-app
       jdk21 # for minecraft
       supertuxkart
       supertux
       beyond-all-reason
-      warzone2100
     ];
+
+    programs.steam.enable = true;
+  };
+
+  flake.homeModules.games = { ... }: {
+    programs.prismlauncher.enable = true;
   };
 }

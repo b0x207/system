@@ -31,7 +31,7 @@
         "kvm"
 
         # Custom
-        "gccarch-${hostArch}"
+        # "gccarch-${hostArch}"
       ];
     };
 
@@ -66,8 +66,8 @@
 
     programs.nh = {
       enable = true;
-      clean.enable = true;
-      clean.extraArgs = "--keep-since 10d --keep 15";
+      # clean.enable = true;
+      # clean.extraArgs = "--keep-since 10d --keep 15";
       flake = "/home/ben/config"; # TODO: make better
     };
   };

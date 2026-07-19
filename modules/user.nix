@@ -36,6 +36,7 @@
           self.homeModules.quickshell
           self.homeModules.neovim
           self.homeModules.tmux
+          self.homeModules.games
         ];
       };
       useUserPackages = true;

@@ -26,7 +26,7 @@
       ];
 
       buildPhase = ''
-        git apply --verbose ${pkgs.lib.concatStringsSep " " patches}
+        git apply --allow-empty --verbose ${pkgs.lib.concatStringsSep " " patches}
       '';
 
       installPhase = ''
