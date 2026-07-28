@@ -5,6 +5,7 @@
       gimp
       vimiv-qt
       mpv
+      kdePackages.kdenlive
     ];
 
     programs.obs-studio = {
