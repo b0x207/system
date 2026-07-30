@@ -22,6 +22,13 @@
       ];
       ssl-cert-file = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
 
+      substituters = [
+        "https://nix-cache.b0x207.dev/b0x207"
+      ];
+      trusted-public-keys = [
+        "b0x207:oWb7Z73tEXZyk7NrvAmj3RLabX7APnup4p+CHE1dDC4="
+      ];
+
       # Attempt to enable more optimizations
       system-features = [
         # Present by default

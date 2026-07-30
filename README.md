@@ -6,6 +6,7 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
 
 ### Short Term
 
+- [ ] Build tooling around `./upstream-diff.sh` that can check the todo-tree and notify when manual PR inclusion can be removed
 - [ ] Flake parts
   - [x] Split config out for desktop versus laptop
   - [ ] Modularize home manager config
@@ -31,6 +32,7 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
     - [ ] Figure out why `QT_STYLE_OVERRIDE=kvantum` breaks `polkit-kde-authentication-agent-1`
 - [ ] Fix PNPM download text jitter by disabling the standard progress bar. Might need nixpkgs edit
 - [ ] Hyprland: add bind for assigning a workspace to a different monitor. Rofi or maybe quickshell?
+- [ ] Try out Liam's transparency effect on unfocused windows with a bit of a frosted glass twist and some animations
 
 ### Long Term
 

@@ -48,6 +48,7 @@
       self.nixosModules.clipboard
 
       self.nixosModules.user
+      self.nixosModules.attic
       self.nixosModules.catppuccin
       # self.nixosModules.fstrim
       self.nixosModules.keyd

@@ -11,7 +11,7 @@
     programs.steam.enable = true;
   };
 
-  flake.homeModules.games = { ... }: {
+  flake.homeModules.games = {...}: {
     programs.prismlauncher.enable = true;
   };
 }

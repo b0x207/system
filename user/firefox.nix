@@ -55,6 +55,13 @@
 
         # Nvidia can be problematic
         "media.hardware-video-decoding.force-enabled" = true;
+
+        # Why disable by default Mozilla?
+        "dom.webgpu.enabled" = true;
+
+        "sidebar.verticalTabs" = true;
+        "sidebar.main.tools" = "{446900e4-71c2-419f-a6a7-df9c091e268b},history,bookmarks";
+        "sidebar.installed.extensions" = "{446900e4-71c2-419f-a6a7-df9c091e268b}";
       };
       extensions = {
         force = true;
@@ -62,7 +69,7 @@
           ublock-origin
           bitwarden
           darkreader
-          sidebery
+          # sidebery
           vimium
           redirect-shorts-to-youtube
           tasks-for-canvas
@@ -86,36 +93,6 @@
           ];
           privateAllowed = true;
         };
-
-        # Sidebery
-        # moz-extension://fca2c735-f2ee-413d-a41e-4dafaafee37e/page.setup/setup.html
-        # data obtained via inspect from 'about:debugging#/runtime/this-firefox'
-        # and then extracted via `await browser.storage.local.get(null)`
-        settings."{3c078156-979c-498b-8990-85f7987dd929}".settings = let
-          # TODO: confirm that the path provided is actually in the nix store and not impure
-          baseConfig = builtins.fromJSON (builtins.readFile ./firefox/sidebery-config.json);
-        in
-          baseConfig
-          // {
-            settings = {
-              autoExpandTabs = true;
-              autoExpandTabsOnNew = true;
-              colorizeTabs = false;
-              colorizeTabsBranchesSrc = "domain";
-              colorizeTabsSrc = "container";
-              ctxMenuNative = true;
-              fontSize = "s";
-              hideInact = true;
-              previewTabs = true;
-              tabsPanelSwitchActMove = true;
-              markWindow = true;
-              markWindowPreface = "[Sidebery]";
-              syncName = "laptop";
-              syncUseFirefox = true;
-              newTabCtxReopen = true;
-            };
-            sidebarCSS = builtins.readFile ./firefox/sidebery.css;
-          };
       };
       userChrome = builtins.readFile ./firefox/userChrome.css;
     };
