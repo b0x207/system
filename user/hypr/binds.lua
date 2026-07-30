@@ -54,8 +54,8 @@ end
 hl.bind(modKey .. " + 0", hl.dsp.focus({ workspace = 10, follow = false }))
 hl.bind(modKey .. " + SHIFT + 0", hl.dsp.window.move({ workspace = 10, follow = false }))
 
-hl.bind(modKey .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
-hl.bind(modKey .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
+hl.bind(modKey .. " + mouse_down", hl.dsp.focus({ workspace = "e-1" }))
+hl.bind(modKey .. " + mouse_up", hl.dsp.focus({ workspace = "e+1" }))
 
 hl.bind(modKey .. " + SHIFT + Prior", hl.dsp.workspace.move({ monitor = "HDMI-A-1" }))
 hl.bind(modKey .. " + SHIFT + Next", hl.dsp.workspace.move({ monitor = "eDP-1" }))
