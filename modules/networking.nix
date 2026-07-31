@@ -1,13 +1,10 @@
 {...}: {
   flake.nixosModules.networking = {...}: {
     networking = {
-      networkmanager = {
-        enable = true;
-        unmanaged = ["qemu-tap"];
-      };
+      networkmanager.enable = true;
+      resolvconf.enable = true;
       nameservers = [
-        "1.1.1.1#one.one.one.one"
-        "1.0.0.1#one.one.one.one"
+        "127.0.0.1"
       ];
       firewall = {
         enable = true;
@@ -17,31 +14,29 @@
         ];
       };
     };
-    services.resolved = {
+
+    # environment.etc."resolv.conf".text = ''
+    #   nameserver 127.0.0.1
+    # '';
+
+    services.resolved.enable = false;
+    services.dnsmasq = {
       enable = true;
-      settings.Resolve = {
-        DNSOverTLS = true;
-        # DNSSEC = true;  # too many verification problems
-        DNS = [
+
+      settings = {
+        no-resolv = true;
+        server = [
+          "100.109.87.89"
           "1.1.1.1"
-          "8.8.8.8"
         ];
       };
     };
-    systemd.network = {
-      netdevs = {
-        "qemu-tap" = {
-          enable = true;
-          netdevConfig = {
-            Kind = "tap";
-            Name = "qemu-tap";
-          };
-          tapConfig = {
-            User = "ben";
-          };
-        };
-      };
-    };
+
+    networking.extraHosts = ''
+      100.109.87.89 faesten
+    '';
+
+    # For MDNS
     services.avahi = {
       enable = true;
       nssmdns4 = true;
