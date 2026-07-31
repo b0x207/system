@@ -2,7 +2,7 @@
   flake.nixosModules.tailscale = {pkgs, ...}: {
     services.tailscale = {
       enable = true;
-      extraSetFlags = [ "--accept-dns=false" "--operator=ben" ];
+      extraSetFlags = [ "--accept-dns=true" "--operator=ben" ];
     };
 
     networking.firewall.trustedInterfaces = ["tailscale"];
