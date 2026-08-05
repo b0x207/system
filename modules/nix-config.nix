@@ -19,6 +19,9 @@
       experimental-features = [
         "nix-command"
         "flakes"
+        "dynamic-derivations"
+        "ca-derivations"
+        "recursive-nix"
       ];
       ssl-cert-file = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
 
@@ -60,6 +63,9 @@
     };
 
     nixpkgs.overlays = [
+      (final: prev: {
+        nix = inputs.nix-git.packages.${pkgs.stdenv.hostPlatform.system}.default;
+      })
       inputs.nur.overlays.default
       (import ../overlays/valkey.nix {})
       (import ../overlays/dolphin.nix {})

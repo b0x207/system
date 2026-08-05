@@ -2,6 +2,7 @@
   description = "System config flake";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable-small";
+    nix-git.url = "github:nixos/nix";
 
     home-manager = {
       url = "github:nix-community/home-manager/master";
