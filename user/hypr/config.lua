@@ -51,6 +51,11 @@ hl.config({
         force_split = 2,
     },
 
+    scrolling = {
+        -- fullscreen_on_one_column = true,
+        column_width = 0.99,
+    },
+
     misc = {
         disable_splash_rendering = true,
         force_default_wallpaper = 0,
