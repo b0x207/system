@@ -6,6 +6,7 @@
       vimiv-qt
       mpv
       kdePackages.kdenlive
+      kopuz
     ];
 
     programs.obs-studio = {
