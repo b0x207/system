@@ -13,7 +13,6 @@
       # Disable till secrets are needed
       # inputs.agenix.nixosModules.default
 
-      self.nixosModules.jellyfin
       self.nixosModules.i2p
       self.nixosModules.lm-studio
       self.nixosModules.local-ai

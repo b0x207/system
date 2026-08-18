@@ -7,6 +7,7 @@
     users.users = {
       ben = {
         uid = 1000;
+        description = "Ben";
         isNormalUser = true;
         extraGroups = [
           "wheel"

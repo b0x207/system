@@ -19,6 +19,10 @@
       dex
       satty
       networkmanagerapplet
+
+      # Hyprlock and dependencies
+      bash
+      hyprlock
     ];
 
     programs.xwayland.enable = true;
@@ -70,11 +74,20 @@
         ];
       };
     };
+
+    security.pam.services.hyprlock = {};
   };
 
   flake.homeModules.hyprland = {config, ...}: let
-    nvimPath = "${config.home.homeDirectory}/config/user/hypr";
+    # TODO: make this not dependent upon the config source directory location
+    hyprlandPath = "${config.home.homeDirectory}/config/user/hypr";
   in {
-    xdg.configFile."hypr".source = config.lib.file.mkOutOfStoreSymlink nvimPath;
+    xdg.configFile."hypr".source = config.lib.file.mkOutOfStoreSymlink hyprlandPath;
+    xdg.configFile."wallpapers" = {
+      source = ../../wallpapers;
+      recursive = true;
+    };
+
+    home.file.".face".source = ../../user/face.jpg;
   };
 }

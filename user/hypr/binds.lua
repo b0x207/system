@@ -4,6 +4,7 @@ local menu = "rofi -show drun"
 local browser = "firefox"
 local calculator = "rofi -show calc -modi calc -no-show-match -no-sort"
 local shutdown = "hyprshutdown -t 'Exiting hyprland...'"
+local screenlocker = "hyprlock"
 
 local modKey = "SUPER"
 
@@ -19,6 +20,7 @@ hl.bind(modKey .. " + SHIFT + Space", hl.dsp.window.float({ action = "toggle" })
 
 hl.bind(modKey .. " + mouse:272", hl.dsp.window.drag())
 hl.bind(modKey .. " + mouse:273", hl.dsp.window.resize())
+hl.bind("F9", hl.dsp.exec_cmd(screenlocker))
 
 -- WINDOW MANAGEMENT
 

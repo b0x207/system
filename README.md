@@ -33,6 +33,13 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
 - [ ] Fix PNPM download text jitter by disabling the standard progress bar. Might need nixpkgs edit
 - [ ] Hyprland: add bind for assigning a workspace to a different monitor. Rofi or maybe quickshell?
 - [ ] Try out Liam's transparency effect on unfocused windows with a bit of a frosted glass twist and some animations
+- [ ] Force float for bitwarden
+  ```
+  class: firefox
+  title: Extension: (Bitwarden Password Manager) - Bitwarden — Mozilla Firefox
+  initialClass: firefox
+  initialTitle: Mozilla Firefox
+  ```
 
 ### Long Term
 
