@@ -1,6 +1,10 @@
 {...}: {
   flake.nixosModules.core-system = {pkgs, ...}: {
     environment.systemPackages = with pkgs; [
+      # Fundamental shells
+      bash
+      nushell
+
       # Compression and archival tools
       zip
       unzip

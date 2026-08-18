@@ -95,6 +95,7 @@
   };
 
   home.shell.enableZshIntegration = true;
+  home.shell.enableNushellIntegration = true;
   programs.zsh = {
     enable = true;
     enableVteIntegration = true;
@@ -127,6 +128,9 @@
         };
       }
     ];
+  };
+  programs.nushell = {
+    enable = true;
   };
 
   programs.fzf = {

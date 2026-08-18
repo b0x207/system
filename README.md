@@ -6,6 +6,13 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
 
 ### Short Term
 
+- [ ] Rice
+  - [ ] Screen brightness bar on change
+  - [ ] Revamp quickshell
+  - [ ] Back to square and minimalism
+  - [ ] Fix firefox file manager popup
+  - [ ] Switch to nushell
+  - [ ] Redo fastfetch
 - [ ] Build tooling around `./upstream-diff.sh` that can check the todo-tree and notify when manual PR inclusion can be removed
 - [ ] Flake parts
   - [x] Split config out for desktop versus laptop

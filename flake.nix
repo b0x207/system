@@ -36,6 +36,8 @@
 
     # TODO: See if the newer build can be fixed
     todo-tree.url = "github:alexandretrotel/todo-tree/b46a07f6a8f0c8a2d3c0b70792cb819f82cb2c1a";
+
+    treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 
   outputs = base-inputs @ {
@@ -65,8 +67,9 @@
       flake = {
         formatter.${system} = let
           pkgs = import patched-nixpkgs {inherit system;};
+          treefmtEval = inputs.treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
         in
-          pkgs.alejandra;
+          treefmtEval.config.build.wrapper;
       };
     };
 }
