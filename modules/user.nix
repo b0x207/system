@@ -15,6 +15,7 @@
           "wireshark"
           "render"
           "video"
+          "input"
         ];
         shell = pkgs.zsh;
       };

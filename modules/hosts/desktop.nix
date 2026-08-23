@@ -37,6 +37,7 @@
       self.nixosModules.file-manager
       self.nixosModules.browser
       self.nixosModules.calculator
+      self.nixosModules.scanner
       self.nixosModules.fonts
       self.nixosModules.btop
       self.nixosModules.gpg
