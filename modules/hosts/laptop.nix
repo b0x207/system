@@ -15,7 +15,6 @@
 
       self.nixosModules.i2p
       self.nixosModules.lm-studio
-      self.nixosModules.local-ai
       self.nixosModules.games
       self.nixosModules.xonotic
       self.nixosModules.typst
@@ -32,6 +31,7 @@
       self.nixosModules.iphone
       self.nixosModules.disk-tools
       self.nixosModules.matrix-client
+      self.nixosModules.uci-vpn
 
       self.nixosModules.hyprland
       self.nixosModules.theme

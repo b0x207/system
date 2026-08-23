@@ -16,17 +16,19 @@ print $"(ansi blue)Upstream is ahead by ($upstream_ahead_by) commits(ansi reset)
 
 let continue = input $"(ansi green)Continue \(type y) ?(ansi reset) "
 if $continue != "y" {
-  print "Abort"
-  exit
+    print "Abort"
+    exit
 }
 
 mut commits = []
 
 for commit in ($upstream_raw_diff | get commits) {
-   $commits = $commits ++ [ {
-      "Date": ($commit | get commit.committer.date | date humanize),
-      "Commit Message": ($commit | get commit.message)
-   } ]
+    $commits = $commits ++ [
+        {
+            "Date": ($commit | get commit.committer.date | date humanize)
+            "Commit Message": ($commit | get commit.message)
+        }
+    ]
 }
 
 $commits | reverse | table --expand
