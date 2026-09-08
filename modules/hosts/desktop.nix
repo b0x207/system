@@ -2,17 +2,18 @@
   inputs,
   self,
   ...
-}: {
+}:
+{
   flake.nixosConfigurations.desktop = inputs.nixpkgs.lib.nixosSystem {
     modules = [
       self.nixosModules.desktop-hw
       self.nixosModules.desktop-config
 
       inputs.home-manager.nixosModules.home-manager
+      inputs.tether.nixosModules.default
 
+      # self.nixosModules.tether
       self.nixosModules.i2p
-      self.nixosModules.lm-studio
-      self.nixosModules.local-ai
       self.nixosModules.games
       self.nixosModules.xonotic
       self.nixosModules.typst
@@ -68,7 +69,7 @@
     ];
   };
 
-  flake.nixosModules.desktop-config = {pkgs, ...}: {
+  flake.nixosModules.desktop-config = { ... }: {
     boot.loader = {
       efi = {
         canTouchEfiVariables = true;
@@ -103,79 +104,100 @@
     system.stateVersion = "25.11"; # Did you read the comment?
   };
 
-  flake.nixosModules.desktop-hw = {
-    config,
-    pkgs,
-    lib,
-    ...
-  }: {
-    boot.initrd.availableKernelModules = [
-      "xhci_pci"
-      "ahci"
-      "nvme"
-      "usbhid"
-      "usb_storage"
-      "sd_mod"
-    ];
-    boot.initrd.kernelModules = [];
-    boot.initrd.systemd.enable = true;
-    boot.kernelModules = [
-      "kvm-intel"
-    ];
-    boot.extraModulePackages = [];
-    boot.kernelPackages = pkgs.linuxPackages_latest;
-    hardware.enableRedistributableFirmware = true;
-    boot.kernel.sysctl."vm.swappiness" = 5;
+  flake.nixosModules.desktop-hw =
+    {
+      config,
+      pkgs,
+      lib,
+      ...
+    }:
+    {
+      boot.initrd.availableKernelModules = [
+        "xhci_pci"
+        "ahci"
+        "nvme"
+        "usbhid"
+        "usb_storage"
+        "sd_mod"
+      ];
+      boot.initrd.kernelModules = [ ];
+      boot.initrd.systemd.enable = true;
+      boot.kernelModules = [
+        "kvm-intel"
+      ];
+      boot.extraModulePackages = [ ];
+      boot.kernelPackages = pkgs.linuxPackages_latest;
+      hardware.enableRedistributableFirmware = true;
+      boot.kernel.sysctl."vm.swappiness" = 5;
 
-    systemd.sleep.settings.Sleep = {
-      # Hibernation can't work when using an encrypted swap
-      AllowHibernation = "no";
+      systemd.sleep.settings.Sleep = {
+        # Hibernation can't work when using an encrypted swap
+        AllowHibernation = "no";
+      };
+
+      fileSystems."/" = {
+        device = "/dev/mapper/rootfs";
+        fsType = "btrfs";
+        options = [
+          "subvol=@root"
+          "noatime"
+          "compress=zstd"
+        ];
+      };
+
+      boot.initrd.luks.devices."rootfs".device = "/dev/disk/by-uuid/9606c000-3a33-4e50-81ee-db61ad4acabe";
+
+      fileSystems."/nix" = {
+        device = "/dev/mapper/rootfs";
+        fsType = "btrfs";
+        options = [
+          "subvol=@nix"
+          "noatime"
+          "compress=zstd"
+        ];
+      };
+
+      fileSystems."/home" = {
+        device = "/dev/mapper/rootfs";
+        fsType = "btrfs";
+        options = [
+          "subvol=@home"
+          "noatime"
+          "compress=zstd"
+        ];
+      };
+
+      fileSystems."/var/log" = {
+        device = "/dev/mapper/rootfs";
+        fsType = "btrfs";
+        options = [
+          "subvol=@log"
+          "noatime"
+          "compress=zstd"
+        ];
+        neededForBoot = true;
+      };
+
+      fileSystems."/boot" = {
+        device = "/dev/disk/by-uuid/8379-2604";
+        fsType = "vfat";
+        options = [
+          "fmask=0022"
+          "dmask=0022"
+        ];
+      };
+
+      swapDevices = [
+        {
+          device = "/dev/disk/by-partuuid/481c8904-1794-4588-ab02-feb7c8a64aa0";
+          randomEncryption = {
+            enable = true;
+            allowDiscards = true;
+          };
+        }
+      ];
+
+      nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+      hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     };
-
-    fileSystems."/" = {
-      device = "/dev/mapper/rootfs";
-      fsType = "btrfs";
-      options = ["subvol=@root" "noatime" "compress=zstd"];
-    };
-
-    boot.initrd.luks.devices."rootfs".device = "/dev/disk/by-uuid/9606c000-3a33-4e50-81ee-db61ad4acabe";
-
-    fileSystems."/nix" = {
-      device = "/dev/mapper/rootfs";
-      fsType = "btrfs";
-      options = ["subvol=@nix" "noatime" "compress=zstd"];
-    };
-
-    fileSystems."/home" = {
-      device = "/dev/mapper/rootfs";
-      fsType = "btrfs";
-      options = ["subvol=@home" "noatime" "compress=zstd"];
-    };
-
-    fileSystems."/var/log" = {
-      device = "/dev/mapper/rootfs";
-      fsType = "btrfs";
-      options = ["subvol=@log" "noatime" "compress=zstd"];
-      neededForBoot = true;
-    };
-
-    fileSystems."/boot" = {
-      device = "/dev/disk/by-uuid/8379-2604";
-      fsType = "vfat";
-      options = ["fmask=0022" "dmask=0022"];
-    };
-
-    swapDevices = [
-      {
-        device = "/dev/disk/by-partuuid/481c8904-1794-4588-ab02-feb7c8a64aa0";
-        randomEncryption = {
-          enable = true;
-          allowDiscards = true;
-        };
-      }
-    ];
-
-    nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-    hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-  };
 }

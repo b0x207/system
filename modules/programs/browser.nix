@@ -1,12 +1,12 @@
-{...}: {
-  flake.nixosModules.browser = {pkgs, ...}: {
+{ ... }: {
+  flake.nixosModules.browser = { pkgs, ... }: {
     programs.firefox = {
       enable = true;
       package = pkgs.firefox-bin;
-      languagePacks = ["en-US"];
+      languagePacks = [ "en-US" ];
     };
 
-    programs.ladybird.enable = true;
+    # programs.ladybird.enable = true;
 
     environment.systemPackages = with pkgs; [
       # librewolf

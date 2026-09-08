@@ -56,7 +56,7 @@ vim.api.nvim_create_autocmd({ "WinEnter", "BufWinEnter", "TermOpen" }, {
 augroup("setIndent", { clear = true })
 autocmd("Filetype", {
     group = "setIndent",
-    pattern = { "nix" },
+    pattern = { "nix", "sh" },
     command = "setlocal shiftwidth=2 tabstop=2"
 })
 

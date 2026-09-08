@@ -1,5 +1,5 @@
-{...}: {
-  flake.homeModules.zathura = {pkgs, ...}: {
+{ ... }: {
+  flake.homeModules.zathura = { ... }: {
     programs.zathura = {
       enable = true;
       extraConfig = ''
@@ -24,6 +24,9 @@
         set guioptions 'v'
 
         set selection-clipboard clipboard
+
+        # Give more space between pages
+        set page-v-padding 15
       '';
     };
   };

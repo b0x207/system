@@ -38,6 +38,12 @@ hl.window_rule({
 hl.on("window.title", function (w)
     local pattern = "Extension: (Bitwarden Password Manager) - Bitwarden — Mozilla Firefox"
     if string.find(w.title, pattern, nil, true) then
+        -- If the window is inside of a window group, we must extract it before continuing.
+        -- Otherwise, the entire window group will be modified
+        -- if w.group != nil then
+        --     hl.dispatch(
+        -- end
+
         hl.dispatch(
             hl.dsp.window.float({
                 action = "enable",

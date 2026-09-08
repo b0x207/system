@@ -1,7 +1,8 @@
-{...}: {
-  flake.nixosModules.audio = {pkgs, ...}: {
+{ ... }: {
+  flake.nixosModules.audio = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
       pavucontrol
+      wiremix
     ];
 
     security.rtkit.enable = true;

@@ -1,10 +1,10 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   projectRootFile = "flake.nix";
 
-  programs.alejandra.enable = true;
+  programs.nixfmt.enable = true;
 
   settings.formatter.nufmt = {
     command = "${pkgs.nufmt}/bin/nufmt";
-    includes = ["*.nu"];
+    includes = [ "*.nu" ];
   };
 }

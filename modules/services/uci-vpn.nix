@@ -1,5 +1,5 @@
-{...}: {
-  flake.nixosModules.uci-vpn = {pkgs, ...}: {
+{ ... }: {
+  flake.nixosModules.uci-vpn = { pkgs, ... }: {
     networking.networkmanager.plugins = with pkgs; [
       networkmanager-openconnect
     ];
@@ -17,7 +17,7 @@
         useragent = "AnyConnect";
         csd_wrapper = "${pkgs.openconnect}/libexec/openconnect/csd-post.sh";
         enable_csd_trojan = "yes";
-        # authgroup = "UCI
+        # authgroup = "UCI-clasic";
       };
     };
   };
