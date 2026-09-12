@@ -1,5 +1,5 @@
-{inputs, ...}: {
-  flake.nixosModules.dev-tools = {pkgs, ...}: {
+{ inputs, ... }: {
+  flake.nixosModules.dev-tools = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
       rustup
       gh

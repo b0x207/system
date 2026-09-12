@@ -1,5 +1,5 @@
-{inputs, ...}: {
-  flake.nixosModules.catppuccin = {pkgs, ...}: {
+{ inputs, ... }: {
+  flake.nixosModules.catppuccin = { pkgs, ... }: {
     imports = [
       inputs.catppuccin.nixosModules.catppuccin
     ];

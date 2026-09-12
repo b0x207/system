@@ -1,5 +1,5 @@
-{...}: {
-  flake.nixosModules.file-manager = {pkgs, ...}: {
+{ ... }: {
+  flake.nixosModules.file-manager = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
       kdePackages.dolphin
       thunar

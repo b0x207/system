@@ -1,5 +1,5 @@
-{inputs, ...}: {
-  flake.nixosModules.neovim = {pkgs, ...}: {
+{ inputs, ... }: {
+  flake.nixosModules.neovim = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
       neovim
 
@@ -9,9 +9,12 @@
     ];
   };
 
-  flake.homeModules.neovim = {config, ...}: let
-    neovimPath = "${config.home.homeDirectory}/config/user/nvim";
-  in {
-    xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink neovimPath;
-  };
+  flake.homeModules.neovim =
+    { config, ... }:
+    let
+      neovimPath = "${config.home.homeDirectory}/config/user/nvim";
+    in
+    {
+      xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink neovimPath;
+    };
 }

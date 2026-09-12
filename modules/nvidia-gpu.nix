@@ -1,5 +1,5 @@
-{...}: {
-  flake.nixosModules.nvidia-gpu = {pkgs, ...}: {
+{ ... }: {
+  flake.nixosModules.nvidia-gpu = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
     ];
 
@@ -10,6 +10,6 @@
       videoAcceleration = true;
     };
 
-    services.xserver.videoDrivers = ["nvidia"];
+    services.xserver.videoDrivers = [ "nvidia" ];
   };
 }

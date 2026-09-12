@@ -1,5 +1,5 @@
-{...}: {
-  flake.nixosModules.games = {pkgs, ...}: {
+{ ... }: {
+  flake.nixosModules.games = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
       # modrinth-app
       jdk21 # for minecraft
@@ -11,7 +11,7 @@
     programs.steam.enable = true;
   };
 
-  flake.homeModules.games = {...}: {
+  flake.homeModules.games = { ... }: {
     programs.prismlauncher.enable = true;
   };
 }

@@ -2,8 +2,9 @@
   inputs,
   self,
   ...
-}: {
-  flake.nixosModules.user = {pkgs, ...}: {
+}:
+{
+  flake.nixosModules.user = { pkgs, ... }: {
     users.users = {
       ben = {
         uid = 1000;
@@ -22,7 +23,7 @@
     };
 
     programs.zsh.enable = true;
-    environment.pathsToLink = ["/share/zsh"];
+    environment.pathsToLink = [ "/share/zsh" ];
 
     home-manager = {
       users.ben = {
@@ -44,7 +45,7 @@
       useUserPackages = true;
       useGlobalPkgs = true;
       backupFileExtension = "hm-backup";
-      extraSpecialArgs = {inherit inputs;};
+      extraSpecialArgs = { inherit inputs; };
     };
   };
 }

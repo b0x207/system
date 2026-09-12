@@ -1,5 +1,5 @@
-{...}: {
-  flake.nixosModules.ghostty = {pkgs, ...}: {
+{ ... }: {
+  flake.nixosModules.ghostty = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
       ghostty
     ];

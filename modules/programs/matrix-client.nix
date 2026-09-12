@@ -1,5 +1,5 @@
-{...}: {
-  flake.nixosModules.matrix-client = {pkgs, ...}: {
-    environment.systemPackages = [pkgs.fluffychat];
+{ ... }: {
+  flake.nixosModules.matrix-client = { pkgs, ... }: {
+    environment.systemPackages = [ pkgs.fluffychat ];
   };
 }

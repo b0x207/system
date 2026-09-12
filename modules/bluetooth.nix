@@ -1,5 +1,5 @@
-{...}: {
-  flake.nixosModules.bluetooth = {pkgs, ...}: {
+{ ... }: {
+  flake.nixosModules.bluetooth = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
       blueman
       bluejay

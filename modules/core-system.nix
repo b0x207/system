@@ -1,5 +1,5 @@
-{...}: {
-  flake.nixosModules.core-system = {pkgs, ...}: {
+{ ... }: {
+  flake.nixosModules.core-system = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
       # Fundamental shells
       bash

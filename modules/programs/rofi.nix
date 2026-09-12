@@ -1,5 +1,5 @@
-{...}: {
-  flake.homeModules.rofi = {pkgs, ...}: {
+{ ... }: {
+  flake.homeModules.rofi = { pkgs, ... }: {
     programs.rofi = {
       enable = true;
 
@@ -9,9 +9,12 @@
         scroll-method = 1; # 1 = continuous scroll
       };
 
-      plugins = [pkgs.rofi-calc];
+      plugins = [ pkgs.rofi-calc ];
 
-      modes = ["drun" "calc"];
+      modes = [
+        "drun"
+        "calc"
+      ];
     };
 
     catppuccin.rofi.enable = true;

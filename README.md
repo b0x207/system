@@ -59,6 +59,9 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
       - [ ] `rapidocr-onnxruntime`
       - [ ] `nix-store-tests`
       - [ ] `triton-llvm`
+      - [ ] `perl5.42.0-Test2-Harness-1.000161 (checkPhase)`
+      - [ ] `python3-minimal`
+      - [ ] `go`
   - Packages having problems due to `.git` being missing (see: a lot of the LLVM packages)
   - Some packages don't build in parallel
     - `lager`

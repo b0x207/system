@@ -1,5 +1,5 @@
-{...}: {
-  flake.nixosModules.intel-igpu = {pkgs, ...}: {
+{ ... }: {
+  flake.nixosModules.intel-igpu = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
       intel-gpu-tools
       level-zero

@@ -119,14 +119,5 @@
             };
           };
         };
-
-      flake = {
-        formatter.${system} =
-          let
-            pkgs = import patched-nixpkgs { inherit system; };
-            treefmtEval = inputs.treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
-          in
-          treefmtEval.config.build.wrapper;
-      };
     };
 }
