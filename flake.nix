@@ -7,6 +7,10 @@
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:denful/import-tree";
@@ -67,13 +71,17 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
         (inputs.import-tree ./modules)
+        inputs.flake-parts.flakeModules.modules
         inputs.home-manager.flakeModules.home-manager
         inputs.git-hooks-nix.flakeModule
         # (inputs.tether.nixosModules.default (import inputs.nixpkgs { inherit system; }))
       ];
 
       # Is this kinda dumb? Yeah.
-      systems = [ system ];
+      systems = [
+        system
+        "aarch64-darwin"
+      ];
 
       perSystem =
         {

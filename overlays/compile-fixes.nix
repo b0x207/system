@@ -1,8 +1,10 @@
 # TODO: reorganize this into a collection of smaller files
-{nixpkgs}: final: prev: let
+{ nixpkgs }:
+final: prev:
+let
   # TODO: this needs a complete overhaul to make it work, however, other packages need to be
   # before more time is spent on picky packages
-  plain-pkgs = import nixpkgs {system = "x86_64-linux";};
+  plain-pkgs = import nixpkgs { system = "x86_64-linux"; };
 
   # A basic replacement GCC with default platform targets
   genericCC = prev.wrapCCWith {
@@ -15,7 +17,11 @@
   };
 
   genericStdenv = prevStdenv: prev.overrideCC prevStdenv genericCC;
-  withGenericStdenv = pkg: pkg.override (oldArgs: {stdenv = genericStdenv oldArgs.stdenv;});
+  withGenericStdenv =
+    pkg:
+    pkg.override (oldArgs: {
+      stdenv = genericStdenv oldArgs.stdenv;
+    });
 
   genericPkgs = import prev.path {
     inherit (prev.stdenv) system;
@@ -25,7 +31,8 @@
       allowUnfree = true;
     };
   };
-in {
+in
+{
   # Jul 6 2026
   # The python313Packages.afdko package seems to not like being built with -march. Since it is just
   # used by nototools, it is far easier to just override all of nototools which doesn't matter
@@ -93,66 +100,57 @@ in {
   # TRACK: https://github.com/ValveSoftware/gamescope/issues/2110
   gamescope = prev.gamescope.overrideAttrs (
     oldAttrs:
-      assert oldAttrs.version == "3.16.23"; {
-        src = prev.fetchFromGitHub {
-          owner = "ValveSoftware";
-          repo = "gamescope";
-          rev = "96376e4773574a929b59f53f021cf0923189c993";
-          fetchSubmodules = true;
-          hash = "sha256-JAuapmAJrTERWuocmPfAD/ZVy3CYATkm47nP6d92fxA=";
-        };
-      }
+    assert oldAttrs.version == "3.16.23";
+    {
+      src = prev.fetchFromGitHub {
+        owner = "ValveSoftware";
+        repo = "gamescope";
+        rev = "96376e4773574a929b59f53f021cf0923189c993";
+        fetchSubmodules = true;
+        hash = "sha256-JAuapmAJrTERWuocmPfAD/ZVy3CYATkm47nP6d92fxA=";
+      };
+    }
   );
 
-  pythonPackagesExtensions =
-    prev.pythonPackagesExtensions
-    ++ [
-      (python-final: python-prev: {
-        # Apr 18 2026:
-        # Test scipy/signal/tests/test_spectral.py::TestSTFT::test_roundtrip_scaling
-        # fails. Since it builds correctly on normal nixpkgs, we'll assume that
-        # the test failure is due to a bug in GCC.
-        #
-        # The package also likes to ignore parallelism requirements. We can put it
-        # back into shape with a fairly simple fix, though.
-        #
-        # TRACK: https://github.com/NixOS/nixpkgs/issues/216033
-        scipy = python-prev.scipy.overridePythonAttrs (prevAttrs: {
-          preBuild =
-            (prevAttrs.preBuild or "")
-            + ''
-              appendToVar pypaBuildFlags "-Ccompile-args=-j$NIX_BUILD_CORES"
-            '';
+  pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+    (python-final: python-prev: {
+      # Apr 18 2026:
+      # Test scipy/signal/tests/test_spectral.py::TestSTFT::test_roundtrip_scaling
+      # fails. Since it builds correctly on normal nixpkgs, we'll assume that
+      # the test failure is due to a bug in GCC.
+      #
+      # The package also likes to ignore parallelism requirements. We can put it
+      # back into shape with a fairly simple fix, though.
+      #
+      # TRACK: https://github.com/NixOS/nixpkgs/issues/216033
+      scipy = python-prev.scipy.overridePythonAttrs (prevAttrs: {
+        preBuild = (prevAttrs.preBuild or "") + ''
+          appendToVar pypaBuildFlags "-Ccompile-args=-j$NIX_BUILD_CORES"
+        '';
 
-          disabledTests =
-            (prevAttrs.disabledTests or [])
-            ++ [
-              "test_roundtrip_scaling"
-              "test_initial_step"
-            ];
-        });
+        disabledTests = (prevAttrs.disabledTests or [ ]) ++ [
+          "test_roundtrip_scaling"
+          "test_initial_step"
+        ];
+      });
 
-        # May 7 2026
-        # Test `test_gradient_sync_cpu_multi` fails
-        accelerate = python-prev.accelerate.overridePythonAttrs (prevAttrs: {
-          disabledTests =
-            (prevAttrs.disabledTests or [])
-            ++ [
-              "test_gradient_sync_cpu_multi"
-            ];
-        });
+      # May 7 2026
+      # Test `test_gradient_sync_cpu_multi` fails
+      accelerate = python-prev.accelerate.overridePythonAttrs (prevAttrs: {
+        disabledTests = (prevAttrs.disabledTests or [ ]) ++ [
+          "test_gradient_sync_cpu_multi"
+        ];
+      });
 
-        # May 7 2026
-        # Test `test_execution_state` fails
-        jupyter-server = python-prev.jupyter-server.overridePythonAttrs (prevAttrs: {
-          disabledTests =
-            (prevAttrs.disabledTests or [])
-            ++ [
-              "test_execution_state"
-            ];
-        });
-      })
-    ];
+      # May 7 2026
+      # Test `test_execution_state` fails
+      jupyter-server = python-prev.jupyter-server.overridePythonAttrs (prevAttrs: {
+        disabledTests = (prevAttrs.disabledTests or [ ]) ++ [
+          "test_execution_state"
+        ];
+      });
+    })
+  ];
 
   # Apr 17 2026:
   # What a waste of literal days of my life. I've tried everything under the sun, but I can't seem
@@ -239,11 +237,9 @@ in {
   #
   # TRACK: https://github.com/NixOS/nixpkgs/issues/447012
   triton-llvm = prev.triton-llvm.overrideAttrs (oldAttrs: {
-    cmakeFlags =
-      (oldAttrs.cmakeFlags or [])
-      ++ [
-        "-DLLVM_APPEND_VC_REV=OFF"
-      ];
+    cmakeFlags = (oldAttrs.cmakeFlags or [ ]) ++ [
+      "-DLLVM_APPEND_VC_REV=OFF"
+    ];
   });
 
   # Apr 19 2026:
@@ -253,11 +249,9 @@ in {
   #        https://github.com/dyne/frei0r/issues/239
   #        Note that the first one is closed by the maintainer, yet the problem persists.
   frei0r = prev.frei0r.overrideAttrs (oldAttrs: {
-    patches =
-      (oldAttrs.patches or [])
-      ++ [
-        ../packages/frei0r/sse-cast.patch
-      ];
+    patches = (oldAttrs.patches or [ ]) ++ [
+      ../packages/frei0r/sse-cast.patch
+    ];
   });
 
   # Apr 27 2026:
@@ -276,25 +270,26 @@ in {
   });
 
   # Patches adding in additional source mirrors
-  autogen = prev.autogen.overrideAttrs (oldAttrs:
-    assert oldAttrs.version == "5.18.16"; {
-      patches =
-        prev.lib.lists.imap0 (
-          i: v:
-            if i == 7
-            then
-              (prev.fetchpatch {
-                name = "guile-3.patch";
-                urls = [
-                  "https://raw.githubusercontent.com/gentoo/gentoo/refs/heads/master/sys-devel/autogen/files/autogen-5.18.16-guile-3.patch"
-                  "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-devel/autogen/files/autogen-5.18.16-guile-3.patch?id=43bcc61c56a5a7de0eaf806efec7d8c0e4c01ae7"
-                ];
-                sha256 = "18d7y1f6164dm1wlh7rzbacfygiwrmbc35a7qqsbdawpkhydm5lr";
-              })
-            else v
-        )
-        prev.autogen.patches;
-    });
+  autogen = prev.autogen.overrideAttrs (
+    oldAttrs:
+    assert oldAttrs.version == "5.18.16";
+    {
+      patches = prev.lib.lists.imap0 (
+        i: v:
+        if i == 7 then
+          (prev.fetchpatch {
+            name = "guile-3.patch";
+            urls = [
+              "https://raw.githubusercontent.com/gentoo/gentoo/refs/heads/master/sys-devel/autogen/files/autogen-5.18.16-guile-3.patch"
+              "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-devel/autogen/files/autogen-5.18.16-guile-3.patch?id=43bcc61c56a5a7de0eaf806efec7d8c0e4c01ae7"
+            ];
+            sha256 = "18d7y1f6164dm1wlh7rzbacfygiwrmbc35a7qqsbdawpkhydm5lr";
+          })
+        else
+          v
+      ) prev.autogen.patches;
+    }
+  );
   libssh = prev.libssh.overrideAttrs {
     src = prev.fetchurl {
       inherit (prev.libssh.src) hash;
@@ -305,8 +300,10 @@ in {
     };
   };
   # TODO: see if this actually does anything
-  pyside6 = prev.pyside6.overrideAttrs (oldAttrs:
-    assert oldAttrs.version == "6.11.0"; {
+  pyside6 = prev.pyside6.overrideAttrs (
+    oldAttrs:
+    assert oldAttrs.version == "6.11.0";
+    {
       patches = [
         (prev.fetchurl {
           urls = [
@@ -316,5 +313,6 @@ in {
           hash = "sha256-PPLV5K+xp7ZdG0Tah1wpBdNWN7fsXvZh14eBzO0R55c=";
         })
       ];
-    });
+    }
+  );
 }

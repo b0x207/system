@@ -7,7 +7,6 @@
 {
   imports = [
     ./firefox.nix
-    ./fastfetch.nix
     ../theme/home-manager.nix
   ];
 
@@ -24,137 +23,9 @@
     settings.SKIP_HOST_UPDATE = true;
   };
 
-  programs.direnv = {
-    enable = true;
-    enableZshIntegration = true;
-    nix-direnv.enable = true;
-    config = {
-      warn_timeout = 0;
-    };
-  };
-
-  programs.ghostty = {
-    enable = true;
-    enableBashIntegration = true;
-    settings = {
-      auto-update = "off";
-      background-opacity = 0.9;
-      link-previews = "osc8";
-      clipboard-read = "allow";
-      clipboard-write = "allow";
-      gtk-single-instance = false;
-      shell-integration-features = "ssh-terminfo,ssh-env,sudo";
-      font-family = "JetBrainsMono Nerd Font Mono";
-    };
-  };
-
-  programs.git = {
-    enable = true;
-    lfs.enable = true;
-    settings = {
-      user = {
-        name = "Ben Landon";
-        email = "me@b0x207.dev";
-      };
-      init.defaultBranch = "main";
-      gpg.ssh.allowedSignersFile = "~/.config/git/allowed-signers";
-      credential = {
-        helper = [
-          "cache --timeout 21600"
-          "oauth"
-        ];
-        "https://git.b0x207.dev" = {
-          oauthClientId = "a4792ccc-144e-407e-86c9-5e7d8d9c3269";
-          oauthAuthURL = "/login/oauth/authorize";
-          oauthTokenURL = "/login/oauth/access_token";
-        };
-        "https://git.alugatuci.org" = {
-          oauthClientId = "a4792ccc-144e-407e-86c9-5e7d8d9c3269";
-          oauthAuthURL = "/login/oauth/authorize";
-          oauthTokenURL = "/login/oauth/access_token";
-        };
-      };
-    };
-    signing = {
-      format = "ssh";
-      key = "~/.ssh/id_ed25519";
-      signByDefault = true;
-    };
-    includes = [
-      {
-        condition = "gitdir:~/school/";
-        contents = {
-          user.email = "blandon1@uci.edu";
-        };
-      }
-    ];
-  };
-
-  programs.git-credential-oauth = {
-    enable = true;
-  };
-
-  xdg.configFile."git/allowed-signers" = {
-    enable = true;
-    force = true;
-    text =
-      "${config.programs.git.settings.user.email} "
-      + "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDnyx15yATERx55O38TsVldST7u2eXX8fAsv15L6AhLE";
-  };
-
-  home.shell.enableZshIntegration = true;
-  home.shell.enableNushellIntegration = true;
-  programs.zsh = {
-    enable = true;
-    enableVteIntegration = true;
-    autosuggestion = {
-      enable = true;
-    };
-    syntaxHighlighting.enable = true;
-    initContent = lib.mkOrder 1000 ''
-      export EDITOR=nvim
-
-      # Because wth ZSH???
-      bindkey "^[[1;5C" forward-word
-      bindkey "^[[1;5D" backward-word
-      bindkey \^U backward-kill-line
-
-      # alias pix="pinix --pix-command nix --pix-log-history 0 --pix-record /tmp/pix.log"
-
-      #if [[ ! -n $DISPLAY ]] && uwsm check may-start && uwsm select; then
-      #  exec uwsm start default
-      #fi
-    '';
-    plugins = [
-      {
-        name = "pure";
-        src = pkgs.fetchFromGitHub {
-          owner = "sindresorhus";
-          repo = "pure";
-          rev = "v1.27.1";
-          sha256 = "sha256-Fhk4nlVPS09oh0coLsBnjrKncQGE6cUEynzDO2Skiq8=";
-        };
-      }
-    ];
-  };
-  programs.nushell = {
-    enable = true;
-    extraConfig = ''
-      # $env.config.hooks.command_not_found = source ${pkgs.nix-index}/etc/profile.d/command-not-found.nu
-    '';
-  };
-
   programs.fzf = {
     enable = true;
     historyWidget.command = "";
-  };
-
-  programs.atuin = {
-    enable = true;
-    daemon.enable = true;
-    enableBashIntegration = true;
-    enableZshIntegration = true;
-    flags = [ "--disable-up-arrow" ];
   };
 
   services.swaync = {
@@ -162,24 +33,16 @@
   };
 
   catppuccin = {
-    autoEnable = false;
-    enable = true;
-
-    flavor = "mocha";
-    accent = "blue";
-    ghostty.enable = true;
     swaync = {
       enable = true;
       font = "JetBrainsMono Nerd Font";
     };
-    atuin.enable = true;
     # cursors = {
     #   enable = true;
     #   accent = "dark";
     # };
     # gtk.icon.enable = true;
     fzf.enable = true;
-    zsh-syntax-highlighting.enable = true;
   };
 
   home.pointerCursor = {

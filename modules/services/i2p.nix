@@ -1,12 +1,15 @@
-{...}: {
-  flake.nixosModules.i2p = {pkgs, ...}: {
+{ ... }: {
+  flake.nixosModules.i2p = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
       biglybt
     ];
 
     services.i2p.enable = true;
-    networking.firewall.allowedUDPPorts = [123 12887];
-    networking.firewall.allowedTCPPorts = [12887];
+    networking.firewall.allowedUDPPorts = [
+      123
+      12887
+    ];
+    networking.firewall.allowedTCPPorts = [ 12887 ];
 
     # services.i2pd = {
     #   enable = true;

@@ -1,5 +1,5 @@
-{...}: {
-  flake.nixosModules.nohang-oomd = {...}: {
+{ ... }: {
+  flake.nixosModules.nohang-oomd = { ... }: {
     systemd.oomd = {
       enable = false;
     };

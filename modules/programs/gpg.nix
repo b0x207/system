@@ -1,5 +1,5 @@
-{...}: {
-  flake.nixosModules.gpg = {pkgs, ...}: {
+{ ... }: {
+  flake.nixosModules.gpg = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
       gnupg
       pinentry-tty

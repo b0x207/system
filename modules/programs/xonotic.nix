@@ -1,5 +1,5 @@
-{...}: {
-  flake.nixosModules.xonotic = {pkgs, ...}: {
+{ ... }: {
+  flake.nixosModules.xonotic = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
       xonotic
     ];

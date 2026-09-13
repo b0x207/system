@@ -1,5 +1,5 @@
-{...}: {
-  flake.nixosModules.email = {pkgs, ...}: {
+{ ... }: {
+  flake.nixosModules.email = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
       # TODO: consider switching to from source
       thunderbird-bin
@@ -31,7 +31,7 @@
     };
 
     environment.sessionVariables = {
-      XDG_DATA_DIRS = ["${pkgs.kdePackages.kdepim-runtime}/share"];
+      XDG_DATA_DIRS = [ "${pkgs.kdePackages.kdepim-runtime}/share" ];
     };
   };
 }

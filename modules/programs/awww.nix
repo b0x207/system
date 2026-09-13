@@ -1,5 +1,5 @@
-{...}: {
-  flake.nixosModules.awww = {pkgs, ...}: {
+{ ... }: {
+  flake.nixosModules.awww = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
       awww
     ];

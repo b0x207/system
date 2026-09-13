@@ -1,5 +1,5 @@
-{...}: {
-  flake.nixosModules.attic = {pkgs, ...}: {
+{ ... }: {
+  flake.nixosModules.attic = { pkgs, ... }: {
     environment.systemPackages = [
       pkgs.attic-client
     ];

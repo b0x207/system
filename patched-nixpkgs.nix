@@ -3,18 +3,20 @@
 {
   nixpkgs,
   system,
-}: let
-  pkgs = import nixpkgs {inherit system;};
+}:
+let
+  pkgs = import nixpkgs { inherit system; };
   patched-nixpkgs-src = pkgs.stdenv.mkDerivation (
     let
       patches = [
       ];
-    in {
+    in
+    {
       pname = "patched-nixpkgs";
       version = "${nixpkgs.shortRev}-patched";
       src = nixpkgs.sourceInfo.outPath;
 
-      nativeBuildInputs = [pkgs.git];
+      nativeBuildInputs = [ pkgs.git ];
 
       phases = [
         "unpackPhase"
@@ -36,13 +38,11 @@
   # Since `builtins.getFlake` won't allow passing store paths as inputs, the only solution is
   # to resort to trickery. Here, we add in the bare minimum required attributes to pretend that
   # this is an actual flake input.
-  flake =
-    (import "${patched-nixpkgs-src}/flake.nix")
-    // {
-      outPath = "${patched-nixpkgs-src}";
-    };
+  flake = (import "${patched-nixpkgs-src}/flake.nix") // {
+    outPath = "${patched-nixpkgs-src}";
+  };
 in
-  flake.outputs {self = flake;}
-  // {
-    inherit (patched-nixpkgs-src) outPath;
-  }
+flake.outputs { self = flake; }
+// {
+  inherit (patched-nixpkgs-src) outPath;
+}

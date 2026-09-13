@@ -1,5 +1,5 @@
-{...}: {
-  flake.nixosModules.tz-and-locale = {...}: {
+{ ... }: {
+  flake.nixosModules.tz-and-locale = { ... }: {
     time.timeZone = "America/Los_Angeles";
 
     services.timesyncd = {
