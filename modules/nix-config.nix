@@ -43,11 +43,11 @@
         ];
       };
 
-      # nixpkgs.hostPlatform = {
-      #   system = "x86_64-linux";
-      #   gcc.arch = hostArch;
-      #   gcc.tune = hostArch;
-      # };
+      nixpkgs.hostPlatform = {
+        system = "x86_64-linux";
+        gcc.arch = hostArch;
+        gcc.tune = hostArch;
+      };
 
       # I already run nix builds with a limited number of jobs. Instead, let's just for a CPU
       # affinity for p-cores only
@@ -81,6 +81,11 @@
         # inputs.hyprland.overlays.hyprland-extras
         (import ../overlays/valkey.nix { })
         (import ../overlays/dolphin.nix { })
+        (import ../overlays/compile-fixes/afdko.nix)
+        (import ../overlays/compile-fixes/scipy.nix {
+          inherit (inputs) nixpkgs;
+          system = pkgs.stdenv.system;
+        })
       ];
 
       services.nixseparatedebuginfod2.enable = true;
