@@ -10,9 +10,7 @@
       self.nixosModules.desktop-config
 
       inputs.home-manager.nixosModules.home-manager
-      inputs.tether.nixosModules.default
 
-      # self.nixosModules.tether
       self.nixosModules.i2p
       self.nixosModules.games
       self.nixosModules.xonotic

@@ -49,8 +49,6 @@
     todo-tree.url = "github:alexandretrotel/todo-tree";
 
     treefmt-nix.url = "github:numtide/treefmt-nix";
-
-    tether.url = "github:zackb/tether";
   };
 
   outputs =
