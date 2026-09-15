@@ -823,6 +823,21 @@
         "type": "github"
       }
     },
+    "nixpkgs-patcher": {
+      "locked": {
+        "lastModified": 1789143781,
+        "narHash": "sha256-WFr3wYdhSEJd/nQyJuETd6dcS08Exc+qoZWJ2tHM/gg=",
+        "owner": "gepbird",
+        "repo": "nixpkgs-patcher",
+        "rev": "da7c09e478f552c3a9ebb78b2f68426c1855fd81",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gepbird",
+        "repo": "nixpkgs-patcher",
+        "type": "github"
+      }
+    },
     "nixpkgs_10": {
       "locked": {
         "lastModified": 1767379071,
@@ -1053,6 +1068,7 @@
         "hyprland": "hyprland",
         "import-tree": "import-tree",
         "nixpkgs": "nixpkgs_4",
+        "nixpkgs-patcher": "nixpkgs-patcher",
         "nur": "nur",
         "tether": "tether",
         "todo-tree": "todo-tree",

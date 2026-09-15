@@ -1,17 +1,24 @@
 {
   description = "System config flake";
   inputs = {
+    # Core inputs
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable-small";
+    nixpkgs-patcher.url = "github:gepbird/nixpkgs-patcher";
+
+    # ~~~ NIXPKGS PATCHES HERE ~~~
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Flake fundamentals
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:denful/import-tree";
     git-hooks-nix.url = "github:cachix/git-hooks.nix";
 
+    # Everything else
     hyprland = {
       url = "github:HyprWM/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -48,32 +55,19 @@
   };
 
   outputs =
-    base-inputs@{
-      nixpkgs,
+    inputs@{
       flake-parts,
       ...
     }:
-    let
-      system = "x86_64-linux";
-
-      # TODO: find a way to make this work without IFD
-      patched-nixpkgs = import ./patched-nixpkgs.nix { inherit system nixpkgs; };
-
-      inputs = base-inputs // {
-        nixpkgs = patched-nixpkgs;
-        base-nixpkgs = nixpkgs;
-      };
-    in
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
         (inputs.import-tree ./modules)
         inputs.home-manager.flakeModules.home-manager
         inputs.git-hooks-nix.flakeModule
-        # (inputs.tether.nixosModules.default (import inputs.nixpkgs { inherit system; }))
       ];
 
       # Is this kinda dumb? Yeah.
-      systems = [ system ];
+      systems = [ "x86_64-linux" ];
 
       perSystem =
         {
