@@ -46,8 +46,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # TODO: See if the newer build can be fixed
-    todo-tree.url = "github:alexandretrotel/todo-tree/b46a07f6a8f0c8a2d3c0b70792cb819f82cb2c1a";
+    todo-tree.url = "github:alexandretrotel/todo-tree";
 
     treefmt-nix.url = "github:numtide/treefmt-nix";
 
