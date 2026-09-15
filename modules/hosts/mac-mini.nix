@@ -14,11 +14,15 @@
     ];
   };
 
-  flake.modules.darwin.skalkr-config = { config, pkgs, ... }: {
-    nixpkgs.hostPlatform = "aarch64-darwin";
-
+  flake.modules.darwin.skalkr-config = { pkgs, ... }: {
     nixpkgs.config = {
       allowUnfree = true;
+    };
+
+    nixpkgs.hostPlatform = {
+      system = "aarch64-darwin";
+      gcc.cpu = "apple-m1";
+      gcc.mtune = "apple-m1";
     };
 
     nix.settings.experimental-features = "nix-command flakes";
@@ -50,6 +54,8 @@
         inputs.catppuccin.homeModules.catppuccin
         self.homeModules.catppuccin
 
+        self.homeModules.cargo
+        self.homeModules.nix-output-monitor
         self.homeModules.tmux
         self.homeModules.fastfetch
         self.homeModules.atuin

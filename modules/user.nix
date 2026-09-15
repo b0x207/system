@@ -29,8 +29,11 @@
       users.ben = {
         imports = [
           ../user/home-manager.nix
+
           inputs.catppuccin.homeModules.catppuccin
           self.homeModules.catppuccin
+
+          self.homeModules.nix-output-monitor
           self.homeModules.fastfetch
           self.homeModules.atuin
           self.homeModules.git

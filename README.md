@@ -15,6 +15,7 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
   - [ ] Redo fastfetch
   - [ ] Hyprland `graphical-session.target`
   - [ ] Fix bitwarden float by ensuring it is removed from any window groups before forcing float
+- [ ] Fix mac-mini tmux to recognize that ghostty supports unicode
 - [ ] Build tooling around `./upstream-diff.sh` that can check the todo-tree and notify when manual PR inclusion can be removed
 - [ ] Flake parts
   - [x] Split config out for desktop versus laptop
