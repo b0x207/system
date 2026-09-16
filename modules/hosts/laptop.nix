@@ -4,7 +4,7 @@
   ...
 }:
 {
-  flake.nixosConfigurations.laptop = inputs.nixpkgs.lib.nixosSystem {
+  flake.nixosConfigurations.laptop = inputs.nixpkgs-patcher.lib.nixosSystem {
     modules = [
       self.nixosModules.laptop-hw
       self.nixosModules.laptop-config
@@ -68,6 +68,8 @@
       self.nixosModules.nix-config
       self.nixosModules.firmware
     ];
+
+    specialArgs = inputs;
   };
 
   flake.nixosModules.laptop-config = { ... }: {

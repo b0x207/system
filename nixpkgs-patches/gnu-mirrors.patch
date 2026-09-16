@@ -1,0 +1,15 @@
+diff --git a/pkgs/build-support/fetchurl/mirrors.nix b/pkgs/build-support/fetchurl/mirrors.nix
+index ba78f36a17c0..d4da367429b6 100644
+--- a/pkgs/build-support/fetchurl/mirrors.nix
++++ b/pkgs/build-support/fetchurl/mirrors.nix
+@@ -73,10 +73,6 @@
+ 
+   # GNU (https://www.gnu.org/prep/ftp.html)
+   gnu = [
+-    # This one redirects to a (supposedly) nearby and (supposedly) up-to-date
+-    # mirror
+-    "https://ftpmirror.gnu.org/"
+-
+     "https://ftp.nluug.nl/pub/gnu/"
+     "https://mirrors.kernel.org/gnu/"
+     "https://mirror.ibcp.fr/pub/gnu/"

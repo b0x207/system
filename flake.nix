@@ -6,6 +6,20 @@
     nixpkgs-patcher.url = "github:gepbird/nixpkgs-patcher";
 
     # ~~~ NIXPKGS PATCHES HERE ~~~
+
+    # Remove ftpmirror.gnu.org because it sometimes redirects to freedif.org which is currently
+    # broken. Also, download speed is not as important as reliability which this mirror is not
+    nixpkgs-patch-fix-gnufpt-mirror = {
+      url = "path:./nixpkgs-patches/gnu-mirrors.patch";
+      flake = false;
+    };
+
+    # Fixes download problems with some source repos since anubis causes download problems
+    nixpkgs-patch-fix-anubis-fetchurl = {
+      url = "path:./nixpkgs-patches/anubis-fetchurl.patch";
+      flake = false;
+    };
+
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     home-manager = {

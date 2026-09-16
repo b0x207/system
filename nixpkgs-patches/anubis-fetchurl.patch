@@ -1,0 +1,26 @@
+diff --git a/pkgs/os-specific/linux/minimal-bootstrap/tinycc/mes.nix b/pkgs/os-specific/linux/minimal-bootstrap/tinycc/mes.nix
+index 6cfe73252671..d9b823a92896 100644
+--- a/pkgs/os-specific/linux/minimal-bootstrap/tinycc/mes.nix
++++ b/pkgs/os-specific/linux/minimal-bootstrap/tinycc/mes.nix
+@@ -18,7 +18,7 @@ let
+   rev = "cb41cbfe717e4c00d7bb70035cda5ee5f0ff9341";
+ 
+   tarball = fetchurl {
+-    url = "https://repo.or.cz/tinycc.git/snapshot/${rev}.tar.gz";
++    url = "https://github.com/TinyCC/tinycc/archive/${rev}.tar.gz";
+     hash = "sha256-MRuqq3TKcfIahtUWdhAcYhqDiGPkAjS8UTMsDE+/jGU=";
+   };
+   src =
+diff --git a/pkgs/os-specific/linux/minimal-bootstrap/tinycc/musl.nix b/pkgs/os-specific/linux/minimal-bootstrap/tinycc/musl.nix
+index 4fceaf33471d..f49faba101ea 100644
+--- a/pkgs/os-specific/linux/minimal-bootstrap/tinycc/musl.nix
++++ b/pkgs/os-specific/linux/minimal-bootstrap/tinycc/musl.nix
+@@ -15,7 +15,7 @@ let
+   rev = "cb41cbfe717e4c00d7bb70035cda5ee5f0ff9341";
+ 
+   src = fetchurl {
+-    url = "https://repo.or.cz/tinycc.git/snapshot/${rev}.tar.gz";
++    url = "https://github.com/TinyCC/tinycc/archive/${rev}.tar.gz";
+     hash = "sha256-MRuqq3TKcfIahtUWdhAcYhqDiGPkAjS8UTMsDE+/jGU=";
+   };
+ 
