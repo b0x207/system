@@ -13,3 +13,16 @@ index ba78f36a17c0..d4da367429b6 100644
      "https://ftp.nluug.nl/pub/gnu/"
      "https://mirrors.kernel.org/gnu/"
      "https://mirror.ibcp.fr/pub/gnu/"
+diff --git a/pkgs/by-name/ed/ed/package.nix b/pkgs/by-name/ed/ed/package.nix
+index 41580d8017c3..ce53e638af2a 100644
+--- a/pkgs/by-name/ed/ed/package.nix
++++ b/pkgs/by-name/ed/ed/package.nix
+@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
+   version = "1.22.6";
+ 
+   src = fetchurl {
+-    url = "mirror://gnu/ed/ed-${finalAttrs.version}.tar.lz";
++    url = "https://ftp.gnu.org/pub/gnu/ed/ed-${finalAttrs.version}.tar.lz";
+     hash = "sha256-PzOyITUhnDnDxpX3txccJWfT4qF8eYwKkGBzIMuyaPI=";
+   };
+ 

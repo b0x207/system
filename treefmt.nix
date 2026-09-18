@@ -7,4 +7,6 @@
     command = "${pkgs.nufmt}/bin/nufmt";
     includes = [ "*.nu" ];
   };
+
+  # programs.qmlformat.enable = true;
 }

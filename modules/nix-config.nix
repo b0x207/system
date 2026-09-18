@@ -23,8 +23,8 @@
         ];
         ssl-cert-file = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
 
-        substituters = pkgs.lib.mkForce [ ];
-        builders-use-substituters = false;
+        # substituters = pkgs.lib.mkForce [ ];
+        # builders-use-substituters = false;
 
         # Attempt to enable more optimizations
         system-features = [
@@ -39,11 +39,11 @@
         ];
       };
 
-      nixpkgs.hostPlatform = {
-        system = "x86_64-linux";
-        gcc.arch = hostArch;
-        gcc.tune = hostArch;
-      };
+      # nixpkgs.hostPlatform = {
+      #   system = "x86_64-linux";
+      #   gcc.arch = hostArch;
+      #   gcc.tune = hostArch;
+      # };
 
       # I already run nix builds with a limited number of jobs. Instead, let's just for a CPU
       # affinity for p-cores only

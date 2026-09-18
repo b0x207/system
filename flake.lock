@@ -80,11 +80,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788792980,
-        "narHash": "sha256-TX/Z3PQZQVHgy4g9OZpflVpuazwturkGolsRDkFVHiU=",
+        "lastModified": 1789553013,
+        "narHash": "sha256-W5dvgFOuVs24X3G5tUb8C2IHU7ICXNvyGPiWWFjfbuo=",
         "owner": "catppuccin",
         "repo": "nix",
-        "rev": "3142fdbeea0b181ad6600587dfe484ccb644dcc6",
+        "rev": "89b3eacf59d6b5eefbc2d69c3a4eb5aaf66d63bc",
         "type": "github"
       },
       "original": {
@@ -367,11 +367,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1789512121,
-        "narHash": "sha256-yEp352SkpVW1JRqQX4fstDiDIbLWeLbYImKrjsC9xSU=",
+        "lastModified": 1789514889,
+        "narHash": "sha256-PFD1nxptCXJyJoiYO1gf/5Vv43yqGpHtMC6LUhl9/pQ=",
         "owner": "cachix",
         "repo": "git-hooks.nix",
-        "rev": "eaf2c17c086f20abfea7f54414f837481240034c",
+        "rev": "59f4ca0d063a1a3ec722c88b51a33004862e5379",
         "type": "github"
       },
       "original": {
@@ -408,11 +408,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1789482455,
-        "narHash": "sha256-pD3qVlQ4mUCFoTWrYtxecpSitQMsgJvJIN0FUIDZoEU=",
+        "lastModified": 1789618856,
+        "narHash": "sha256-OSqj7eOijvCZfN7owFWRxLWRhej5lZI+Kt82q3INLvc=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "efa3ccb4c3cc90d832eab232976379058fa75aa3",
+        "rev": "afa6821c70560bb19d1a8c577bff398f7f239869",
         "type": "github"
       },
       "original": {
@@ -823,30 +823,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-patch-fix-anubis-fetchurl": {
-      "flake": false,
-      "locked": {
-        "path": "./nixpkgs-patches/anubis-fetchurl.patch",
-        "type": "path"
-      },
-      "original": {
-        "path": "./nixpkgs-patches/anubis-fetchurl.patch",
-        "type": "path"
-      },
-      "parent": []
-    },
-    "nixpkgs-patch-fix-gnufpt-mirror": {
-      "flake": false,
-      "locked": {
-        "path": "./nixpkgs-patches/gnu-mirrors.patch",
-        "type": "path"
-      },
-      "original": {
-        "path": "./nixpkgs-patches/gnu-mirrors.patch",
-        "type": "path"
-      },
-      "parent": []
-    },
     "nixpkgs-patcher": {
       "locked": {
         "lastModified": 1789143781,
@@ -928,11 +904,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1789491802,
-        "narHash": "sha256-b1oub1k+TSrJurSlVf44ZLtS83LvpKcJczY8XwsvzRI=",
+        "lastModified": 1789625268,
+        "narHash": "sha256-ifID4dreZRXnXVSNeJmrcz4pV4eLgtUFOM4bZwgs6ac=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "418b4364809447c9bce66e1e52ce0a194e7b4160",
+        "rev": "b825c77421944fc29a38b59fb3f09730a594e7dc",
         "type": "github"
       },
       "original": {
@@ -1030,11 +1006,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1789513238,
-        "narHash": "sha256-5DDoMNpZV+LcKS8M1WSSyvmLE4NdwE/lYzL+FDivRlw=",
+        "lastModified": 1789634318,
+        "narHash": "sha256-CDt8CCoIeLGtQTwrN29dygdQVGM0BoaC05HEZpBQyyI=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "10997017c6ea27ed54a5c6b196884a7a83df7aaf",
+        "rev": "388212f20236f49ab73d896671c4b51df0f57124",
         "type": "github"
       },
       "original": {
@@ -1076,8 +1052,6 @@
         "hyprland": "hyprland",
         "import-tree": "import-tree",
         "nixpkgs": "nixpkgs_4",
-        "nixpkgs-patch-fix-anubis-fetchurl": "nixpkgs-patch-fix-anubis-fetchurl",
-        "nixpkgs-patch-fix-gnufpt-mirror": "nixpkgs-patch-fix-gnufpt-mirror",
         "nixpkgs-patcher": "nixpkgs-patcher",
         "nur": "nur",
         "todo-tree": "todo-tree",

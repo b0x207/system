@@ -85,6 +85,9 @@
       };
     };
 
+    # TODO: QUICK FIX
+    services.openssh.enable = true;
+
     networking.hostName = "desktop";
 
     system.configurationRevision = toString (self.rev or self.dirtyRev or "unknown");
