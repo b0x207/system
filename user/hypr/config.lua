@@ -29,6 +29,10 @@ hl.config({
             -- Disabled because it causes issues when playing games on trackpad
             -- drag_lock = 1,
         },
+
+        sensitivity = 1.0,  -- Adjust this: positive = faster, negative = slower
+        accel_profile = "flat",  -- or "adaptive"
+        force_no_accel = false,
     },
 
     group = {
