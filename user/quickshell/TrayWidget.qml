@@ -1,10 +1,9 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Widgets
 import Quickshell.Services.SystemTray
-
-pragma ComponentBehavior: Bound
 
 Rectangle {
     id: trayWidgetContainer

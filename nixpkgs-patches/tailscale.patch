@@ -1,0 +1,16 @@
+Upsteam nixpkgs uses a different hash for tailscale for some reason. Likely, the tag for release
+v1.102.4 was adjusted.
+
+diff --git a/pkgs/by-name/ta/tailscale/package.nix b/pkgs/by-name/ta/tailscale/package.nix
+index 7382d9803d14..d6e990dbd3de 100644
+--- a/pkgs/by-name/ta/tailscale/package.nix
++++ b/pkgs/by-name/ta/tailscale/package.nix
+@@ -35,7 +35,7 @@ buildGoModule (finalAttrs: {
+     owner = "tailscale";
+     repo = "tailscale";
+     tag = "v${finalAttrs.version}";
+-    hash = "sha256-NzWuMhLCqewkH/vwyfRND8yEubRmUSXe/TYA2ldhFl8=";
++    hash = "sha256-PCCkzNvV9AK1AM5UhM97roSctctvFfwUw5QhKB64n00=";
+   };
+ 
+   vendorHash = "sha256-amKkUPszyhG4N5ZtrB01swBACYq76raSS+SQRneLmwc=";

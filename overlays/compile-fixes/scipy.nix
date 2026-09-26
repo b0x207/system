@@ -1,3 +1,4 @@
+# Apr 18 2026:
 # Test scipy/signal/tests/test_spectral.py::TestSTFT::test_roundtrip_scaling fails. Since it builds
 # correctly on normal nixpkgs, we'll assume that the test failure is due to a difference in codegen
 # due to enabling F16C.

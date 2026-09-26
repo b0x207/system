@@ -1,3 +1,4 @@
+# Jul 6 2026
 # This test fails when building with floating point hardware features (i.e. `-march`). Until a
 # proper fix can be produced, disabling the test doesn't seem to result in any significant quality
 # decrease.

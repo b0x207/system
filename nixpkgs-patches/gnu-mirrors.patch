@@ -1,3 +1,6 @@
+Remove ftpmirror.gnu.org because it sometimes redirects to freedif.org which is currently broken.
+Also, download speed is not as important as reliability which this mirror is not.
+
 diff --git a/pkgs/build-support/fetchurl/mirrors.nix b/pkgs/build-support/fetchurl/mirrors.nix
 index ba78f36a17c0..d4da367429b6 100644
 --- a/pkgs/build-support/fetchurl/mirrors.nix

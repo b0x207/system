@@ -24,7 +24,6 @@
         ssl-cert-file = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
 
         substituters = pkgs.lib.mkForce [ ];
-        builders-use-substituters = false;
 
         # Attempt to enable more optimizations
         system-features = [
@@ -71,18 +70,24 @@
         allowUnfree = true;
       };
 
-      nixpkgs.overlays = [
-        inputs.nur.overlays.default
-        # inputs.hyprland.overlays.hyprland-packages
-        # inputs.hyprland.overlays.hyprland-extras
-        (import ../overlays/valkey.nix { })
-        (import ../overlays/dolphin.nix { })
-        (import ../overlays/compile-fixes/afdko.nix)
-        (import ../overlays/compile-fixes/scipy.nix {
-          inherit (inputs) nixpkgs;
-          system = pkgs.stdenv.system;
-        })
-      ];
+      nixpkgs.overlays =
+        let
+          plain-args = {
+            inherit (inputs) nixpkgs;
+            system = pkgs.stdenv.system;
+          };
+        in
+        [
+          inputs.nur.overlays.default
+          # inputs.hyprland.overlays.hyprland-packages
+          # inputs.hyprland.overlays.hyprland-extras
+          (import ../overlays/valkey.nix { })
+          (import ../overlays/dolphin.nix { })
+          (import ../overlays/compile-fixes/afdko.nix)
+          (import ../overlays/compile-fixes/scipy.nix plain-args)
+          (import ../overlays/compile-fixes/qtbase.nix plain-args)
+          (import ../overlays/compile-fixes/kdoctools.nix plain-args)
+        ];
 
       services.nixseparatedebuginfod2.enable = true;
 

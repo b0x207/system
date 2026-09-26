@@ -8,7 +8,7 @@ PopupWindow {
     id: root
     anchor.window: window
 
-    required property QsMenuHandle trayItem;
+    required property QsMenuHandle trayItem
 
     implicitWidth: menuContainer.implicitWidth
     implicitHeight: menuContainer.implicitHeight
@@ -21,18 +21,18 @@ PopupWindow {
     }
 
     function close(): void {
-        trayIcon.isOpen = false;
-        trayWidgetContainer.activeMenu = null;
-    }
+    trayIcon.isOpen = false;
+    trayWidgetContainer.activeMenu = null;
+}
 
     Component.onCompleted: trayWidgetContainer.activeMenu = this
 
     HyprlandFocusGrab {
         id: grab
-        windows: [ root ]
+        windows: [root]
 
         onCleared: {
-            root.close()
+            root.close();
         }
 
         active: trayIcon.isOpen
@@ -100,9 +100,9 @@ PopupWindow {
                             const entry = menuItem.modelData;
                             if (entry.hasChildren) {
                                 stack.push(subMenuComp.createObject(null, {
-                                    handle: entry,
-                                    isSubMenu: true
-                                }));
+                                                                        handle: entry,
+                                                                        isSubMenu: true
+                                                                    }));
                             } else {
                                 menuItem.modelData.triggered();
                                 root.close();
@@ -113,7 +113,8 @@ PopupWindow {
                             id: icon
 
                             anchors.left: parent.left
-                            active: menuItem.modelData.icon !== "" && this.sourceComponent.status != Image.Error
+                            active: menuItem.modelData.icon !== "" && this.sourceComponent.status
+                                    != Image.Error
 
                             Component.onCompleted: {
                                 console.log(this.sourceComponent.source, menuItem.modelData.icon);

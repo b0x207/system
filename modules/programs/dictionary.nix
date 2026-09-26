@@ -5,7 +5,10 @@
       (aspellWithDicts (
         dicts: with dicts; [
           en
-          en-computers
+
+          # TRACK: Disable due to a problem in upstream
+          # en-computers
+
           en-science
         ]
       ))

@@ -5,11 +5,11 @@ import Quickshell.Io
 import QtQuick
 
 Singleton {
-    property string value;
+    property string value
 
     Process {
         running: true
-        command: [ "hostname" ]
+        command: ["hostname"]
         stdout: StdioCollector {
             onStreamFinished: {
                 value = this.text.trim();

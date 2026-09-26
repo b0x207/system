@@ -27,7 +27,6 @@
       self.nixosModules.pika-backup
       self.nixosModules.multimedia-tools
       self.nixosModules.homelab
-      self.nixosModules.kdeconnect
       self.nixosModules.iphone
       self.nixosModules.disk-tools
       self.nixosModules.matrix-client
@@ -50,7 +49,6 @@
       self.nixosModules.hyprquickframe
       self.nixosModules.clipboard
 
-      self.nixosModules.scanner
       self.nixosModules.user
       self.nixosModules.catppuccin
       self.nixosModules.fstrim

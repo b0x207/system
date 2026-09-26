@@ -44,7 +44,9 @@ Scope {
                     border.color: Theme.border
                     border.width: window.borderWidth
 
-                    ClockWidget { id: clockWidget }
+                    ClockWidget {
+                        id: clockWidget
+                    }
                 }
                 Rectangle {
                     Layout.minimumWidth: workspaceWidget.implicitWidth + 30
@@ -72,7 +74,9 @@ Scope {
                     border.color: Theme.border
                     border.width: window.borderWidth
 
-                    NetworkWidget { id: networkWidget }
+                    NetworkWidget {
+                        id: networkWidget
+                    }
                 }
 
                 Rectangle {
@@ -84,7 +88,9 @@ Scope {
                     border.color: Theme.border
                     border.width: window.borderWidth
 
-                    VolumeWidget { id: volumeWidget }
+                    VolumeWidget {
+                        id: volumeWidget
+                    }
                 }
 
                 Rectangle {
@@ -98,7 +104,9 @@ Scope {
                     border.color: Theme.border
                     border.width: window.borderWidth
 
-                    BatteryWidget { id: batteryWidget }
+                    BatteryWidget {
+                        id: batteryWidget
+                    }
                 }
             }
         }

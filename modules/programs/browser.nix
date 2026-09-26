@@ -11,7 +11,7 @@
     environment.systemPackages = with pkgs; [
       # librewolf
       tor-browser
-      ungoogled-chromium
+      # ungoogled-chromium
     ];
   };
 }

@@ -7,16 +7,24 @@
 
     # ~~~ NIXPKGS PATCHES HERE ~~~
 
-    # Remove ftpmirror.gnu.org because it sometimes redirects to freedif.org which is currently
-    # broken. Also, download speed is not as important as reliability which this mirror is not
     nixpkgs-patch-fix-gnufpt-mirror = {
       url = "path:./nixpkgs-patches/gnu-mirrors.patch";
       flake = false;
     };
 
-    # Fixes download problems with some source repos since anubis causes download problems
     nixpkgs-patch-fix-anubis-fetchurl = {
       url = "path:./nixpkgs-patches/anubis-fetchurl.patch";
+      flake = false;
+    };
+
+    # Fixes problem with upstream source archives for bmake version 20260313 being delisted
+    nixpkgs-patch-bmake = {
+      url = "https://github.com/NixOS/nixpkgs/pull/515225.diff";
+      flake = false;
+    };
+
+    nixpkgs-patch-tailscale = {
+      url = "path:./nixpkgs-patches/tailscale.patch";
       flake = false;
     };
 
@@ -92,7 +100,12 @@
         {
           formatter = treefmtEval.config.build.wrapper;
 
-          packages.pre-commit = config.pre-commit.settings.package;
+          packages = {
+            pre-commit = config.pre-commit.settings.package;
+
+            # To support building the required bootstrap sources with a correct nixpkgs version
+            make-minimal-bootstrap-sources = pkgs.make-minimal-bootstrap-sources;
+          };
 
           devShells.default = pkgs.mkShell {
             packages = [

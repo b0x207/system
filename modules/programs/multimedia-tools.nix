@@ -1,12 +1,11 @@
 { ... }: {
   flake.nixosModules.multimedia-tools = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
-      krita
       gimp
       vimiv-qt
       mpv
       kdePackages.kdenlive
-      kopuz
+      # kopuz
     ];
 
     programs.obs-studio = {

@@ -1,3 +1,5 @@
+Fixes download problems with some source repos since anubis causes download problems.
+
 diff --git a/pkgs/os-specific/linux/minimal-bootstrap/tinycc/mes.nix b/pkgs/os-specific/linux/minimal-bootstrap/tinycc/mes.nix
 index 6cfe73252671..d9b823a92896 100644
 --- a/pkgs/os-specific/linux/minimal-bootstrap/tinycc/mes.nix

@@ -7,4 +7,10 @@
     command = "${pkgs.nufmt}/bin/nufmt";
     includes = [ "*.nu" ];
   };
+
+  programs.qmlformat.enable = true;
+  settings.formatter.qmlformat.options = [
+    "--column-width"
+    "100"
+  ];
 }

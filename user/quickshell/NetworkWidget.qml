@@ -38,14 +38,10 @@ Text {
         command: ["nmcli", "monitor"]
 
         stdout: SplitParser {
-            onRead: (data) => {
-                const getName = (input) => {
+            onRead: data => {
+                const getName = input => {
                     let first = input.indexOf("'");
-                    let second = input
-                    .split("")
-                    .reverse()
-                    .join("")
-                    .indexOf("'");
+                    let second = input.split("").reverse().join("").indexOf("'");
 
                     if (first < 0 || second < 0) {
                         return "";
