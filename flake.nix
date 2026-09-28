@@ -2,7 +2,7 @@
   description = "System config flake";
   inputs = {
     # Core inputs
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable-small";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
     nixpkgs-patcher.url = "github:gepbird/nixpkgs-patcher";
 
     # ~~~ NIXPKGS PATCHES HERE ~~~
@@ -27,6 +27,14 @@
       url = "path:./nixpkgs-patches/tailscale.patch";
       flake = false;
     };
+    nixpkgs-patch-hunspell = {
+      url = "path:./nixpkgs-patches/hunspell.patch";
+      flake = false;
+    };
+    nixpkgs-patch-dart = {
+      url = "path:./nixpkgs-patches/dart.patch";
+      flake = false;
+    };
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -49,7 +57,12 @@
       url = "github:catppuccin/nix/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    utpm.url = "github:typst-community/utpm";
+    utpm = {
+      url = "github:typst-community/utpm";
+
+      # This only needs to be pinned until upstream update their flake to use nixpkgs post Feb 2026
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     typst = {
       url = "github:typst/typst-flake";
       inputs.typst.follows = "typst-src";
@@ -58,7 +71,10 @@
       url = "github:typst/typst";
       flake = false;
     };
-    agenix.url = "github:ryantm/agenix";
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     HyprQuickFrame.url = "github:Ronin-CK/HyprQuickFrame?rev=d8750eab1963886085c66d4b19c5ccc49f59869c";
 
     typst-plantuml.url = "github:b0x207/typst-plantuml";

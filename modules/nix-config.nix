@@ -13,7 +13,7 @@
       nix.settings = {
         # TODO: make automatic lockstep with CPU affinity
         max-jobs = 2;
-        cores = if hostArch == "arrowlake" then 3 else 4;
+        cores = if hostArch == "arrowlake" then 8 else 4;
 
         auto-optimise-store = true;
         trusted-users = [ "ben" ];
@@ -23,7 +23,8 @@
         ];
         ssl-cert-file = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
 
-        substituters = pkgs.lib.mkForce [ ];
+        # Perhaps one day...
+        # substituters = pkgs.lib.mkForce [ ];
 
         # Attempt to enable more optimizations
         system-features = [
@@ -50,7 +51,7 @@
         # If not arrowlake, then this system must be a skylake or coffee lake CPU which both
         # predate Intel's switch to a heterogeneous core architecture. Thus, we'll just allocate 8
         # cores as a sensible default.
-        CPUAffinity = if hostArch == "arrowlake" then "0-5" else "0-7";
+        CPUAffinity = if hostArch == "arrowlake" then "0-15" else "0-7";
       };
 
       nix.registry.nixpkgs = {

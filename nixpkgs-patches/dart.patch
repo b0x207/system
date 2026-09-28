@@ -1,0 +1,43 @@
+A quick fix to a basic build error caused by dart's version of depot_tools still using a
+deprecated version of python's `pipes` stdlib module.
+
+diff --git a/pkgs/development/compilers/dart/source/default.nix b/pkgs/development/compilers/dart/source/default.nix
+index 2345180b7590..4b00e77c513b 100644
+--- a/pkgs/development/compilers/dart/source/default.nix
++++ b/pkgs/development/compilers/dart/source/default.nix
+@@ -15,7 +15,7 @@
+   nix-update,
+   pax-utils,
+   pkg-config,
+-  python3,
++  python312,
+   ripgrep,
+   stdenv,
+   writableTmpDirAsHomeHook,
+@@ -43,7 +43,7 @@ let
+ 
+   buildArchInfo = getArchInfo stdenv.buildPlatform;
+ 
+-  pythonEnv = python3.withPackages (
++  pythonEnv = python312.withPackages (
+     ps: with ps; [
+       httplib2
+       six
+@@ -60,7 +60,7 @@ let
+       tools.cipd
+       gitMinimal
+       pax-utils
+-      python3
++      python312
+       writableTmpDirAsHomeHook
+     ];
+ 
+@@ -126,7 +126,7 @@ dart-bin.overrideAttrs (oldAttrs: {
+   nativeBuildInputs = [
+     gitMinimal
+     gitSetupHook
+-    python3
++    python312
+     ripgrep
+     pkg-config
+   ];
