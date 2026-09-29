@@ -3,18 +3,19 @@
     programs.rofi = {
       enable = true;
 
-      cycle = true;
-      location = "center";
-      extraConfig = {
-        scroll-method = 1; # 1 = continuous scroll
+      settings = {
+        cycle = true;
+        location = 0; # 0 = center
+        extraConfig = {
+          scroll-method = 1; # 1 = continuous scroll
+        };
+        modes = [
+          "drun"
+          "calc"
+        ];
       };
 
       plugins = [ pkgs.rofi-calc ];
-
-      modes = [
-        "drun"
-        "calc"
-      ];
     };
 
     catppuccin.rofi.enable = true;
