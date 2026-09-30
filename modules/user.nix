@@ -31,6 +31,7 @@
           ../user/home-manager.nix
           inputs.catppuccin.homeModules.catppuccin
 
+          self.homeModules.lazygit
           self.homeModules.rstudio
           self.homeModules.btop
           self.homeModules.theme
