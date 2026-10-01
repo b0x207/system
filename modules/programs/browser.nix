@@ -6,7 +6,7 @@
       languagePacks = [ "en-US" ];
     };
 
-    # programs.ladybird.enable = true;
+    programs.ladybird.enable = true;
 
     environment.systemPackages = with pkgs; [
       # librewolf
