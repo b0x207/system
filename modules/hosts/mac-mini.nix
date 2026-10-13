@@ -9,7 +9,12 @@
       self.modules.darwin.skalkr-config
 
       inputs.home-manager.darwinModules.home-manager
+      inputs.nix-homebrew.darwinModules.nix-homebrew
 
+      self.modules.darwin.minecraft-server
+      self.modules.darwin.music-server
+      self.modules.darwin.karabiner-elements
+      self.modules.darwin.nix-homebrew
       self.modules.darwin.tailscale
     ];
   };
@@ -37,6 +42,8 @@
       home = "/Users/ben";
       shell = pkgs.zsh;
     };
+
+    system.primaryUser = "ben";
 
     home-manager = {
       users.ben.imports = [
