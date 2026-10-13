@@ -46,11 +46,12 @@
       self.nixosModules.quickshell
       self.nixosModules.awww
       self.nixosModules.sway-notification-center
-      self.nixosModules.hyprquickframe
+      self.nixosModules.grimblast
       self.nixosModules.clipboard
 
       self.nixosModules.user
       self.nixosModules.catppuccin
+      self.nixosModules.thermald
       self.nixosModules.fstrim
       self.nixosModules.keyd
       self.nixosModules.battery
@@ -150,6 +151,8 @@
       #   "i915.force_probe=!"
       #   "xe.force_probe=*"
       # ];
+
+      boot.tmp.cleanOnBoot = true;
 
       systemd.sleep.settings.Sleep = {
         # Hibernation can cause weird problems with no physical swap device

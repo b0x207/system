@@ -91,6 +91,7 @@ PanelWindow {
 
                     model: ScriptModel {
                         values: {
+                            entryList.currentIndex = 0;
                             return [...DesktopEntries.applications.values].sort((a, b)
                                                                                 => a.name.localeCompare(
                                                                                        b.name)).filter(

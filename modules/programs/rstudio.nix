@@ -3,7 +3,7 @@
     home.packages = with pkgs; [
       R
       rPackages.rmarkdown
-      rstudio
+      rstudioWrapper
     ];
   };
 }

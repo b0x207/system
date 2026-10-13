@@ -1,12 +1,8 @@
-{
-  inputs,
-  ...
-}:
-{
+{ ... }: {
   flake.nixosModules.hyprland = { pkgs, ... }: {
     programs.hyprland = {
       enable = true;
-      package = inputs.hyprland.packages.${pkgs.stdenv.system}.hyprland;
+      package = pkgs.hyprland;
     };
 
     environment.systemPackages = with pkgs; [

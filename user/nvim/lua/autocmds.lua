@@ -64,7 +64,7 @@ autocmd("Filetype", {
 augroup("setColorColumn", { clear = true })
 autocmd("FileType", {
     group = "setColorColumn",
-    pattern = { "cpp", "c" },
+    pattern = { "cpp", "c", "rmd" },
     callback = function ()
         -- The editorconfig values are applied after the FileType autocmd runs so we have to defer
         -- the main logic until after

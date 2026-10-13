@@ -8,8 +8,7 @@
 
           # TRACK: Disable due to a problem in upstream
           # en-computers
-
-          en-science
+          # en-science
         ]
       ))
     ];

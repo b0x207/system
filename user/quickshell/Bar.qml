@@ -60,6 +60,19 @@ Scope {
                         id: workspaceWidget
                     }
                 }
+                Rectangle {
+                    Layout.minimumWidth: hyprSubmapWidget.implicitWidth + 30
+                    Layout.fillHeight: true
+                    radius: window.radius
+                    color: Theme.base
+                    border.color: Theme.border
+                    border.width: window.borderWidth
+                    visible: HyprSubmap.active_submap != null
+
+                    HyprSubmapWidget {
+                        id: hyprSubmapWidget
+                    }
+                }
 
                 SpacerWidget {}
 

@@ -1,0 +1,37 @@
+Once again, GNU infrastructure has failed me. So, add in an extra url for my own mirror of the
+upstream patches.
+
+diff --git a/pkgs/by-name/cp/cpio/package.nix b/pkgs/by-name/cp/cpio/package.nix
+index 8d929f60c05d..ab85c3d82dcc 100644
+--- a/pkgs/by-name/cp/cpio/package.nix
++++ b/pkgs/by-name/cp/cpio/package.nix
+@@ -25,17 +25,26 @@ stdenv.mkDerivation (finalAttrs: {
+   patches = [
+     (fetchpatch {
+       name = "CVE-2026-66484.patch";
+-      url = "https://git.savannah.gnu.org/cgit/cpio.git/patch/?id=e2b9cbdd3354d2b1569b7390d1bc15c1930559ad";
++      urls = [
++        "https://mirror.b0x207.dev/cpio/e2b9cbdd3354d2b1569b7390d1bc15c1930559ad.patch"
++        "https://git.savannah.gnu.org/cgit/cpio.git/patch/?id=e2b9cbdd3354d2b1569b7390d1bc15c1930559ad"
++      ];
+       hash = "sha256-WjphVpMaI/ePg8MTZx+vvilKzpRAAzhAFwCwrbsPLRE=";
+     })
+     (fetchpatch {
+       name = "CVE-2026-66485.patch";
+-      url = "https://git.savannah.gnu.org/cgit/cpio.git/patch/?id=3cd514031371d8aeeaf2048aa10103e02831aaa9";
++      urls = [
++        "https://mirror.b0x207.dev/cpio/3cd514031371d8aeeaf2048aa10103e02831aaa9.patch"
++        "https://git.savannah.gnu.org/cgit/cpio.git/patch/?id=3cd514031371d8aeeaf2048aa10103e02831aaa9"
++      ];
+       hash = "sha256-YDlROEYYlZERNzzlx1cQD29gV5IrU01aVcZ/sKpWrRo=";
+     })
+     (fetchpatch {
+       name = "CVE-2026-66486.patch";
+-      url = "https://git.savannah.gnu.org/cgit/cpio.git/patch/?id=2ff9600c9ef32e88759843cdbde74c8db5ae9b30";
++      urls = [
++        "https://mirror.b0x207.dev/cpio/2ff9600c9ef32e88759843cdbde74c8db5ae9b30.patch"
++        "https://git.savannah.gnu.org/cgit/cpio.git/patch/?id=2ff9600c9ef32e88759843cdbde74c8db5ae9b30"
++      ];
+       excludes = [ "NEWS" ];
+       hash = "sha256-qi9/9xhKnIyPpji63RgzbnnHZsJgwRnQVMaMiLxQipk=";
+     })

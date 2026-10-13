@@ -23,16 +23,25 @@
       flake = false;
     };
 
-    nixpkgs-patch-tailscale = {
-      url = "path:./nixpkgs-patches/tailscale.patch";
+    nixpkgs-patch-hyprland-binary-wrapper = {
+      url = "https://github.com/NixOS/nixpkgs/pull/573247.diff";
       flake = false;
     };
+
     nixpkgs-patch-hunspell = {
       url = "path:./nixpkgs-patches/hunspell.patch";
       flake = false;
     };
     nixpkgs-patch-dart = {
       url = "path:./nixpkgs-patches/dart.patch";
+      flake = false;
+    };
+    nixpkgs-patch-libtirpc = {
+      url = "path:./nixpkgs-patches/libtirpc.patch";
+      flake = false;
+    };
+    nixpkgs-patch-cpio = {
+      url = "path:./nixpkgs-patches/cpio.patch";
       flake = false;
     };
 
@@ -66,6 +75,7 @@
     typst = {
       url = "github:typst/typst-flake";
       inputs.typst.follows = "typst-src";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     typst-src = {
       url = "github:typst/typst";
@@ -85,7 +95,6 @@
     };
 
     todo-tree.url = "github:alexandretrotel/todo-tree";
-
     treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 

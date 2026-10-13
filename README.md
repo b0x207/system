@@ -63,6 +63,8 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
       - [ ] `python3-minimal`
       - [ ] `go`
       - [ ] `numpy`
+      - [ ] `librsvg-2.62.3-i686-linux`
+      - [ ] `ffmpeg-headless` checkPhase
   - Packages having problems due to `.git` being missing (see: a lot of the LLVM packages)
   - Some packages don't build in parallel
     - `lager`

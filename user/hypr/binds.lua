@@ -38,6 +38,16 @@ hl.bind(modKey .. " + G", hl.dsp.group.toggle())
 hl.bind(modKey .. " + right", hl.dsp.group.next())
 hl.bind(modKey .. " + left", hl.dsp.group.prev())
 
+hl.bind(modKey .. " + R", hl.dsp.submap("resize"))
+hl.define_submap("resize", function()
+    hl.bind("L", hl.dsp.window.resize({ x = 10, y = 0, relative = true}), { repeating = true })
+    hl.bind("H", hl.dsp.window.resize({ x = -10, y = 0, relative = true}), { repeating = true })
+    hl.bind("K", hl.dsp.window.resize({ x = 0, y = 10, relative = true}), { repeating = true })
+    hl.bind("J", hl.dsp.window.resize({ x = 0, y = -10, relative = true}), { repeating = true })
+
+    hl.bind("escape", hl.dsp.submap("reset"))
+end)
+
 -- IMPORTANT PROGRAMS
 
 hl.bind(modKey .. " + Return", hl.dsp.exec_cmd(terminal))
@@ -69,8 +79,7 @@ hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl s 10%-"))
 
 -- SCREENSHOTS
 
-hl.bind(modKey .. " + S", hl.dsp.exec_cmd("hyprquickframe"))
-hl.bind(modKey .. " + SHIFT + S", hl.dsp.exec_cmd("env HYPRQUICKFRAME_EDITOR=1 hyprquickframe"))
+hl.bind(modKey .. " + SHIFT + S", hl.dsp.exec_cmd("env GRIMBLAST_EDITOR='satty --copy-command wl-copy --filename' grimblast edit area"))
 
 -- AUDIO
 

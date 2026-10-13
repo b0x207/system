@@ -24,7 +24,7 @@ else
     hl.monitor({
         output = "HDMI-A-1",
         mode = "preferred",
-        position = "0x0",
+        position = "0x-1080",
         scale = "1",
     })
 end
@@ -33,6 +33,6 @@ hl.monitor({
     output = "eDP-1",
     mode = "preferred",
     -- position = "0x-1920",
-    position = "0x1080",
+    position = "0x0",
     scale = "1",
 })
