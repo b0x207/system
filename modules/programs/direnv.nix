@@ -1,0 +1,12 @@
+{ ... }: {
+  flake.homeModules.direnv = { ... }: {
+    programs.direnv = {
+      enable = true;
+      enableZshIntegration = true;
+      nix-direnv.enable = true;
+      config = {
+        warn_timeout = 0;
+      };
+    };
+  };
+}

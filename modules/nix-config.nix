@@ -1,4 +1,4 @@
-{ inputs, ... }: {
+{ self, inputs, ... }: {
   flake.nixosModules.nix-config =
     {
       pkgs,
@@ -70,29 +70,18 @@
 
         config.allowUnfree = true;
 
-        overlays =
-          let
-            plain-args = {
-              inherit (inputs) nixpkgs;
-              system = pkgs.stdenv.system;
-            };
-          in
-          [
-            inputs.nur.overlays.default
-            (import ../overlays/valkey.nix { })
-            (import ../overlays/dolphin.nix { })
-            (import ../overlays/compile-fixes/afdko.nix)
-            (import ../overlays/compile-fixes/scipy.nix plain-args)
-            (import ../overlays/compile-fixes/qtbase.nix plain-args)
-            (import ../overlays/compile-fixes/kdoctools.nix plain-args)
-            (import ../overlays/compile-fixes/zopfli-py.nix plain-args)
+        overlays = [
+          inputs.nur.overlays.default
 
-            # I hate building Electron
-            (prev: _final: {
-              electron = prev.electron-bin;
-              electron_42 = prev.electron_42-bin;
-            })
-          ];
+          self.overlays.valkey
+          self.overlays.dolphin
+          self.overlays.afdko
+          self.overlays.kdoctools
+          self.overlays.qtbase
+          self.overlays.scipy
+          self.overlays.zopfli-py
+          self.overlays.electron-bin
+        ];
       };
 
       # I already run nix builds with a limited number of jobs. Instead, let's just for a CPU

@@ -23,11 +23,6 @@
       flake = false;
     };
 
-    nixpkgs-patch-hyprland-binary-wrapper = {
-      url = "https://github.com/NixOS/nixpkgs/pull/573247.diff";
-      flake = false;
-    };
-
     nixpkgs-patch-hunspell = {
       url = "path:./nixpkgs-patches/hunspell.patch";
       flake = false;
@@ -60,10 +55,6 @@
     # Everything else
     hyprland = {
       url = "github:HyprWM/Hyprland";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    catppuccin = {
-      url = "github:catppuccin/nix/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     utpm = {
@@ -135,6 +126,7 @@
           devShells.default = pkgs.mkShell {
             packages = [
               config.packages.pre-commit
+              pkgs.nixd
             ];
 
             shellHook = "${config.pre-commit.installationScript} ";

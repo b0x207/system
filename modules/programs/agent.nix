@@ -3,6 +3,7 @@
     programs.pi-coding-agent = {
       enable = true;
       extraPackages = with pkgs; [
+        nodejs
         ketch
       ];
 
@@ -19,7 +20,8 @@
           "Qwen 3.8 27B"
         ];
         packages = [
-          # "npm:pi-show"
+          "npm:pi-ketch"
+          "npm:pi-guard"
         ];
         retry = {
           enabled = true;

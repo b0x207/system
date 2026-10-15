@@ -13,7 +13,7 @@
             <type>passive</type>
           </TripPoint>
           <TripPoint>
-            <Temperature>900000</Temperature>
+            <Temperature>90000</Temperature>
             <type>active</type>
           </TripPoint>
         </TripPoints>

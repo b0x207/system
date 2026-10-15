@@ -11,7 +11,7 @@ require("mini.pick").setup({
     window = {
         config = function()
             local height = math.floor(0.8 * vim.opt.lines:get())
-            local width = math.floor(0.9 * vim.opt.columns:get())
+            local width = math.floor(0.6 * vim.opt.columns:get())
 
             return {
                 anchor = "NW",

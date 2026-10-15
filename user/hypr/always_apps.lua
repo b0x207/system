@@ -7,7 +7,7 @@ local always_apps = function ()
     ensure_cmd("nm-applet")
     ensure_cmd("blueman-applet")
     ensure_cmd("awww-daemon")
-    hl.exec_cmd("awww img ~/config/wallpapers/earth-behind-moon.jpg")
+    hl.exec_cmd("awww img ~/config/wallpapers/satellite.jpg")
 end
 
 hl.on("hyprland.start", always_apps)

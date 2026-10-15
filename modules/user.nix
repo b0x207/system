@@ -28,21 +28,40 @@
     home-manager = {
       users.ben = {
         imports = [
-          ../user/home-manager.nix
-          inputs.catppuccin.homeModules.catppuccin
+          self.homeModules.home-manager-base
 
-          self.homeModules.agent
-          self.homeModules.lazygit
+          # Core
+          self.homeModules.git
           self.homeModules.btop
-          self.homeModules.theme
-          self.homeModules.rofi
-          self.homeModules.zathura
           self.homeModules.ssh
           self.homeModules.hyprland
           self.homeModules.quickshell
           self.homeModules.neovim
           self.homeModules.tmux
+          self.homeModules.theme
+          self.homeModules.atuin
+          self.homeModules.ghostty
+          self.homeModules.direnv
+          self.homeModules.clipboard
+          self.homeModules.sway-notification-center
+
+          # Shells
+          self.homeModules.zsh
+          self.homeModules.nushell
+
+          # Browsers
+          self.homeModules.firefox
+          self.homeModules.tor-browser
+
+          # Misc
+          self.homeModules.agent
+          self.homeModules.lazygit
+          self.homeModules.rofi
           self.homeModules.games
+          self.homeModules.zathura
+          self.homeModules.fzf
+          self.homeModules.discord
+          self.homeModules.mpv
         ];
       };
       useUserPackages = true;

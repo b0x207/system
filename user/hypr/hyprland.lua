@@ -16,6 +16,7 @@ require("config")
 require("theme")
 require("animations")
 require("rules")
+require("session")
 require("always_apps")
 
 if get_hostname() == "desktop" then

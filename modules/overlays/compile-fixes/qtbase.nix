@@ -22,6 +22,7 @@
 #
 # Prior attempt at using override scope:
 #
+# ```nix
 # qt6 = prev.qt6.overrideScope (scope-final: scope-prev: {
 #   qtbase = scope-prev.qtbase.overrideAttrs (prevAttrs: {
 #     env.NIX_CFLAGS_COMPILE = plain-pkgs.lib.debug.traceVal (
@@ -45,16 +46,19 @@
 #   qtbase = scope-prev.qtbase.overrideAttrs (prevAttrs: {
 #   });
 # });
-{ nixpkgs, system }:
-_final: prev:
-let
-  plain-pkgs = import nixpkgs { inherit system; };
-in
-{
-  qt6 = plain-pkgs.qt6; # Unfortunately, really aggressive but necessary without overrideScope
-  qt5 = prev.qt5.overrideScope (
-    _qt-final: _qt-prev: {
-      qtbase = plain-pkgs.qt5.qtbase;
-    }
-  );
+# ```
+{ inputs, ... }: {
+  flake.overlays.qtbase =
+    _final: prev:
+    let
+      plain-pkgs = import inputs.nixpkgs { inherit (prev.stdenv.hostPlatform) system; };
+    in
+    {
+      qt6 = plain-pkgs.qt6; # Unfortunately, really aggressive but necessary without overrideScope
+      qt5 = prev.qt5.overrideScope (
+        _qt-final: _qt-prev: {
+          qtbase = plain-pkgs.qt5.qtbase;
+        }
+      );
+    };
 }

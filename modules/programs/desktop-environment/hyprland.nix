@@ -93,10 +93,21 @@
     {
       xdg.configFile."hypr".source = config.lib.file.mkOutOfStoreSymlink hyprlandPath;
       xdg.configFile."wallpapers" = {
-        source = ../../wallpapers;
+        source = ../../../wallpapers;
         recursive = true;
       };
 
-      home.file.".face".source = ../../user/face.jpg;
+      home.file.".face".source = ../../../user/face.jpg;
+
+      # TRACK: not needed for versions > 0.56
+      systemd.user.targets.hyprland-session = {
+        Unit = {
+          Description = "Hyprland session";
+          BindsTo = "graphical-session.target";
+          Wants = "graphical-session-pre.target";
+          After = "graphical-session-pre.target";
+          PropagatesStopTo = "graphical-session.target";
+        };
+      };
     };
 }

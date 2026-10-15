@@ -1,5 +1,5 @@
 vim.pack.add({
-    { src = "https://github.com/catppuccin/nvim", name = "catppuccin-nvim" },
+    { src = "https://github.com/ellisonleao/gruvbox.nvim", name = "gruvbox-nvim" },
     "https://github.com/stevearc/oil.nvim",
     "https://github.com/folke/which-key.nvim",
     "https://github.com/lukas-reineke/indent-blankline.nvim",
@@ -40,10 +40,10 @@ vim.pack.add({
     "https://github.com/sakhnik/nvim-gdb",
 })
 
-require("catppuccin").setup({
-    transparent_background = true
+require("gruvbox").setup({
+    transparent_mode = true,
+    contrast = "hard"
 })
-
-vim.cmd("colorscheme catppuccin-mocha")
+vim.cmd.colorscheme("gruvbox")
 
 require("pkg-configs")

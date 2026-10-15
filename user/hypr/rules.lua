@@ -1,7 +1,6 @@
 -- Per Workspace Layouts
 hl.workspace_rule({ workspace = 10, layout = "scrolling" })
 
-
 -- Make dolphin look right in various situations
 hl.window_rule({
     name = "dolphin-transfer",
