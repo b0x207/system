@@ -1,7 +1,6 @@
 { ... }: {
   flake.homeModules.home-manager-base = { pkgs, ... }: {
     imports = [
-      ../user/fastfetch.nix
       ../theme/home-manager.nix
     ];
 

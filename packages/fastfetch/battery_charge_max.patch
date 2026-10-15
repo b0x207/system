@@ -1,5 +1,5 @@
 diff --git a/src/detection/battery/battery.h b/src/detection/battery/battery.h
-index 1a3b4e99..010edf34 100644
+index 1a3b4e99a..010edf34e 100644
 --- a/src/detection/battery/battery.h
 +++ b/src/detection/battery/battery.h
 @@ -24,6 +24,7 @@ typedef struct FFBatteryResult {
@@ -11,10 +11,10 @@ index 1a3b4e99..010edf34 100644
      uint32_t cycleCount;
      int32_t timeRemaining; // in seconds, -1 if unknown
 diff --git a/src/detection/battery/battery_linux.c b/src/detection/battery/battery_linux.c
-index 13fc4d05..cda7ec99 100644
+index 0362cbcd1..7c6531a5d 100644
 --- a/src/detection/battery/battery_linux.c
 +++ b/src/detection/battery/battery_linux.c
-@@ -128,6 +128,15 @@ static bool parseBattery(int dfd, const char* id, FFBatteryOptions* options, FFl
+@@ -128,6 +128,16 @@ static bool parseBattery(int dfd, const char* id, FFBatteryOptions* options, FFl
          }
      }
  
@@ -27,34 +27,49 @@ index 13fc4d05..cda7ec99 100644
 +        result->chargeFull = chargeFull < 0 || chargeFull > UINT32_MAX ? 0 : (uint32_t) chargeFull;
 +    }
 +
++
      if (ffReadFileBufferRelative(dfd, "serial_number", &result->serial)) {
          ffStrbufTrimRightSpace(&result->serial);
      }
 diff --git a/src/modules/battery/battery.c b/src/modules/battery/battery.c
-index f59375c9..c0a19661 100644
+index 57c4d5666..9eb802806 100644
 --- a/src/modules/battery/battery.c
 +++ b/src/modules/battery/battery.c
-@@ -150,6 +150,7 @@ static void printBattery(FFBatteryOptions* options, FFBatteryResult* result, uin
+@@ -1,3 +1,4 @@
++#include <stdio.h>
+ #include "common/printing.h"
+ #include "common/jsonconfig.h"
+ #include "common/percent.h"
+@@ -122,6 +123,8 @@ static void printBattery(FFBatteryOptions* options, FFBatteryResult* result, uin
+             ffDurationAppendNum((uint32_t) result->timeRemaining, &timeStr);
+         }
+ 
++        FF_STRBUF_AUTO_DESTROY chargeFullNum = ffStrbufCreateF("%d", result->chargeFull);
++
+         FF_LIST_AUTO_DESTROY status = ffListCreate();
+         if (result->status & FF_BATTERY_STATUS_AC_CONNECTED) {
+             ffStrbufInitStatic(FF_LIST_ADD(FFstrbuf, status), "AC Connected");
+@@ -150,6 +153,7 @@ static void printBattery(FFBatteryOptions* options, FFBatteryResult* result, uin
                                                                                                       FF_ARG(result->modelName, "model-name"),
                                                                                                       FF_ARG(result->technology, "technology"),
                                                                                                       FF_ARG(capacityNum, "capacity"),
-+                                                                                                     FF_ARG(result->chargeFull, "charge_full"),
-                                                                                                      FF_ARG(statusStr, "status"),
++                                                                                                     FF_ARG(chargeFullNum, "charge-full"),
+                                                                                                      FF_ARG(status, "status"),
                                                                                                       FF_ARG(tempStr, "temperature"),
                                                                                                       FF_ARG(result->cycleCount, "cycle-count"),
-@@ -235,6 +236,7 @@ bool ffGenerateBatteryJsonResult(FFBatteryOptions* options, yyjson_mut_doc* doc,
+@@ -235,6 +239,7 @@ bool ffGenerateBatteryJsonResult(FFBatteryOptions* options, yyjson_mut_doc* doc,
      FF_LIST_FOR_EACH (FFBatteryResult, battery, results) {
          yyjson_mut_val* obj = yyjson_mut_arr_add_obj(doc, arr);
          yyjson_mut_obj_add_real(doc, obj, "capacity", battery->capacity);
-+        yyjson_mut_obj_add_uint(doc, obj, "charge_full", battery->chargeFull);
++        yyjson_mut_obj_add_uint(doc, obj, "charge-full", battery->chargeFull);
          yyjson_mut_obj_add_strbuf(doc, obj, "manufacturer", &battery->manufacturer);
          yyjson_mut_obj_add_strbuf(doc, obj, "manufactureDate", &battery->manufactureDate);
          yyjson_mut_obj_add_strbuf(doc, obj, "modelName", &battery->modelName);
-@@ -311,6 +313,7 @@ FFModuleBaseInfo ffBatteryModuleInfo = {
-         { "Battery model name", "model-name" },
-         { "Battery technology", "technology" },
+@@ -335,6 +340,7 @@ FFModuleBaseInfo ffBatteryModuleInfo = {
          { "Battery capacity (percentage num)", "capacity" },
-+        {"Battery full charge capacity (microamp-hours)", "charge_full"},
          { "Battery status", "status" },
          { "Battery temperature (formatted)", "temperature" },
++        { "Battery full charge capacity (microamp-hours)", "charge-full"},
          { "Battery cycle count", "cycle-count" },
+         { "Battery serial number", "serial" },
+         { "Battery manufacture date", "manufacture-date" },
