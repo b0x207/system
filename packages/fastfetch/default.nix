@@ -10,6 +10,6 @@ let
 in
 pkgs.fastfetch.override {
   fastfetch-unwrapped =
-    assert unwrapped-pkg.version == "2.69.0"; # Because new versions often causes patch problems
+    assert unwrapped-pkg.version == "2.70.0"; # Because new versions often causes patch problems
     unwrapped-pkg;
 }

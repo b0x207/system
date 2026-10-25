@@ -110,7 +110,6 @@
       "rtsx_pci_sdmmc"
     ];
     boot.initrd.kernelModules = [ ];
-    boot.initrd.systemd.enable = true;
     boot.kernelModules = [
       "kvm-intel"
       "usbmon"

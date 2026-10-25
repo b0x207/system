@@ -76,6 +76,21 @@ Scope {
 
                 SpacerWidget {}
 
+                Rectangle {
+                    Layout.minimumWidth: governorWidget.implicitWidth + window.paddingWidth * 2
+                    Layout.fillHeight: true
+                    Layout.alignment: Qt.AlignRight
+                    radius: window.radius
+                    color: Theme.base
+                    border.color: Theme.border
+                    border.width: window.borderWidth
+                    visible: governorWidget.is_notable
+
+                    CPUGovernorWidget {
+                        id: governorWidget
+                    }
+                }
+
                 TrayWidget {}
 
                 Rectangle {

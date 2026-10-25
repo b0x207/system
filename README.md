@@ -19,14 +19,10 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
 - [ ] Flake parts
   - [x] Split config out for desktop versus laptop
   - [ ] Modularize home manager config
-- [ ] UWSM?
 - [ ] Redo everything on my desktop system
   - [x] Figure out disk encryption
   - [ ] Figure out best use for HDD+SSD
 - [ ] Finally add a lock screen to hyprland
-- [ ] Switch to limine
-  - [x] Make sure it works in removable/fallback mode for desktop (dumb MSI bios)
-  - [ ] Theme it properly
 - [ ] Nohang
   - [ ] Never kill hyprland
   - [ ] Never kill nix-daemon (builds are ok)
@@ -47,10 +43,6 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
 
 - Fingerprint reader
 - Revisit fingerprint reader + PAM
-- Fix the evaluation warning: 
-  ```
-  pkgs.buildEnv warning: colliding subpath (ignored): `/nix/store/788mx070y81zjlg5ipcl0cra3afviw9k-gcc-wrapper-15.2.0/bin/cpp' and `/nix/store/86ghvdw2dyw702cyb8c6hs86ilp1kwyn-clang-wrapper-21.1.8/bin/cpp'
-  ```
 - Package Problems:
   - Packages don't respect `NIX_BUILD_CORES`
       - [x] `firmware-manager`
@@ -59,12 +51,13 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
       - [ ] `rapidocr-onnxruntime`
       - [ ] `nix-store-tests`
       - [ ] `triton-llvm`
-      - [ ] `perl5.42.0-Test2-Harness-1.000161 (checkPhase)`
+      - [ ] `perl5.42.0-Test2-Harness-1.000161` checkPhase
       - [ ] `python3-minimal`
       - [ ] `go`
       - [ ] `numpy`
       - [ ] `librsvg-2.62.3-i686-linux`
       - [ ] `ffmpeg-headless` checkPhase
+      - [ ] `sqlite` checkPhase
   - Packages having problems due to `.git` being missing (see: a lot of the LLVM packages)
   - Some packages don't build in parallel
     - `lager`

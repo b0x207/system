@@ -10,6 +10,10 @@ PopupWindow {
 
     required property QsMenuHandle trayItem
 
+    property int contentWidth: 310
+    property int padding: 10
+    property int totalWidth: contentWidth + 2 * padding
+
     implicitWidth: menuContainer.implicitWidth
     implicitHeight: menuContainer.implicitHeight
 
@@ -21,9 +25,9 @@ PopupWindow {
     }
 
     function close(): void {
-    trayIcon.isOpen = false;
-    trayWidgetContainer.activeMenu = null;
-}
+        trayIcon.isOpen = false;
+        trayWidgetContainer.activeMenu = null;
+    }
 
     Component.onCompleted: trayWidgetContainer.activeMenu = this
 
@@ -70,7 +74,7 @@ PopupWindow {
                 id: menuItem
                 required property QsMenuEntry modelData
 
-                implicitWidth: 220 // TODO configure
+                implicitWidth: totalWidth // TODO configure
                 implicitHeight: modelData.isSeparator ? 1 : 20
 
                 color: modelData.isSeparator ? Theme.baseHover : "transparent"
@@ -148,7 +152,7 @@ PopupWindow {
                             font.family: label.font.family
 
                             elide: Text.ElideRight
-                            elideWidth: 200 // TODO!!
+                            elideWidth: contentWidth // TODO!!
                         }
 
                         Loader {
@@ -176,7 +180,7 @@ PopupWindow {
 
             sourceComponent: Item {
                 implicitWidth: back.implicitWidth
-                implicitHeight: back.implicitHeight + 20 // TODO: theme
+                implicitHeight: back.implicitHeight + 2 * padding // TODO: theme
 
                 Item {
                     anchors.bottom: parent.bottom

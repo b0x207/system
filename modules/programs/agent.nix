@@ -21,7 +21,6 @@
         ];
         packages = [
           "npm:pi-ketch"
-          "npm:pi-guard"
         ];
         retry = {
           enabled = true;

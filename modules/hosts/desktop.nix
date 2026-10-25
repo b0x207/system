@@ -34,7 +34,7 @@
       self.nixosModules.dictionary
       self.nixosModules.email
       self.nixosModules.file-manager
-      self.nixosModules.browser
+      # self.nixosModules.browser
       self.nixosModules.calculator
       self.nixosModules.scanner
       self.nixosModules.fonts

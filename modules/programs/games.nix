@@ -6,6 +6,7 @@
       supertuxkart
       supertux
       beyond-all-reason
+      zeroad
     ];
 
     programs.steam.enable = true;

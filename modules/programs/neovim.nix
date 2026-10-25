@@ -6,6 +6,9 @@
       # For various plugins
       tree-sitter
       ripgrep
+
+      # Always used LSP
+      nixd
     ];
   };
 

@@ -9,9 +9,6 @@
           hashKnownHosts = false;
           userKnownHostsFile = "~/.ssh/known_hosts";
         };
-        "*.b0x207.dev" = {
-          proxyCommand = "cloudflared access ssh --hostname %h";
-        };
         "*.intercraft.nexus" = {
           proxyCommand = "cloudflared access ssh --hostname %h";
         };

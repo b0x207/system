@@ -81,6 +81,7 @@
           self.overlays.scipy
           self.overlays.zopfli-py
           self.overlays.electron-bin
+          self.overlays.libjpeg_turbo
         ];
       };
 
@@ -104,6 +105,7 @@
 
       programs.nh = {
         enable = true;
+        package = inputs.nh.packages.${pkgs.stdenv.hostPlatform.system}.default;
         flake = "/home/ben/config"; # TODO: make better
 
         # Absolutely no automatic cleans. This will trash any progress during long system updates

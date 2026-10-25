@@ -39,6 +39,10 @@
       url = "path:./nixpkgs-patches/cpio.patch";
       flake = false;
     };
+    nixpkgs-patch-gcc-regular-libdir = {
+      url = "path:./nixpkgs-patches/gcc-regular-libdir.patch";
+      flake = false;
+    };
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -74,6 +78,10 @@
     };
     agenix = {
       url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nh = {
+      url = "github:nix-community/nh";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     HyprQuickFrame.url = "github:Ronin-CK/HyprQuickFrame?rev=d8750eab1963886085c66d4b19c5ccc49f59869c";
