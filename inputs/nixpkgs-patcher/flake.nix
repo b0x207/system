@@ -1,0 +1,332 @@
+{
+  description = "Add patches to nixpkgs seamlessly";
+
+  outputs =
+    _:
+    let
+      die = msg: throw "[nixpkgs-patcher]: ${msg}";
+
+      defaultPatchInputRegex = "^nixpkgs-patch-.*";
+
+      patchesFromFlakeInputs =
+        {
+          inputs,
+          patchInputRegex,
+          pkgs,
+        }:
+        let
+          patches = pkgs.lib.attrsToList (
+            pkgs.lib.filterAttrs (n: v: builtins.match patchInputRegex n != null) inputs
+          );
+          addPatchNameInDerivation =
+            patch:
+            pkgs.stdenvNoCC.mkDerivation {
+              inherit (patch) name;
+
+              phases = [ "installPhase" ];
+              installPhase = ''
+                cp -r ${patch.value.outPath} $out
+              '';
+            };
+        in
+        map addPatchNameInDerivation patches;
+
+      nixpkgsVersion =
+        {
+          nixpkgs,
+          patches,
+        }:
+        "${
+          nixpkgs.lib.substring 0 8 nixpkgs.lastModifiedDate or "19700101"
+        }.${nixpkgs.shortRev or "dirty"}${if patches != [ ] then "-patched" else ""}";
+
+      patchNixpkgsRaw =
+        {
+          nixpkgs,
+          patches,
+          enableTroubleshootingShell,
+          pkgs,
+        }:
+        pkgs.applyPatches {
+          name = "nixpkgs-${nixpkgsVersion { inherit nixpkgs patches; }}";
+          src = nixpkgs;
+
+          inherit patches;
+
+          nativeBuildInputs =
+            with pkgs;
+            [
+              bat
+            ]
+            ++ lib.optionals (stdenv.buildPlatform.isLinux && enableTroubleshootingShell) [
+              breakpointHook
+            ];
+
+          failureHook = ''
+            failedPatches=$(find . -name "*.rej")
+            for failedPatch in $failedPatches; do
+              echo "────────────────────────────────────────────────────────────────────────────────"
+              originalFile="${nixpkgs}/''${failedPatch%.rej}"
+              echo "Original file without any patches: $originalFile"
+              echo "Failed hunks of this file:"
+              bat --pager never --style plain $failedPatch
+            done
+
+            echo "────────────────────────────────────────────────────────────────────────────────"
+            echo "Applying some patches failed. Check the build log above this message."
+            echo "Visit https://github.com/gepbird/nixpkgs-patcher/blob/main/doc/troubleshooting.md for help."
+          ''
+          + pkgs.lib.optionalString enableTroubleshootingShell ''
+            echo "You can inspect the state of the patched nixpkgs by attaching to the build shell, or press Ctrl+C to exit:"
+            # breakpontHook message gets inserted here
+          '';
+        };
+
+      makePatchedSystem =
+        {
+          systemType,
+        }:
+        args:
+        let
+          selectSystem =
+            systemAttrs: systemAttrs."${systemType}" or (die "${systemType} is an invalid system type.");
+
+          setNixpkgsFlakeSourceToPatched = config.setNixpkgsFlakeSourceToPatched or false;
+
+          metadataModule =
+            nixpkgs.lib.recursiveUpdate
+              (selectSystem {
+                nixosSystem.config = {
+                  system.nixos.versionSuffix = ".${nixpkgsVersion { inherit nixpkgs patches; }}";
+                  system.nixos.revision = nixpkgs.rev or "dirty";
+                };
+                darwinSystem.config = {
+                  system.darwinVersionSuffix = nixpkgs.lib.mkForce ".${nixpkgsVersion { inherit nixpkgs patches; }}";
+                  system.darwinRevision = nixpkgs.lib.mkForce nixpkgs.rev or "dirty";
+                };
+              })
+              {
+                config = {
+                  nixpkgs.flake.source = toString (if setNixpkgsFlakeSourceToPatched then finalNixpkgs else nixpkgs);
+                };
+              };
+
+          nixpkgsPatcherNixosModule =
+            { lib, ... }:
+
+            let
+              inherit (lib)
+                mkOption
+                mkEnableOption
+                literalExpression
+                types
+                ;
+            in
+            {
+              options.nixpkgs-patcher = {
+                enable = mkEnableOption "nixpkgs-patcher";
+                patchedNixpkgs = mkOption {
+                  type = types.path;
+                  default = finalNixpkgs;
+                  readOnly = true;
+                  description = ''
+                    The nixpkgs source this system was evaluated against, with
+                    all patches applied (equal to the unpatched nixpkgs when
+                    there are no patches).
+
+                    Exposed so you can reuse the exact same patched nixpkgs
+                    elsewhere in your configuration — for example as the target
+                    of a `nixpkgs=...` `NIX_PATH` entry, so legacy tooling
+                    resolves `<nixpkgs>` to the same source the system was built
+                    from:
+
+                    ```nix
+                    { config, ... }:
+                    {
+                      nix.nixPath = [ "nixpkgs=${config.nixpkgs-patcher.patchedNixpkgs}" ];
+                    }
+                    ```
+                  '';
+                };
+                settings = mkOption {
+                  type = types.submodule {
+                    options = {
+                      patches = lib.mkOption {
+                        type = types.listOf (types.either types.path types.package);
+                        default = [ ];
+                        example = literalExpression ''
+                          [
+                            (pkgs.fetchurl {
+                              name = "foo-module-init.patch";
+                              url = "https://github.com/NixOS/nixpkgs/compare/pull/123456/head~1...pull/123456/head.patch";
+                              hash = "";
+                            })
+                          ]
+                        '';
+                        description = ''
+                          A list of patches to apply to the nixpkgs source.
+                        '';
+                      };
+                    };
+                  };
+                  default = { };
+                };
+              };
+            };
+
+          dontCheckModule = {
+            # disable checking for "The option `services.xyz.enable' does not exist" and other errors
+            # this is a common error when using a module init patch
+            _module.check = false;
+          };
+
+          args' = {
+            modules = args.modules ++ [
+              metadataModule
+              nixpkgsPatcherNixosModule
+            ];
+          }
+          // nixpkgs.lib.optionalAttrs (systemType == "nixosSystem") { system = null; }
+          // removeAttrs args [
+            "modules"
+            "nixpkgsPatcher"
+          ];
+
+          config = args.nixpkgsPatcher or { };
+          inputs =
+            let
+              maybeInputs = config.inputs or args.specialArgs or { };
+              isFlake = v: v._type or null == "flake";
+              isFlakeInputs = inputs: builtins.any isFlake (builtins.attrValues inputs);
+            in
+            if isFlakeInputs maybeInputs then
+              maybeInputs
+            else
+              die ''
+                Couldn't find your flake inputs.
+                You need to pass the `lib.${systemType}` function your flake inputs with either:
+
+                    specialArgs = inputs;
+                 or
+                    specialArgs = inputs // { inherit inputs; };
+                 or
+                    nixpkgsPatcher.inputs = inputs;
+
+                See https://github.com/gepbird/nixpkgs-patcher/blob/main/doc/configuration.md#avoiding-specialargs-pollution.
+              '';
+          nixpkgs =
+            config.nixpkgs or inputs.nixpkgs
+              or (die "Couldn't find your base nixpkgs. You need to pass the `lib.${systemType}` function an attrset with `nixpkgsPatcher.nixpkgs = inputs.nixpkgs` or name your main nixpkgs input `nixpkgs` and pass `specialArgs = inputs`.");
+          nix-darwin =
+            config.nix-darwin or inputs.nix-darwin
+              or (die "Couldn't find your nix-darwin. You need to pass the `lib.${systemType}` function an attrset with `nixpkgsPatcher.nix-darwin = inputs.nix-darwin` or name your main nix-darwin input `nix-darwin` and pass `specialArgs = inputs`.");
+          patchInputRegex = config.patchInputRegex or defaultPatchInputRegex;
+          patchesFromConfig = config.patches or (_: [ ]);
+
+          evalArgs = args' // {
+            modules = args'.modules ++ [ dontCheckModule ];
+          };
+          evaledModules = selectSystem {
+            nixosSystem = nixpkgs.lib.nixosSystem evalArgs;
+            darwinSystem = nix-darwin.lib.darwinSystem evalArgs;
+          };
+          system =
+            config.system or (
+              if args' ? system && args'.system != null then
+                args'.system
+              else
+                evaledModules.config.nixpkgs.hostPlatform.system
+            );
+          pkgs = import nixpkgs { inherit system; };
+
+          moduleConfig = evaledModules.config.nixpkgs-patcher;
+          patchesFromModules = if moduleConfig.enable then moduleConfig.settings.patches else [ ];
+
+          patches =
+            (patchesFromFlakeInputs { inherit inputs patchInputRegex pkgs; })
+            ++ (patchesFromConfig pkgs)
+            ++ patchesFromModules;
+
+          enableTroubleshootingShell = config.enableTroubleshootingShell or true;
+
+          patchedNixpkgs = patchNixpkgsRaw {
+            inherit
+              nixpkgs
+              patches
+              enableTroubleshootingShell
+              pkgs
+              ;
+          };
+          finalNixpkgs = if patches == [ ] then nixpkgs else patchedNixpkgs;
+          finalPkgs = import finalNixpkgs {
+            inherit (evaledModules.config.nixpkgs) config;
+            inherit system;
+          };
+        in
+        selectSystem {
+          nixosSystem = import "${finalNixpkgs}/nixos/lib/eval-config.nix" args';
+          darwinSystem = nix-darwin.lib.darwinSystem (
+            args'
+            // {
+              pkgs = finalPkgs;
+            }
+          );
+        };
+    in
+    {
+      lib = {
+        patchNixpkgs =
+          {
+            inputs ? null,
+            nixpkgs ? null,
+            patchInputRegex ? defaultPatchInputRegex,
+            patches ? null,
+            enableTroubleshootingShell ? true,
+            pkgs ? null,
+            system ? null,
+          }@args:
+          let
+            nixpkgs' =
+              args.nixpkgs or args.inputs.nixpkgs
+                or (die "Couldn't find your base nixpkgs when calling `patchNixpkgs`. You need to pass `nixpkgs` or have a flake input named `nixpkgs` and pass your `inputs`.");
+            pkgs' =
+              if pkgs != null then
+                pkgs
+              else if system != null then
+                import nixpkgs' { inherit system; }
+              else
+                (die "Couldn't get `pkgs` when calling `patchNixpkgs`. You need to pass your `pkgs` or `system`.");
+
+            maybePatchesFromFlakeInputs =
+              if inputs != null then
+                patchesFromFlakeInputs {
+                  inherit inputs patchInputRegex;
+                  pkgs = pkgs';
+                }
+              else
+                [ ];
+            maybePatches = args.patches or [ ];
+            maybePatchesList =
+              if builtins.typeOf maybePatches == "lambda" then maybePatches pkgs' else maybePatches;
+            patches' =
+              if inputs == null && patches == null then
+                (die "Couldn't find any patches when calling `patchNixpkgs`. You need to pass your flake inputs as `inputs` or a list of patches as `patches` or pass both.")
+              else
+                maybePatchesFromFlakeInputs ++ maybePatchesList;
+
+            patchedNixpkgs = patchNixpkgsRaw {
+              nixpkgs = nixpkgs';
+              patches = patches';
+              pkgs = pkgs';
+              inherit enableTroubleshootingShell;
+            };
+
+            finalNixpkgs = if patches' == [ ] then nixpkgs' else patchedNixpkgs;
+          in
+          finalNixpkgs;
+
+        nixosSystem = makePatchedSystem { systemType = "nixosSystem"; };
+        darwinSystem = makePatchedSystem { systemType = "darwinSystem"; };
+      };
+    };
+}

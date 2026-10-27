@@ -1,0 +1,75 @@
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/44edb9645db4dd80fcdc0a060f28580d7b1f6bd2";
+    nixpkgs-patcher.url = "path:../..";
+  };
+
+  outputs =
+    inputs: with inputs; {
+      nixosConfigurations.unpatched = nixpkgs.lib.nixosSystem {
+        modules = [
+          ./configuration.nix
+          ./hardware-configuration.nix
+        ];
+        specialArgs = inputs;
+      };
+
+      nixosConfigurations.patchedFails = nixpkgs-patcher.lib.nixosSystem {
+        modules = [
+          ./configuration.nix
+          ./hardware-configuration.nix
+        ];
+        specialArgs = inputs;
+        nixpkgsPatcher.patches = pkgs: [
+          # this test is known to be failing
+          # https://github.com/gepbird/nixpkgs-patcher/issues/3
+          # https://github.com/twaugh/patchutils/issues/109
+          (pkgs.fetchpatch2 {
+            name = "msmtp-build-fix-1-8-30.diff";
+            url = "https://github.com/NixOS/nixpkgs/pull/425312.diff?full_index=1";
+            hash = "sha256-313F1u+FI8c2y6pxHlmnFaWKwM1pJD9lyCxNxTxCsW4=";
+          })
+        ];
+      };
+
+      nixosConfigurations.patchedWorks = nixpkgs-patcher.lib.nixosSystem {
+        modules = [
+          ./configuration.nix
+          ./hardware-configuration.nix
+        ];
+        specialArgs = inputs;
+        nixpkgsPatcher.patches = pkgs: [
+          (pkgs.fetchurl {
+            name = "msmtp-build-fix-1-8-30.diff";
+            url = "https://github.com/NixOS/nixpkgs/pull/425312.diff?full_index=1";
+            hash = "sha256-kW+GGVuSX99WUm1wPYFe78k81S/dbfR/XsE5lZ+DsXI=";
+          })
+        ];
+      };
+
+      checks.x86_64-linux.tests =
+        let
+          inherit (self.nixosConfigurations) unpatched patchedFails patchedWorks;
+          lib = import ../lib.nix { inherit nixpkgs; system = "x86_64-linux"; };
+        in
+        lib.runTests {
+          # this is failing, because msmtp doesn't build
+          #testUnpatchedSystemBuilds = lib.testNixosConfigurationBuilds unpatched;
+          # this is failing, because fetchpatch2 ignores renames, it should be asserted
+          #testPatchedFailsSystemBuilds = lib.testNixosConfigurationBuilds patchedFails;
+          testPatchedWorksSystemBuilds = lib.testNixosConfigurationBuilds patchedWorks;
+          testUnpatchedPackageVersion = {
+            expr = unpatched.pkgs.msmtp.version;
+            expected = "1.8.26";
+          };
+          testPatchedFailsPackageVersion = {
+            expr = patchedFails.pkgs.msmtp.version;
+            expected = "1.8.30";
+          };
+          testPatchedWorksPackageVersion = {
+            expr = patchedWorks.pkgs.msmtp.version;
+            expected = "1.8.30";
+          };
+        };
+    };
+}

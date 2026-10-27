@@ -1,0 +1,164 @@
+{
+  inputs = {
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/3d79cbf3caec8f7482ad176f63701168b66e08a3";
+    nixpkgs-patcher.url = "../..";
+    osu-nix-pr-10-605-3 = {
+      url = "https://github.com/NixOS/nixpkgs/compare/pull/414172/head~2...pull/414172/head.diff?full_index=1";
+      flake = false;
+    };
+    osu-nix-pr-20-607-0 = {
+      url = "path:./osu-nix-pr-20-607-0.diff";
+      flake = false;
+    };
+  };
+
+  outputs =
+    inputs: with inputs; {
+      nixosConfigurations.patched = nixpkgs-patcher.lib.nixosSystem {
+        modules = [
+          ./configuration.nix
+          ./hardware-configuration.nix
+          (
+            { ... }:
+            {
+              nixpkgs-patcher = {
+                enable = true;
+                settings.patches = [
+                  ./nixos-lact-init.diff
+                ];
+              };
+
+              services.glance = {
+                enable = true;
+                environmentFile = "/run/secrets/glance";
+              };
+            }
+          )
+        ];
+        nixpkgsPatcher = {
+          inherit inputs;
+          nixpkgs = nixpkgs-unstable;
+          patchInputRegex = ".*nix-pr.*";
+          patches =
+            pkgs: with pkgs; [
+              (fetchurl {
+                name = "glance-environment-file.diff";
+                url = "https://github.com/gepbird/nixpkgs/commit/3bddd16a376b1e7360395ccc4ca1d702644513ce.diff?full_index=1";
+                hash = "sha256-6/lvpreEKP4HqalCBRhy9QrPGBV8g11czxDZ5mQmzww=";
+              })
+            ];
+        };
+      };
+
+      nixosConfigurations.patchedWithFlakeSource = nixpkgs-patcher.lib.nixosSystem {
+        modules = [
+          ./configuration.nix
+          ./hardware-configuration.nix
+        ];
+        nixpkgsPatcher = {
+          inherit inputs;
+          nixpkgs = nixpkgs-unstable;
+          patchInputRegex = ".*nix-pr.*";
+          patches =
+            pkgs: with pkgs; [
+              (fetchurl {
+                name = "glance-environment-file.diff";
+                url = "https://github.com/gepbird/nixpkgs/commit/3bddd16a376b1e7360395ccc4ca1d702644513ce.diff?full_index=1";
+                hash = "sha256-6/lvpreEKP4HqalCBRhy9QrPGBV8g11czxDZ5mQmzww=";
+              })
+            ];
+          setNixpkgsFlakeSourceToPatched = true;
+        };
+      };
+
+      nixosConfigurations.unpatched = nixpkgs-unstable.lib.nixosSystem {
+        modules = [
+          ./configuration.nix
+          ./hardware-configuration.nix
+        ];
+      };
+
+      # built through the patcher but with no patches, to exercise the path where
+      # patchedNixpkgs falls back to the unpatched base nixpkgs
+      nixosConfigurations.patchless = nixpkgs-patcher.lib.nixosSystem {
+        modules = [
+          ./configuration.nix
+          ./hardware-configuration.nix
+        ];
+        nixpkgsPatcher = {
+          inherit inputs;
+          nixpkgs = nixpkgs-unstable;
+          patchInputRegex = "^no-such-patch-input-.*";
+        };
+      };
+
+      checks.x86_64-linux.tests =
+        let
+          inherit (self.nixosConfigurations)
+            patched
+            patchedWithFlakeSource
+            unpatched
+            patchless
+            ;
+          lib = import ../lib.nix { nixpkgs = nixpkgs-unstable; system = "x86_64-linux"; };
+        in
+        lib.runTests {
+          testUnpatchedSystemBuilds = lib.testNixosConfigurationBuilds unpatched;
+          testPatchedSystemBuilds = lib.testNixosConfigurationBuilds patched;
+          # with patches, patchedNixpkgs is the patched source, not the base input
+          testPatchedNixpkgsIsPatched = {
+            expr = (toString patched.config.nixpkgs-patcher.patchedNixpkgs) == (toString nixpkgs-unstable.outPath);
+            expected = false;
+          };
+          # without patches, patchedNixpkgs is exactly the base nixpkgs input
+          testPatchedNixpkgsIsBaseWhenNoPatches = {
+            expr = (toString patchless.config.nixpkgs-patcher.patchedNixpkgs) == (toString nixpkgs-unstable.outPath);
+            expected = true;
+          };
+          testUnpatchedOsuVersion = {
+            expr = unpatched.pkgs.osu-lazer-bin.version;
+            expected = "2025.424.0";
+          };
+          testPatchedOsuVersion = {
+            expr = patched.pkgs.osu-lazer-bin.version;
+            expected = "2025.607.0";
+          };
+          testUnpatchedGlanceOptionDoesntExist = {
+            expr = unpatched.config.services.glance ? environmentFile;
+            expected = false;
+          };
+          testPatchedGlanceOptionIsSet = {
+            expr = patched.config.services.glance.environmentFile;
+            expected = "/run/secrets/glance";
+          };
+          testPatchedGlanceOptionHasEffect = {
+            expr = patched.config.systemd.services.glance.serviceConfig.EnvironmentFile;
+            expected = "/run/secrets/glance";
+          };
+          testUnpatchedLactModuleDoesntExist = {
+            expr = unpatched.config.services ? lact;
+            expected = false;
+          };
+          testPatchedLactModuleExist = {
+            expr = patched.config.services ? lact;
+            expected = true;
+          };
+          testUnpatchedVersionSuffix = {
+            expr = builtins.match "^\\.[0-9]+\\.[0-9a-f]+$" unpatched.config.system.nixos.versionSuffix != null;
+            expected = true;
+          };
+          testPatchedVersionSuffix = {
+            expr = builtins.match "^\\.[0-9]+\\.[0-9a-f]+-patched$" patched.config.system.nixos.versionSuffix != null;
+            expected = true;
+          };
+          testDefaultFlakeSourceIsUnpatched = {
+            expr = builtins.match "^.*-patched$" patched.config.nixpkgs.flake.source;
+            expected = null;
+          };
+          testSetNixpkgsFlakeSourceToPatchedPointsToPatched = {
+            expr = builtins.match "^.*-patched$" patchedWithFlakeSource.config.nixpkgs.flake.source != null;
+            expected = true;
+          };
+        };
+    };
+}
