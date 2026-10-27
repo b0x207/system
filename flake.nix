@@ -3,7 +3,7 @@
   inputs = {
     # Core inputs
     nixpkgs.url = "path:./inputs/nixpkgs";
-    nixpkgs-patcher.url = "github:gepbird/nixpkgs-patcher";
+    nixpkgs-patcher.url = "path:./inputs/nixpkgs-patcher";
 
     # ~~~ NIXPKGS PATCHES HERE ~~~
 

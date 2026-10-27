@@ -873,18 +873,14 @@
     },
     "nixpkgs-patcher": {
       "locked": {
-        "lastModified": 1789143781,
-        "narHash": "sha256-WFr3wYdhSEJd/nQyJuETd6dcS08Exc+qoZWJ2tHM/gg=",
-        "owner": "gepbird",
-        "repo": "nixpkgs-patcher",
-        "rev": "da7c09e478f552c3a9ebb78b2f68426c1855fd81",
-        "type": "github"
+        "path": "./inputs/nixpkgs-patcher",
+        "type": "path"
       },
       "original": {
-        "owner": "gepbird",
-        "repo": "nixpkgs-patcher",
-        "type": "github"
-      }
+        "path": "./inputs/nixpkgs-patcher",
+        "type": "path"
+      },
+      "parent": []
     },
     "nixpkgs_2": {
       "locked": {
