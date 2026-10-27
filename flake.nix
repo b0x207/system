@@ -2,7 +2,7 @@
   description = "System config flake";
   inputs = {
     # Core inputs
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
+    nixpkgs.url = "path:./inputs/nixpkgs";
     nixpkgs-patcher.url = "github:gepbird/nixpkgs-patcher";
 
     # ~~~ NIXPKGS PATCHES HERE ~~~

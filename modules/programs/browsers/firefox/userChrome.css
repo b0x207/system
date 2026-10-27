@@ -20,6 +20,15 @@
     --muted-purple: #b16286;
     --muted-aqua: #689d6a;
     --muted-orange: #d65d0e;
+
+    /*
+     * Rather than fighting with some sort of background-color combined with !important, simply
+     * make use of the style variables that already exist.
+     */
+    --panel-background-color: var(--bg);
+    --button-text-color-menu-hover: var(--fg);
+    --button-background-color-menu-hover: alpha(from var(--orange) / 50%);
+    --button-background-color-menu-active: alpha(from var(--orange) / 80%);
 }
 
 /* Top strip of the UI */
@@ -44,8 +53,18 @@
 }
 
 /* Bookmarks */
+/* Mostly modifictions on top of moz-button.css */
+#PlacesToolbarItems {
+}
+
 .bookmark-item {
     color: var(--fg);
+	--toolbarbutton-background-color-hover: alpha(from var(--fg) / 20%);
+	--toolbarbutton-background-color-active: alpha(from var(--fg) / 30%);
+}
+
+.bookmark-item[_moz-menuactive] {
+    background: 
 }
 
 .bookmark-item .toolbarbutton-icon {
