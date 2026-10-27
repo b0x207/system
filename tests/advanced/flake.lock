@@ -1,0 +1,65 @@
+{
+  "nodes": {
+    "nixpkgs-patcher": {
+      "locked": {
+        "path": "../..",
+        "type": "path"
+      },
+      "original": {
+        "path": "../..",
+        "type": "path"
+      },
+      "parent": []
+    },
+    "nixpkgs-unstable": {
+      "locked": {
+        "lastModified": 1748556774,
+        "narHash": "sha256-vb1O/WZyVQz2Dae3vKr3wu1ZDhaswLuq5Jn8NLvy1B4=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "3d79cbf3caec8f7482ad176f63701168b66e08a3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "3d79cbf3caec8f7482ad176f63701168b66e08a3",
+        "type": "github"
+      }
+    },
+    "osu-nix-pr-10-605-3": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-KJ+y8AXAsdcDuOIcF9Bw5oPuOFs6rsxiyqWenrb5yd4=",
+        "type": "file",
+        "url": "https://github.com/NixOS/nixpkgs/compare/pull/414172/head~2...pull/414172/head.diff?full_index=1"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/NixOS/nixpkgs/compare/pull/414172/head~2...pull/414172/head.diff?full_index=1"
+      }
+    },
+    "osu-nix-pr-20-607-0": {
+      "flake": false,
+      "locked": {
+        "path": "./osu-nix-pr-20-607-0.diff",
+        "type": "path"
+      },
+      "original": {
+        "path": "./osu-nix-pr-20-607-0.diff",
+        "type": "path"
+      },
+      "parent": []
+    },
+    "root": {
+      "inputs": {
+        "nixpkgs-patcher": "nixpkgs-patcher",
+        "nixpkgs-unstable": "nixpkgs-unstable",
+        "osu-nix-pr-10-605-3": "osu-nix-pr-10-605-3",
+        "osu-nix-pr-20-607-0": "osu-nix-pr-20-607-0"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
