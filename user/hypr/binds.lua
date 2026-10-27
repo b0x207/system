@@ -1,4 +1,4 @@
-local terminal = "ghostty --working-directory=home"
+local terminal = "ghostty --working-directory=home +new-window"
 local file_manager = "dolphin"
 local menu = "rofi -show drun"
 local browser = "firefox"
