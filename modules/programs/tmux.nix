@@ -69,6 +69,10 @@
           #[bg=default,fg=${inactive}]#[fg=default] "
 
           set -g window-status-separator ""
+
+          # Since commit f59921ce184d27b4f11c62a4914bc2a8441b4667, the default is to underline but
+          # the custom fg and bg colors break with underline
+          set -g window-status-current-style ""
         '';
     };
   };
