@@ -1,6 +1,6 @@
 [inputs/nixpkgs]
 repo = https://github.com/nixos/nixpkgs
-sha = fa45202b90a351983649116adb577827b2a9a679
+sha = 715d20f576d746adbf5a871ed37e6e3ee4b280e2
 
 [inputs/nixpkgs-patcher]
 repo = https://github.com/gepbird/nixpkgs-patcher
