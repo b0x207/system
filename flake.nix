@@ -132,9 +132,10 @@
           };
 
           devShells.default = pkgs.mkShell {
-            packages = [
+            packages = with pkgs; [
               config.packages.pre-commit
-              pkgs.nixd
+              nixd
+              vulnix
             ];
 
             shellHook = "${config.pre-commit.installationScript} ";

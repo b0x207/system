@@ -1,7 +1,5 @@
 { ... }: {
   flake.nixosModules.libreoffice = { pkgs, ... }: {
-    environment.systemPackages = with pkgs; [
-      libreoffice
-    ];
+    environment.systemPackages = [ pkgs.libreoffice-stable ];
   };
 }
