@@ -119,9 +119,17 @@ process_subtree() {
     exec 3>&1
   fi
 
+  # Ensure that a matching remote exists and is properly configured
+  if git remote get-url "$dir" >/dev/null 2>&1; then
+    git remote set-url $git_flags "$dir" "$repo"
+  else
+    log "Adding remote \"$dir\" for \"$repo\""
+    git remote add $git_flags "$dir" "$repo"
+  fi
+
   if [ ! -d "$dir" ]; then
     log "Initializing subtree $dir from $repo at commit $sha"
-    git subtree add $git_flags --prefix="$dir" "$repo" "$sha" --squash 2>&3 >&3
+    git subtree add $git_flags --prefix="$dir" "$dir" "$sha" --squash 2>&3 >&3
   else
     current=$(get_subtree_current_sha "$dir")
 
@@ -129,7 +137,7 @@ process_subtree() {
       log "Skipping $dir @ $current"
     else
       log "Updating subtree $dir from $repo with $current..$sha"
-      git subtree pull $git_flags --prefix="$dir" "$repo" "$sha" --squash 2>&3 >&3
+      git subtree pull $git_flags --prefix="$dir" "$dir" "$sha" --squash 2>&3 >&3
     fi
   fi
 
