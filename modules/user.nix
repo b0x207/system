@@ -63,6 +63,7 @@
           self.homeModules.discord
           self.homeModules.mpv
           self.homeModules.fastfetch
+          self.homeModules.microfetch
         ];
       };
       useUserPackages = true;

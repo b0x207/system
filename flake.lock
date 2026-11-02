@@ -799,18 +799,6 @@
       },
       "parent": []
     },
-    "nixpkgs-patch-dart": {
-      "flake": false,
-      "locked": {
-        "path": "./nixpkgs-patches/dart.patch",
-        "type": "path"
-      },
-      "original": {
-        "path": "./nixpkgs-patches/dart.patch",
-        "type": "path"
-      },
-      "parent": []
-    },
     "nixpkgs-patch-fix-anubis-fetchurl": {
       "flake": false,
       "locked": {
@@ -1057,7 +1045,6 @@
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-patch-bmake": "nixpkgs-patch-bmake",
         "nixpkgs-patch-cpio": "nixpkgs-patch-cpio",
-        "nixpkgs-patch-dart": "nixpkgs-patch-dart",
         "nixpkgs-patch-fix-anubis-fetchurl": "nixpkgs-patch-fix-anubis-fetchurl",
         "nixpkgs-patch-fix-gnufpt-mirror": "nixpkgs-patch-fix-gnufpt-mirror",
         "nixpkgs-patch-gcc-regular-libdir": "nixpkgs-patch-gcc-regular-libdir",

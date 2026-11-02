@@ -33,10 +33,6 @@
       url = "path:./nixpkgs-patches/hunspell.patch";
       flake = false;
     };
-    nixpkgs-patch-dart = {
-      url = "path:./nixpkgs-patches/dart.patch";
-      flake = false;
-    };
     nixpkgs-patch-libtirpc = {
       url = "path:./nixpkgs-patches/libtirpc.patch";
       flake = false;
