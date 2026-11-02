@@ -4,4 +4,4 @@ sha = 6da3f247f92c898cfebde206192bb8dac7472ab4
 
 [inputs/nixpkgs-patcher]
 repo = https://github.com/gepbird/nixpkgs-patcher
-sha = da7c09e478f552c3a9ebb78b2f68426c1855fd81
+sha = e5f4b45fb4f0fc81dae025c173648cccbefca569
