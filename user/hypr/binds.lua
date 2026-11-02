@@ -1,7 +1,4 @@
--- TODO: make this use a simple script that doesn't show it if the window doesn't have enough
--- columns to fully display it.
-local terminal = "ghostty --working-directory=home +new-window " ..
-                 "-e /etc/profiles/per-user/ben/bin/zsh -c \"microfetch; exec $SHELL\""
+local terminal = "ghostty --working-directory=home +new-window -e ~/.config/term-startup.sh"
 local file_manager = "dolphin"
 local menu = "rofi -show drun"
 local browser = "firefox"

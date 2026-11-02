@@ -98,6 +98,15 @@
       };
 
       home.file.".face".source = ../../../user/face.jpg;
+      xdg.configFile."term-startup.sh" = {
+        text = ''
+          #!/usr/bin/env sh
+          microfetch
+          exec $SHELL
+        '';
+        executable = true;
+        force = true;
+      };
 
       # TRACK: not needed for versions > 0.56
       systemd.user.targets.hyprland-session = {
