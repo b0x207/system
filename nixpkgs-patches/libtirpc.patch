@@ -9,12 +9,12 @@ index 560039ab7229..7e15985447d4 100644
  
    src = fetchurl {
 -    url = "https://git.linux-nfs.org/?p=steved/libtirpc.git;a=snapshot;h=refs/tags/libtirpc-${
-+    url = "git.linux-nfs.org/cgit/steved/libtirpc.git/snapshot/libtirpc-${
++    url = "https://git.b0x207.dev/mirrors/libtirpc/archive/libtirpc-${
        lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
 -    };sf=tgz";
 -    hash = "sha256-VGftEr3xzCp8O3oqCjIZozlq599gxN5IsHBRaG37GP4=";
 +    }.tar.gz";
-+    hash = "sha256-uw4eGqhDdITWi1Y4U0pok89G4qy08QmEDl1kxf4Q5JA=";
++    hash = "sha256-aJNGkRvLoBciXqGQ1l2iD0lEgrguNp/3kvVzn5opVGE=";
      name = "${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
    };
  

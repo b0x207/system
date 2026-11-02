@@ -23,6 +23,12 @@
       flake = false;
     };
 
+    # Fixes a build error that is caused by changes to the 7.3 kernel
+    nixpkgs-patch-openssl = {
+      url = "https://github.com/NixOS/nixpkgs/pull/579040.diff";
+      flake = false;
+    };
+
     nixpkgs-patch-hunspell = {
       url = "path:./nixpkgs-patches/hunspell.patch";
       flake = false;
