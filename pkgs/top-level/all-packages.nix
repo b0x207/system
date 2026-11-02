@@ -1108,8 +1108,6 @@ with pkgs;
   fceux-qt5 = fceux.override { ___qtVersion = "5"; };
   fceux-qt6 = fceux.override { ___qtVersion = "6"; };
 
-  kega-fusion = pkgsi686Linux.callPackage ../applications/emulators/kega-fusion { };
-
   mame-tools = lib.addMetaAttrs {
     description = mame.meta.description + " (tools only)";
   } (lib.getOutput "tools" mame);
@@ -1634,9 +1632,7 @@ with pkgs;
     rainloop-standard
     ;
 
-  roundcube = callPackage ../servers/roundcube { };
-
-  roundcubePlugins = recurseIntoAttrs (callPackage ../servers/roundcube/plugins { });
+  roundcubePlugins = recurseIntoAttrs (callPackage ../by-name/ro/roundcube/plugins { });
 
   xmlsort = perlPackages.XMLFilterSort;
 
@@ -1653,10 +1649,6 @@ with pkgs;
     enableExtraPlugins = true;
   };
 
-  b2sum = callPackage ../tools/security/b2sum {
-    inherit (llvmPackages) openmp;
-  };
-
   beamerpresenter-mupdf = beamerpresenter;
   beamerpresenter-poppler = beamerpresenter.override {
     useMupdf = false;
@@ -1664,8 +1656,6 @@ with pkgs;
   };
 
   binlore = callPackage ../development/tools/analysis/binlore { };
-
-  bzip2 = callPackage ../tools/compression/bzip2 { };
 
   davix-copy = davix.override { enableThirdPartyCopy = true; };
 
@@ -1981,8 +1971,6 @@ with pkgs;
     guiSupport = false;
   };
 
-  gnused = callPackage ../tools/text/gnused { };
-
   inherit (callPackage ../development/tools/godot { })
     godot3
     godot3-export-templates
@@ -2108,8 +2096,6 @@ with pkgs;
 
   humanfriendly = with python3Packages; toPythonApplication humanfriendly;
 
-  hw-probe = perlPackages.callPackage ../tools/system/hw-probe { };
-
   hyphen = callPackage ../development/libraries/hyphen { };
 
   hyphenDicts = recurseIntoAttrs (callPackages ../development/libraries/hyphen/dictionaries.nix { });
@@ -2221,8 +2207,6 @@ with pkgs;
   logstash = logstash7;
 
   lagrange-tui = lagrange.override { enableTUI = true; };
-
-  kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
 
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse-unwrapped.plugins;
 
@@ -2380,8 +2364,6 @@ with pkgs;
   mjpegtoolsFull = mjpegtools.override {
     withMinimal = false;
   };
-
-  mkpasswd = hiPrio (callPackage ../tools/security/mkpasswd { });
 
   molecule = with python3Packages; toPythonApplication molecule;
 
@@ -2702,10 +2684,6 @@ with pkgs;
 
   rpatool = with python3Packages; toPythonApplication rpatool;
 
-  rpm = callPackage ../tools/package-management/rpm {
-    lua = lua5_4;
-  };
-
   rubocop = rubyPackages.rubocop;
 
   ruby-lsp = rubyPackages.ruby-lsp;
@@ -2919,10 +2897,6 @@ with pkgs;
   };
 
   zellijPlugins = recurseIntoAttrs (callPackage ../by-name/ze/zellij/plugins { });
-
-  zstd = callPackage ../tools/compression/zstd {
-    cmake = buildPackages.cmakeMinimal;
-  };
 
   ### SHELLS
 
@@ -4437,8 +4411,6 @@ with pkgs;
   bundlerApp = callPackage ../development/ruby-modules/bundler-app { };
   bundlerUpdateScript = callPackage ../development/ruby-modules/bundler-update-script { };
 
-  bundler-audit = callPackage ../tools/security/bundler-audit { };
-
   solargraph = rubyPackages.solargraph;
 
   inherit
@@ -4606,6 +4578,7 @@ with pkgs;
     electron_42-bin
     electron_43-bin
     electron_44-bin
+    electron_45-bin
     ;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
@@ -4615,6 +4588,7 @@ with pkgs;
     electron-chromedriver_42
     electron-chromedriver_43
     electron-chromedriver_44
+    electron-chromedriver_45
     ;
 
   inherit
@@ -4637,10 +4611,7 @@ with pkgs;
         electron_39 = electron_39-bin;
         electron_40 = electron_40-bin;
         electron_41 = electron_41-bin;
-        electron_42 = getElectronPkg {
-          src = electron-source.electron_42;
-          bin = electron_42-bin;
-        };
+        electron_42 = electron_42-bin;
         electron_43 = getElectronPkg {
           src = electron-source.electron_43;
           bin = electron_43-bin;
@@ -4648,6 +4619,10 @@ with pkgs;
         electron_44 = getElectronPkg {
           src = electron-source.electron_44;
           bin = electron_44-bin;
+        };
+        electron_45 = getElectronPkg {
+          src = electron-source.electron_45;
+          bin = electron_45-bin;
         };
       }
     )
@@ -4657,6 +4632,7 @@ with pkgs;
     electron_42
     electron_43
     electron_44
+    electron_45
     ;
   electron = electron_43;
   electron-bin = electron_43-bin;
@@ -6268,7 +6244,6 @@ with pkgs;
         pkgsHostTarget
         kdePackages
         ;
-      inherit stdenv;
     }
   );
 
@@ -6302,7 +6277,7 @@ with pkgs;
     pname = "rocksdb";
     version = "9.10.0";
     src = fetchFromGitHub {
-      owner = "facebook";
+      owner = "meta";
       repo = pname;
       rev = "v${version}";
       hash = "sha256-G+DlQwEUyd7JOCjS1Hg1cKWmA/qAiK8UpUIKcP+riGQ=";
@@ -6313,7 +6288,7 @@ with pkgs;
     pname = "rocksdb";
     version = "8.11.4";
     src = fetchFromGitHub {
-      owner = "facebook";
+      owner = "meta";
       repo = pname;
       rev = "v${version}";
       hash = "sha256-ZrU7G3xeimF3H2LRGBDHOq936u5pH/3nGecM4XEoWc8=";
@@ -6324,7 +6299,7 @@ with pkgs;
     pname = "rocksdb";
     version = "8.3.2";
     src = fetchFromGitHub {
-      owner = "facebook";
+      owner = "meta";
       repo = pname;
       rev = "v${version}";
       hash = "sha256-mfIRQ8nkUbZ3Bugy3NAvOhcfzFY84J2kBUIUBcQ2/Qg=";
@@ -6335,7 +6310,7 @@ with pkgs;
     pname = "rocksdb";
     version = "7.10.2";
     src = fetchFromGitHub {
-      owner = "facebook";
+      owner = "meta";
       repo = pname;
       rev = "v${version}";
       hash = "sha256-U2ReSrJwjAXUdRmwixC0DQXht/h/6rV8SOf5e2NozIs=";
@@ -6346,7 +6321,7 @@ with pkgs;
     pname = "rocksdb";
     version = "6.23.3";
     src = fetchFromGitHub {
-      owner = "facebook";
+      owner = "meta";
       repo = pname;
       rev = "v${version}";
       hash = "sha256-SsDqhjdCdtIGNlsMj5kfiuS3zSGwcxi4KV71d95h7yk=";
@@ -7030,19 +7005,21 @@ with pkgs;
       kanidm_1_11 = callPackage ../servers/kanidm/1_11.nix {
         kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_11;
       };
+      kanidm_1_12 = callPackage ../servers/kanidm/1_12.nix {
+        kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_12;
+      };
 
       kanidmWithSecretProvisioning_1_10 = kanidm_1_10.override { enableSecretProvisioning = true; };
       kanidmWithSecretProvisioning_1_11 = kanidm_1_11.override { enableSecretProvisioning = true; };
+      kanidmWithSecretProvisioning_1_12 = kanidm_1_12.override { enableSecretProvisioning = true; };
     })
     kanidm_1_10
     kanidm_1_11
+    kanidm_1_12
     kanidmWithSecretProvisioning_1_10
     kanidmWithSecretProvisioning_1_11
+    kanidmWithSecretProvisioning_1_12
     ;
-
-  lemmy-server = callPackage ../servers/web-apps/lemmy/server.nix { };
-
-  lemmy-ui = callPackage ../servers/web-apps/lemmy/ui.nix { };
 
   mailmanPackages = recurseIntoAttrs (callPackage ../servers/mail/mailman { });
   inherit (mailmanPackages) mailman mailman-hyperkitty;
@@ -9240,6 +9217,8 @@ with pkgs;
 
   zathuraPkgs = recurseIntoAttrs (callPackage ../applications/misc/zathura { });
   zathura = zathuraPkgs.zathuraWrapper;
+  zathura_mupdf = zathura.override { useMupdf = true; };
+  zathura_poppler = zathura.override { useMupdf = false; };
 
   zeroc-ice-cpp11 = zeroc-ice.override { cpp11 = true; };
 
@@ -9351,9 +9330,9 @@ with pkgs;
 
   ddnet-server = ddnet.override { buildClient = false; };
 
-  dwarf-fortress-packages = recurseIntoAttrs (callPackage ../games/dwarf-fortress { });
+  dwarf-fortress-packages = recurseIntoAttrs (callPackage ../by-name/dw/dwarf-fortress { });
 
-  inherit (dwarf-fortress-packages) dwarf-fortress dwarf-fortress-full dwarf-therapist;
+  inherit (dwarf-fortress-packages) dwarf-fortress-full dwarf-therapist;
 
   dfhack = dwarf-fortress-packages.dwarf-fortress-full;
 
