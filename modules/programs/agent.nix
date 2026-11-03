@@ -13,14 +13,16 @@
           keepRecentTokens = 20000;
           reserveTokens = 16384;
         };
-        defaultModel = "Qwen 3.8 27B";
+        defaultModel = "Flint";
         defaultProvider = "faesten";
         defaultThinkingLevel = "medium";
         enabledModels = [
           "Qwen 3.8 27B"
+          "Flint"
         ];
         packages = [
           "npm:pi-ketch"
+          "npm:@gotgenes/pi-permission-system"
         ];
         retry = {
           enabled = true;
@@ -39,9 +41,33 @@
               id = "Qwen 3.8 27B";
               reasoning = true;
             }
+            {
+              id = "Flint";
+              reasoning = true;
+            }
           ];
         };
       };
     };
+
+    home.file.".pi/agent/extensions/pi-permission-system/config.json".text = ''
+      {
+        "permission": {
+          "*": "allow",
+          "path": {
+            "*": "allow",
+            "*.env": "deny",
+            "*.env.*": "deny",
+            "*.env.example": "allow"
+          },
+          "bash": {
+            "*": "ask",
+            "rm -rf *": "deny",
+            "sudo *": "ask"
+          },
+          "external_directory": "ask"
+        }
+      }
+    '';
   };
 }

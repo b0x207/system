@@ -1,5 +1,8 @@
 { pkgs, ... }: {
   projectRootFile = "flake.nix";
+  settings.excludes = [
+    "inputs/**"
+  ];
 
   programs.nixfmt.enable = true;
 
