@@ -50,3 +50,6 @@ vim.o.winborder = "rounded"
 -- Leader key setup
 vim.g.mapleader = " "
 vim.g.leaderkey = " "
+
+-- Enable exrc for project-local configs
+opt.exrc = true
