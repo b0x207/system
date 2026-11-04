@@ -32,6 +32,9 @@
         package = if osConfig.networking.hostName == "desktop" then pkgs.btop-cuda else pkgs.btop;
         settings = {
           disks_filter = "/boot /";
+          color_theme = "gruvbox_dark";
+          vim_keys = true;
+          theme_background = false;
         };
       };
     };
