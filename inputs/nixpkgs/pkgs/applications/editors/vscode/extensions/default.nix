@@ -2049,8 +2049,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "7.2.5";
-          hash = "sha256-qcA9he4jxa8fTFJtGSvdIdq2j9G9zI0ps4zAwcH1ju0=";
+          version = "7.3.5";
+          hash = "sha256-bNrGfkwbVhZAnxODW/ePnXQXcl2vHiCRAynYP5eyjrE=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -2065,8 +2065,8 @@ let
         mktplcRef = {
           name = "gleam";
           publisher = "gleam";
-          version = "2.13.0";
-          hash = "sha256-eCiBbdKMeXcRS4kyI2rH1iAT0CmQmo2SybeW+Y7FRio=";
+          version = "2.13.1";
+          hash = "sha256-A7Pkts3WzFQfzUvC40s4E5ShtbCqV4Xf8N5PFvYq2EA=";
         };
         meta = {
           description = "Support for the Gleam programming language";

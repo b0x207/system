@@ -1636,10 +1636,6 @@ with pkgs;
 
   xmlsort = perlPackages.XMLFilterSort;
 
-  mcelog = callPackage ../os-specific/linux/mcelog {
-    util-linux = util-linuxMinimal;
-  };
-
   asciidoc-full = asciidoc.override {
     enableStandardFeatures = true;
   };
@@ -6435,10 +6431,6 @@ with pkgs;
     tk-9_1
     ;
 
-  tpm2-tss = callPackage ../development/libraries/tpm2-tss {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
-
   unixodbcDrivers = recurseIntoAttrs (callPackages ../development/libraries/unixODBCDrivers { });
 
   valeStyles = recurseIntoAttrs (callPackages ../by-name/va/vale/styles.nix { });
@@ -6638,12 +6630,16 @@ with pkgs;
   };
 
   # Clozure Common Lisp
-  ccl = wrapLisp {
-    pkg = callPackage ../development/compilers/ccl {
-      inherit (buildPackages.darwin) bootstrap_cmds;
+  ccl =
+    let
+      pkg = callPackage ../development/compilers/ccl {
+        inherit (buildPackages.darwin) bootstrap_cmds;
+      };
+    in
+    wrapLisp {
+      inherit pkg;
+      inherit (pkg) faslExt;
     };
-    faslExt = "lx64fsl";
-  };
 
   # Clasp Common Lisp
   clasp-common-lisp = wrapLisp {
@@ -6966,10 +6962,15 @@ with pkgs;
   home-assistant-custom-lovelace-modules = recurseIntoAttrs (
     lib.makeExtensible (
       self:
-      lib.packagesFromDirectoryRecursive {
-        inherit callPackage;
-        directory = ../servers/home-assistant/custom-lovelace-modules;
-      }
+      let
+        packages = lib.packagesFromDirectoryRecursive {
+          inherit callPackage;
+          directory = ../servers/home-assistant/custom-lovelace-modules;
+        };
+
+        aliases = import ../servers/home-assistant/custom-lovelace-modules/aliases.nix self;
+      in
+      packages // (lib.optionalAttrs config.allowAliases aliases)
     )
   );
 
@@ -7159,18 +7160,6 @@ with pkgs;
   nagiosPlugins = recurseIntoAttrs (callPackages ../servers/monitoring/nagios-plugins { });
 
   qboot = pkgsi686Linux.callPackage ../applications/virtualization/qboot { };
-
-  OVMF = callPackage ../applications/virtualization/OVMF {
-    inherit (python3Packages) pexpect;
-  };
-  OVMFFull = callPackage ../applications/virtualization/OVMF {
-    inherit (python3Packages) pexpect;
-    secureBoot = true;
-    httpSupport = true;
-    tpmSupport = true;
-    tlsSupport = true;
-    msVarsTemplate = stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64;
-  };
 
   inherit (import ../servers/sql/postgresql pkgs)
     postgresqlVersions
@@ -7363,10 +7352,6 @@ with pkgs;
   # not `callPackages` so the per-package callPackages don't have their
   # `.override` clobbered. C.F. `llvmPackages` which does the same.
   darwin = callPackage ./darwin-packages.nix { };
-
-  displaylink = callPackage ../os-specific/linux/displaylink {
-    inherit (linuxPackages) evdi;
-  };
 
   dmraid = callPackage ../os-specific/linux/dmraid { lvm2 = lvm2_dmeventd; };
 
@@ -8044,9 +8029,6 @@ with pkgs;
   };
 
   bitwig-studio = bitwig-studio6;
-
-  brave = (callPackage ../applications/networking/browsers/brave { }).brave;
-  brave-origin = (callPackage ../applications/networking/browsers/brave { }).brave-origin;
 
   breezy = with python3Packages; toPythonApplication breezy;
 
@@ -9462,6 +9444,10 @@ with pkgs;
     dreamweb
     flight-of-the-amazon-queen
     lure-of-the-temptress
+    mystery-house
+    nippon-safes-inc
+    sfinx
+    soltys
     ;
 
   sgt-puzzles-mobile = callPackage ../by-name/sg/sgt-puzzles/package.nix {
