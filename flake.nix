@@ -29,6 +29,12 @@
       flake = false;
     };
 
+    # Fixes an issue with rubberband (dep of ffmpeg-full) on i686
+    nixpkgs-patch-rubberband = {
+      url = "https://github.com/NixOS/nixpkgs/pull/583263.diff";
+      flake = false;
+    };
+
     nixpkgs-patch-hunspell = {
       url = "path:./nixpkgs-patches/hunspell.patch";
       flake = false;
