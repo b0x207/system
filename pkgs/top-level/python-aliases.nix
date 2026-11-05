@@ -180,6 +180,7 @@ mapAliases {
   crontab = throw "'crontab' has been removed, migrate to either 'python-crontab' or 'parse-crontab'"; # Added 2026-08-25
   cx_Freeze = throw "'cx_Freeze' has been renamed to/replaced by 'cx-freeze'"; # Converted to throw 2025-10-29
   cx_oracle = throw "'cx_oracle' has been renamed to/replaced by 'cx-oracle'"; # Converted to throw 2025-10-29
+  cypherpunkpay = throw "'cypherpunkpay' was removed because it is abandoned upstream"; # added 2026-11-03
   dalle-mini = throw "'dalle-mini' has been removed due to lack of upstream maintenance"; # added 2026-02-26
   dask-yarn = throw "'dask-yarn' has been removed due to lack of upstream maintenance"; # added 2026-07-06
   databricks-cli = throw "'databricks-cli' has been removed from the Python package set. Use 'pkgs.databricks-cli' instead."; # Added 2026-09-04
@@ -437,6 +438,7 @@ mapAliases {
   mne-python = throw "'mne-python' has been renamed to/replaced by 'mne'"; # Converted to throw 2025-10-29
   modeled = throw "'modeled' has been removed because it is unmaintained"; # Added 2026-01-19
   monarchmoney = throw "'monarchmoney' has been renamed to/replaced by 'monarchmoneycommunity'"; # Added 2026-03-05
+  monero = throw "'monero' has been removed due to being archived upstream"; # added 2026-11-03
   monkeytype = throw "'monkeytype' has been removed as it was unmaintained upstream"; # Added 2026-04-19
   more-properties = throw "'more-properties' has been removed to due lack of upstream maintenance"; # Added 2026-07-14
   moretools = throw "'moretools' has been removed because it is unmaintained"; # Added 2026-01-19
@@ -569,6 +571,7 @@ mapAliases {
   pyhiveapi = throw "'pyhiveapi' has been renamed to/replaced by 'pyhive-integration'"; # Converted to throw 2025-10-29
   pyialarmxr = throw "'pyialarmxr' has been renamed to/replaced by 'pyialarmxr-homeassistant'"; # Converted to throw 2025-10-29
   PyICU = throw "'PyICU' has been renamed to/replaced by 'pyicu'"; # Converted to throw 2025-10-29
+  pyitachip2ir = throw "'pyitachip2ir' has been removed in favor of 'pyitachip2ir2'"; # Added 2026-10-31
   PyLD = throw "'PyLD' has been renamed to/replaced by 'pyld'"; # Converted to throw 2025-10-29
   pyliblo = throw "pyliblo is unmaintained upstream and was removed from nixpkgs. Please use pyliblo3 instead"; # added 2025-06-23
   pylit = throw "'pylit' has been removed as it was broken and unmaintained upstream"; # Added 2025-11-29
@@ -754,6 +757,7 @@ mapAliases {
   sphinxcontrib_httpdomain = throw "'sphinxcontrib_httpdomain' has been renamed to/replaced by 'sphinxcontrib-httpdomain'"; # Converted to throw 2025-10-29
   sphinxcontrib_newsfeed = throw "'sphinxcontrib_newsfeed' has been renamed to/replaced by 'sphinxcontrib-newsfeed'"; # Converted to throw 2025-10-29
   sphinxcontrib_plantuml = throw "'sphinxcontrib_plantuml' has been renamed to/replaced by 'sphinxcontrib-plantuml'"; # Converted to throw 2025-10-29
+  spiderpy = throw "'spiderpy' has been removed as it is archived upstream and Spider is no longer available."; # Added 2026-11-04
   sqlalchemy-utc = throw "'sqlalchemy-utc' has been removed as it was unmaintained upstream"; # Added 2026-03-19
   sqlalchemy-views = throw "'sqlalchemy-views' has been removed as it was broken and unmaintained upstream"; # Added 2025-11-09
   sqlalchemy_1_3 = throw "'sqlalchemy_1_3' has been removed because it was actually version 1.4.54"; # added 2026-07-20
