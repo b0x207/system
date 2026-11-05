@@ -2,6 +2,13 @@
 
 A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
 
+## Tooling
+
+This is mostly documentation for myself.
+
+- `./upstream-diff.nu`: Get the current and latest upstream commit SHAs and print all the commits between them.
+- `./subtrees.sh`: Initialize or update any specified subtress. Note that deletes are not handled.
+
 ## To Do
 
 ### Short Term
