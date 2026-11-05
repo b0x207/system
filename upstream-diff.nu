@@ -1,13 +1,25 @@
 #!/usr/bin/env nu
 
-let flake_lock = open flake.lock --raw | from json
-let current_nixpkgs_node = $flake_lock | get nodes.root.inputs.nixpkgs
-let current_commit = $flake_lock | get nodes | get $current_nixpkgs_node | get locked.rev
+# Change if intending to track a different branch
+let UPSTREAM_REF = "nixos-unstable-small"
+
+##
+
+let input_latest_blame = git log -n 1 --pretty="format:%H" inputs/nixpkgs
+
+let merge_commit = git show ($input_latest_blame)
+| find --no-highlight --regex "^.*Merge commit '(.*)'$"
+| str substring 18..-2
+| get 0
+
+let current_commit = git log -n 1 ($merge_commit)
+| find --no-highlight "git-subtree-split"
+| str substring 23..-1
+| get 0
 
 print $"(ansi blue)Current Nixpkgs commit: ($current_commit)(ansi reset)"
 
-let upstream_ref = $flake_lock | get nodes | get $current_nixpkgs_node | get original.ref
-let upstream_raw_diff = gh api $"repos/nixos/nixpkgs/compare/($current_commit)...($upstream_ref)" | from json
+let upstream_raw_diff = gh api $"repos/nixos/nixpkgs/compare/($current_commit)...($UPSTREAM_REF)" | from json
 let upstream_ahead_by = $upstream_raw_diff | get ahead_by
 let upstream_commit = $upstream_raw_diff | get commits | last | get sha
 

@@ -19,9 +19,6 @@ A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
 - [ ] Flake parts
   - [x] Split config out for desktop versus laptop
   - [ ] Modularize home manager config
-- [ ] Redo everything on my desktop system
-  - [x] Figure out disk encryption
-  - [ ] Figure out best use for HDD+SSD
 - [ ] Finally add a lock screen to hyprland
 - [ ] Nohang
   - [ ] Never kill hyprland
