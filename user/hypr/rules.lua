@@ -1,4 +1,5 @@
 -- Per Workspace Layouts
+hl.workspace_rule({ workspace = 8, layout = "scrolling" })
 hl.workspace_rule({ workspace = 10, layout = "scrolling" })
 
 -- Make dolphin look right in various situations
