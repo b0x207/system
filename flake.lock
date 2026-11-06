@@ -871,18 +871,6 @@
         "url": "https://github.com/NixOS/nixpkgs/pull/579040.diff"
       }
     },
-    "nixpkgs-patch-rubberband": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-HFEuBQfY/iyMwAzrHKAbRGMFRufJKwMRdB+cv/q+07U=",
-        "type": "file",
-        "url": "https://github.com/NixOS/nixpkgs/pull/583263.diff"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://github.com/NixOS/nixpkgs/pull/583263.diff"
-      }
-    },
     "nixpkgs-patcher": {
       "locked": {
         "path": "./inputs/nixpkgs-patcher",
@@ -1063,7 +1051,6 @@
         "nixpkgs-patch-hunspell": "nixpkgs-patch-hunspell",
         "nixpkgs-patch-libtirpc": "nixpkgs-patch-libtirpc",
         "nixpkgs-patch-openssl": "nixpkgs-patch-openssl",
-        "nixpkgs-patch-rubberband": "nixpkgs-patch-rubberband",
         "nixpkgs-patcher": "nixpkgs-patcher",
         "nur": "nur",
         "todo-tree": "todo-tree",
