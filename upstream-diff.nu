@@ -25,6 +25,7 @@ let upstream_commit = $upstream_raw_diff | get commits | last | get sha
 
 print $"(ansi blue)Upstream Nixpkgs commit: ($upstream_commit)(ansi reset)"
 print $"(ansi blue)Upstream is ahead by ($upstream_ahead_by) commits(ansi reset)"
+print $"(ansi green)Compare web URL: https://github.com/NixOS/nixpkgs/compare/($current_commit)...($UPSTREAM_REF)(ansi reset)"
 
 let continue = input $"(ansi green)Continue \(type y) ?(ansi reset) "
 if $continue != "y" {
