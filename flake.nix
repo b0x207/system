@@ -1,5 +1,6 @@
 {
   description = "System config flake";
+
   inputs = {
     # Core inputs
     nixpkgs.url = "path:./inputs/nixpkgs";

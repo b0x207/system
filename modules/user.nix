@@ -64,6 +64,7 @@
           self.homeModules.mpv
           self.homeModules.fastfetch
           self.homeModules.microfetch
+          self.homeModules.kopuz
         ];
       };
       useUserPackages = true;
