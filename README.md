@@ -19,13 +19,14 @@ This is mostly documentation for myself.
   - [ ] Back to square and minimalism
   - [ ] Fix firefox file manager popup
   - [ ] Switch to nushell
-  - [ ] Redo fastfetch
-  - [ ] Hyprland `graphical-session.target`
+  - [x] Redo fastfetch (switched to microfetch)
+  - [x] Hyprland `graphical-session.target` (thanks vaxry)
   - [ ] Fix bitwarden float by ensuring it is removed from any window groups before forcing float
 - [ ] Build tooling around `./upstream-diff.sh` that can check the todo-tree and notify when manual PR inclusion can be removed
 - [ ] Flake parts
   - [x] Split config out for desktop versus laptop
-  - [ ] Modularize home manager config
+  - [x] Modularize home manager config
+  - [ ] Even more dendretic?
 - [ ] Finally add a lock screen to hyprland
 - [ ] Nohang
   - [ ] Never kill hyprland

@@ -15,9 +15,9 @@ Scope {
             screen: modelData
             color: "transparent"
 
-            property real radius: 13
+            property real radius: 0
             property real borderWidth: 2
-            property real paddingWidth: 15
+            property real paddingWidth: 12
 
             anchors {
                 top: true
@@ -34,7 +34,7 @@ Scope {
                 anchors.leftMargin: 2
                 anchors.topMargin: 5
                 anchors.bottomMargin: 5
-                spacing: 6
+                spacing: 4
 
                 Rectangle {
                     Layout.minimumWidth: clockWidget.implicitWidth + window.paddingWidth * 2

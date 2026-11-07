@@ -236,7 +236,7 @@ PopupWindow {
             color: Theme.border
             width: 5
         }
-        radius: 10
+        radius: window.radius
 
         StackView {
             id: stack
