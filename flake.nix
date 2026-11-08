@@ -46,6 +46,10 @@
       url = "path:./nixpkgs-patches/gcc-regular-libdir.patch";
       flake = false;
     };
+    nixpkgs-patch-fprintd = {
+      url = "path:./nixpkgs-patches/fprintd.patch";
+      flake = false;
+    };
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

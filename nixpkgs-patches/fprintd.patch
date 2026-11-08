@@ -1,0 +1,24 @@
+Use the latest upstream firmware provided by Dell. This avoids a problem where the ControlVault 3+
+device would reject any interaction because fprintd attempted to first downgrade the firmware.
+
+diff --git a/pkgs/by-name/li/libfprint-2-tod1-broadcom-cv3plus/package.nix b/pkgs/by-name/li/libfprint-2-tod1-broadcom-cv3plus/package.nix
+index 4d47843ea426..d9fcc15732f0 100644
+--- a/pkgs/by-name/li/libfprint-2-tod1-broadcom-cv3plus/package.nix
++++ b/pkgs/by-name/li/libfprint-2-tod1-broadcom-cv3plus/package.nix
+@@ -10,13 +10,13 @@
+ 
+ let
+   pname = "libfprint-2-tod1-broadcom-cv3plus";
+-  version = "6.3.299-6.3.040.0";
++  version = "6.4.372-6.4.062.0";
+ 
+   src = fetchgit {
+     url = "git://git.launchpad.net/~oem-solutions-engineers/pc-enablement/+git/libfprint-2-tod1-broadcom-cv3plus/";
+     branchName = "ubuntu/latest";
+-    rev = "ac7a8ab2318216e603c8c23b279bbad28a301d3";
+-    hash = "sha256-4JwoUuvskj8GqTUQpKBECCL+jkSfxpaukqRTTVTmSLk=";
++    rev = "0614543a2a72d1fc1cad0af924741f62b848afab";
++    hash = "sha256-IORA42sTpP1jb4+3fya06O7yKYxAsDF0lSjE/paig9E=";
+   };
+ 
+   wrapperLibName = "wrapper-lib.so";

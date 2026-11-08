@@ -50,6 +50,7 @@
 
       self.nixosModules.user
       self.nixosModules.fstrim
+      self.nixosModules.fingerprint
       self.nixosModules.keyd
       self.nixosModules.battery
       self.nixosModules.bluetooth

@@ -823,6 +823,18 @@
       },
       "parent": []
     },
+    "nixpkgs-patch-fprintd": {
+      "flake": false,
+      "locked": {
+        "path": "./nixpkgs-patches/fprintd.patch",
+        "type": "path"
+      },
+      "original": {
+        "path": "./nixpkgs-patches/fprintd.patch",
+        "type": "path"
+      },
+      "parent": []
+    },
     "nixpkgs-patch-gcc-regular-libdir": {
       "flake": false,
       "locked": {
@@ -1047,6 +1059,7 @@
         "nixpkgs-patch-cpio": "nixpkgs-patch-cpio",
         "nixpkgs-patch-fix-anubis-fetchurl": "nixpkgs-patch-fix-anubis-fetchurl",
         "nixpkgs-patch-fix-gnufpt-mirror": "nixpkgs-patch-fix-gnufpt-mirror",
+        "nixpkgs-patch-fprintd": "nixpkgs-patch-fprintd",
         "nixpkgs-patch-gcc-regular-libdir": "nixpkgs-patch-gcc-regular-libdir",
         "nixpkgs-patch-hunspell": "nixpkgs-patch-hunspell",
         "nixpkgs-patch-libtirpc": "nixpkgs-patch-libtirpc",
