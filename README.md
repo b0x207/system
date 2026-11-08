@@ -46,8 +46,6 @@ This is mostly documentation for myself.
 
 ### Long Term
 
-- Fingerprint reader
-- Revisit fingerprint reader + PAM
 - Package Problems:
   - Packages don't respect `NIX_BUILD_CORES`
       - [x] `firmware-manager`
