@@ -5,7 +5,7 @@ Text {
     text: Hyprland.focusedWorkspace.id
 
     font.family: Theme.font
-    font.pixelSize: 15
+    font.pixelSize: Theme.fontSize
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter
     anchors.fill: parent

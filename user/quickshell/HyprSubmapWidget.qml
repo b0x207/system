@@ -5,7 +5,7 @@ Text {
     text: HyprSubmap.active_submap
 
     font.family: Theme.font
-    font.pixelSize: 15
+    font.pixelSize: Theme.fontSize
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter
     anchors.fill: parent

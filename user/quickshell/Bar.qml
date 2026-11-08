@@ -4,7 +4,7 @@ import QtQuick.Layouts
 
 Scope {
     id: root
-    property real barHeight: 35
+    property real barHeight: 24
 
     Variants {
         model: Quickshell.screens
@@ -32,8 +32,8 @@ Scope {
                 anchors.fill: parent
                 anchors.rightMargin: 2
                 anchors.leftMargin: 2
-                anchors.topMargin: 5
-                anchors.bottomMargin: 5
+                anchors.topMargin: 2
+                anchors.bottomMargin: 2
                 spacing: 4
 
                 Rectangle {

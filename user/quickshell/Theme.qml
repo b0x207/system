@@ -11,5 +11,5 @@ Singleton {
     readonly property string border: "#3c3836"
     // readonly property string font: "DroidSansM Nerd Font Mono"
     readonly property string font: "JetBrainsMono Nerd Font"
-    readonly property real fontSize: 15
+    readonly property real fontSize: 12
 }
