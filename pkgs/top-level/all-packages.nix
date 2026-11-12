@@ -1172,7 +1172,7 @@ with pkgs;
     )
   );
 
-  tw = ocamlPackages.tw.bin;
+  tw = ocamlPackages.tw;
 
   wrapRetroArch = retroarch-bare.wrapper;
 
@@ -1389,8 +1389,6 @@ with pkgs;
     charles4
     charles5
     ;
-
-  libtorch-bin = callPackage ../development/libraries/science/math/libtorch/bin.nix { };
 
   behave = with python3Packages; toPythonApplication behave;
 
@@ -1627,11 +1625,6 @@ with pkgs;
 
   steampipePackages = recurseIntoAttrs (callPackage ../tools/misc/steampipe-packages { });
 
-  inherit (callPackages ../servers/rainloop { })
-    rainloop-community
-    rainloop-standard
-    ;
-
   roundcubePlugins = recurseIntoAttrs (callPackage ../by-name/ro/roundcube/plugins { });
 
   xmlsort = perlPackages.XMLFilterSort;
@@ -1799,6 +1792,7 @@ with pkgs;
     cudaPackages_13_2
     cudaPackages_13_3
     cudaPackages_13_4
+    cudaPackages_13_5
     ;
 
   cudaPackages_12 = cudaPackages_12_9;
@@ -2056,31 +2050,6 @@ with pkgs;
 
   hareThirdParty = recurseIntoAttrs (callPackage ./hare-third-party.nix { });
 
-  hdf5 = callPackage ../tools/misc/hdf5 {
-    fortranSupport = false;
-    fortran = gfortran;
-  };
-
-  hdf5-mpi = hdf5.override {
-    mpiSupport = true;
-    cppSupport = false;
-  };
-
-  hdf5-cpp = hdf5.override { cppSupport = true; };
-
-  hdf5-fortran = hdf5.override { fortranSupport = true; };
-
-  hdf5-fortran-mpi = hdf5.override {
-    fortranSupport = true;
-    mpiSupport = true;
-    cppSupport = false;
-  };
-
-  hdf5-threadsafe = hdf5.override {
-    cppSupport = false;
-    threadsafe = true;
-  };
-
   host = bind.host;
 
   hpccm = with python3Packages; toPythonApplication hpccm;
@@ -2259,6 +2228,9 @@ with pkgs;
   nodejs-slim_26 = callPackage ../development/web/nodejs/v26.nix { };
   nodejs_26 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_26; };
 
+  nodejs-slim_27 = callPackage ../development/web/nodejs/v27.nix { };
+  nodejs_27 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_27; };
+
   # Update this when adding the newest nodejs major version!
   nodejs_latest = nodejs_26;
   nodejs-slim_latest = nodejs-slim_26;
@@ -2362,10 +2334,6 @@ with pkgs;
 
   molecule = with python3Packages; toPythonApplication molecule;
 
-  moreutils = callPackage ../tools/misc/moreutils {
-    docbook-xsl = docbook_xsl;
-  };
-
   mtr-gui = mtr.override { withGtk = true; };
 
   multitran = recurseIntoAttrs (
@@ -2404,13 +2372,6 @@ with pkgs;
   netcap-nodpi = callPackage ../by-name/ne/netcap/package.nix {
     withDpi = false;
   };
-
-  netcat = libressl.nc.overrideAttrs (old: {
-    meta = old.meta // {
-      description = "Utility which reads and writes data across network connections — LibreSSL implementation";
-      mainProgram = "nc";
-    };
-  });
 
   libnma-gtk4 = libnma.override { withGtk4 = true; };
 
@@ -2593,11 +2554,6 @@ with pkgs;
   playwright-test = (callPackage ../development/web/playwright/driver.nix { }).playwright-test;
 
   tabview = with python3Packages; toPythonApplication tabview;
-
-  tdarrPackages = callPackage ../tools/misc/tdarr { };
-
-  tdarr-server = tdarrPackages.server;
-  tdarr-node = tdarrPackages.node;
 
   inherit (callPackage ../development/tools/pnpm { })
     pnpm_10_29_2
@@ -2993,8 +2949,6 @@ with pkgs;
   #Use this instead of stdenv to build with clang
   clangStdenv = if stdenv.cc.isClang then stdenv else lowPrio llvmPackages.stdenv;
   libcxxStdenv = if stdenv.hostPlatform.isDarwin then stdenv else lowPrio llvmPackages.libcxxStdenv;
-
-  comby = callPackage ../development/tools/comby { };
 
   inherit (rocqPackages_9_2) compcert;
 
@@ -3522,12 +3476,7 @@ with pkgs;
 
   stack =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
-    (
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        lib.id
-      else
-        haskell.lib.compose.justStaticExecutables
-    )
+    (if stdenv.hostPlatform.isDarwin then lib.id else haskell.lib.compose.justStaticExecutables)
       haskellPackages.stack;
 
   hlint = haskell.lib.compose.justStaticExecutables haskellPackages.hlint;
@@ -3802,7 +3751,7 @@ with pkgs;
   ocamlPackages = recurseIntoAttrs ocaml-ng.ocamlPackages;
   ocamlPackages_latest = recurseIntoAttrs ocaml-ng.ocamlPackages_latest;
 
-  ocaml-crunch = ocamlPackages.crunch.bin;
+  ocaml-crunch = ocamlPackages.crunch;
 
   inherit (ocaml-ng.ocamlPackages_4_14)
     ocamlformat_0_19_0
@@ -3950,6 +3899,7 @@ with pkgs;
     swift-format
     swiftpm
     swiftpm2nix
+    swiftpmDepsUpdater
     ;
 
   swi-prolog-gui = swi-prolog.override { withGui = true; };
@@ -4340,7 +4290,7 @@ with pkgs;
     pythonAttr = "python315FreeThreading";
     enableGIL = false;
   };
-  python316FreeThreading = python315.override {
+  python316FreeThreading = python316.override {
     self = python316FreeThreading;
     pythonAttr = "python316FreeThreading";
     enableGIL = false;
@@ -4433,12 +4383,7 @@ with pkgs;
   spark4 = spark_4_0;
   spark = spark_4_0;
 
-  inherit
-    ({
-      spidermonkey_128 = callPackage ../development/interpreters/spidermonkey/128.nix { };
-      spidermonkey_140 = callPackage ../development/interpreters/spidermonkey/140.nix { };
-    })
-    spidermonkey_128
+  inherit ({ spidermonkey_140 = callPackage ../development/interpreters/spidermonkey/140.nix { }; })
     spidermonkey_140
     ;
 
@@ -4629,15 +4574,9 @@ with pkgs;
     electron_44
     electron_45
     ;
-  electron = electron_43;
-  electron-bin = electron_43-bin;
-  electron-chromedriver = electron-chromedriver_43;
-
-  automake = automake118x;
-
-  automake116x = callPackage ../development/tools/misc/automake/automake-1.16.x.nix { };
-
-  automake118x = callPackage ../development/tools/misc/automake/automake-1.18.x.nix { };
+  electron = electron_45;
+  electron-bin = electron_45-bin;
+  electron-chromedriver = electron-chromedriver_45;
 
   bandit = with python3Packages; toPythonApplication bandit;
 
@@ -4951,12 +4890,7 @@ with pkgs;
 
   haskell-ci =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
-    (
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        lib.id
-      else
-        haskell.lib.compose.justStaticExecutables
-    )
+    (if stdenv.hostPlatform.isDarwin then lib.id else haskell.lib.compose.justStaticExecutables)
       haskellPackages.haskell-ci;
 
   nexusmods-app-unfree = nexusmods-app.override {
@@ -5057,12 +4991,7 @@ with pkgs;
 
   shake =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
-    (
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        lib.id
-      else
-        haskell.lib.compose.justStaticExecutables
-    )
+    (if stdenv.hostPlatform.isDarwin then lib.id else haskell.lib.compose.justStaticExecutables)
       haskellPackages.shake;
 
   shellcheck = callPackage ../development/tools/shellcheck {
@@ -5222,7 +5151,7 @@ with pkgs;
 
   certbot-full = certbot.withPlugins (
     cp: with cp; [
-      # FIXME unbreak certbot-dns-cloudflare
+      certbot-dns-cloudflare
       certbot-dns-google
       certbot-dns-inwx
       certbot-dns-ovh
@@ -5629,6 +5558,7 @@ with pkgs;
     icu76
     icu77
     icu78
+    icu79
     ;
 
   icu = icu78;
@@ -5809,10 +5739,6 @@ with pkgs;
 
   libidn2 = callPackage ../development/libraries/libidn2 { };
 
-  libinput = callPackage ../development/libraries/libinput {
-    graphviz = graphviz-nox;
-  };
-
   # also known as libturbojpeg
   libjpeg = libjpeg_turbo;
   libjpeg8 = libjpeg_turbo.override { enableJpeg8 = true; };
@@ -5834,7 +5760,7 @@ with pkgs;
     libprom
     ;
 
-  libtorrent-rasterbar = libtorrent-rasterbar-2_0_x;
+  libtorrent-rasterbar = libtorrent-rasterbar-2_1_x;
 
   libubox-nossl = libubox.override { with_ustream_ssl = false; };
 
@@ -5899,12 +5825,7 @@ with pkgs;
 
   matterhorn =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
-    (
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        lib.id
-      else
-        haskell.lib.compose.justStaticExecutables
-    )
+    (if stdenv.hostPlatform.isDarwin then lib.id else haskell.lib.compose.justStaticExecutables)
       haskellPackages.matterhorn;
 
   inherit
@@ -6577,8 +6498,8 @@ with pkgs;
   ### DEVELOPMENT / GO
 
   # the unversioned attributes should always point to the same go version
-  go = go_1_26;
-  buildGoModule = buildGo126Module;
+  go = go_1_27;
+  buildGoModule = buildGo127Module;
 
   go_latest = go_1_27;
   buildGoLatestModule = buildGo127Module;
@@ -6693,14 +6614,6 @@ with pkgs;
     ];
   };
 
-  sbcl_2_6_7 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.6.7"; };
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
   sbcl_2_6_8 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.6.8"; };
     faslExt = "fasl";
@@ -6709,7 +6622,15 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl = sbcl_2_6_8;
+  sbcl_2_6_9 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.6.9"; };
+    faslExt = "fasl";
+    flags = [
+      "--dynamic-space-size"
+      "3000"
+    ];
+  };
+  sbcl = sbcl_2_6_9;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -6952,10 +6873,15 @@ with pkgs;
   home-assistant-custom-components = recurseIntoAttrs (
     lib.makeExtensible (
       self:
-      lib.packagesFromDirectoryRecursive {
-        inherit (home-assistant.python3Packages) callPackage;
-        directory = ../servers/home-assistant/custom-components;
-      }
+      let
+        packages = lib.packagesFromDirectoryRecursive {
+          inherit (home-assistant.python3Packages) callPackage;
+          directory = ../servers/home-assistant/custom-components;
+        };
+
+        aliases = import ../servers/home-assistant/custom-components/aliases.nix self;
+      in
+      packages // (lib.optionalAttrs config.allowAliases aliases)
     )
   );
   home-assistant-custom-lovelace-modules = recurseIntoAttrs (
@@ -7997,7 +7923,7 @@ with pkgs;
   );
   android-studio-for-platform = androidStudioForPlatformPackages.stable;
 
-  arelle = with python3Packages; toPythonApplication arelle;
+  arelle = with python3Packages; toPythonApplication arelle-release;
 
   audacious = audacious-bare.override { withPlugins = true; };
 
@@ -8028,6 +7954,9 @@ with pkgs;
   };
 
   bitwig-studio = bitwig-studio6;
+
+  brave = (callPackage ../applications/networking/browsers/brave { }).brave;
+  brave-origin = (callPackage ../applications/networking/browsers/brave { }).brave-origin;
 
   breezy = with python3Packages; toPythonApplication breezy;
 
@@ -8322,12 +8251,7 @@ with pkgs;
   hledger-ui = haskell.lib.compose.justStaticExecutables haskellPackages.hledger-ui;
   hledger-web =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
-    (
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        lib.id
-      else
-        haskell.lib.compose.justStaticExecutables
-    )
+    (if stdenv.hostPlatform.isDarwin then lib.id else haskell.lib.compose.justStaticExecutables)
       haskellPackages.hledger-web;
   hledger-utils = with python3.pkgs; toPythonApplication hledger-utils;
 
@@ -9258,12 +9182,7 @@ with pkgs;
 
   bench =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
-    (
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        lib.id
-      else
-        haskell.lib.compose.justStaticExecutables
-    )
+    (if stdenv.hostPlatform.isDarwin then lib.id else haskell.lib.compose.justStaticExecutables)
       haskellPackages.bench;
 
   ### GAMES
@@ -9479,8 +9398,6 @@ with pkgs;
 
   # To ensure vdrift's code is built on hydra
   vdrift-bin = vdrift.bin;
-
-  vessel = pkgsi686Linux.callPackage ../games/vessel { };
 
   wesnoth-devel = callPackage ../by-name/we/wesnoth/package.nix { enableDevel = true; };
 
@@ -10127,7 +10044,7 @@ with pkgs;
   nix-serve-ng =
     # FIXME: manually eliminate incorrect references on aarch64-darwin,
     # see https://github.com/NixOS/nixpkgs/issues/318013
-    if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
+    if stdenv.hostPlatform.isDarwin then
       haskellPackages.nix-serve-ng
     else
       haskell.lib.compose.justStaticExecutables haskellPackages.nix-serve-ng;
