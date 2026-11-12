@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ ... }: {
   gtk = {
     enable = true;
 
@@ -44,10 +44,10 @@
     Plugins=appimagethumbnail,audiothumbnail,comicbookthumbnail,cursorthumbnail,djvuthumbnail,ebookthumbnail,exrthumbnail,directorythumbnail,heif,imagethumbnail,jpegthumbnail,kraorathumbnail,windowsexethumbnail,windowsimagethumbnail,opendocumentthumbnail,svgthumbnail,textthumbnail
 
     [UiSettings]
-    ColorScheme=BreezeDark
+    ColorScheme=GruvboxDark
 
     [General]
-    ColorScheme=BreezeDark
+    ColorScheme=GruvboxDark
   '';
 
   home.file.".config/kdeglobals".text = ''
@@ -80,14 +80,9 @@
     Theme=breeze-dark
 
     [UiSettings]
-    ColorScheme=BreezeDark
+    ColorScheme=GruvboxDark
 
     [General]
-    ColorScheme=BreezeDark
+    ColorScheme=GruvboxDark
   '';
-
-  # home.file.".local/share/color-schemes/BreezeDark.colors".source =
-  #   "${pkgs.kdePackages.breeze}/share/color-schemes/BreezeDark.colors";
-  # home.file.".local/share/color-schemes/BreezeLight.colors".source =
-  #   "${pkgs.kdePackages.breeze}/share/color-schemes/BreezeLight.colors";
 }

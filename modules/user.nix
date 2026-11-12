@@ -38,12 +38,14 @@
           self.homeModules.quickshell
           self.homeModules.neovim
           self.homeModules.tmux
-          self.homeModules.theme
           self.homeModules.atuin
           self.homeModules.ghostty
           self.homeModules.direnv
           self.homeModules.clipboard
           self.homeModules.sway-notification-center
+
+          # Theme it up
+          self.homeModules.qt-theme
 
           # Shells
           self.homeModules.zsh

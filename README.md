@@ -1,6 +1,6 @@
 # My System Configuration
 
-A collection of scripts, dotfiles, a NixOS configuration, and a custom packages.
+A collection of scripts, dotfiles, a NixOS configuration, and custom packages.
 
 ## Tooling
 
@@ -70,4 +70,8 @@ This is mostly documentation for myself.
 - Mount basically everything with `nosuid`.
   See [this](https://discourse.nixos.org/t/get-size-of-nix-store-efficiently/51354/8).
 
-sudo nixos-install --flake /mnt/home/ben/config#desktop --log-format bar-with-logs --max-jobs 1 --cores 16
+## Bootstrap a New System
+
+```
+sudo nixos-install --flake /mnt/home/ben/config#<host> --log-format bar-with-logs
+```

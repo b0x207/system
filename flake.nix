@@ -63,11 +63,7 @@
     import-tree.url = "github:denful/import-tree";
     git-hooks-nix.url = "github:cachix/git-hooks.nix";
 
-    # Everything else
-    hyprland = {
-      url = "github:HyprWM/Hyprland";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # Typst
     utpm = {
       url = "github:typst-community/utpm";
 
@@ -83,6 +79,16 @@
       url = "github:typst/typst";
       flake = false;
     };
+    typst-plantuml.url = "github:b0x207/typst-plantuml";
+
+    # Hyprland
+    hyprland = {
+      url = "github:HyprWM/Hyprland";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    HyprQuickFrame.url = "github:Ronin-CK/HyprQuickFrame?rev=d8750eab1963886085c66d4b19c5ccc49f59869c";
+
+    # Everything else
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -91,9 +97,6 @@
       url = "github:nix-community/nh";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    HyprQuickFrame.url = "github:Ronin-CK/HyprQuickFrame?rev=d8750eab1963886085c66d4b19c5ccc49f59869c";
-
-    typst-plantuml.url = "github:b0x207/typst-plantuml";
 
     nur = {
       url = "github:nix-community/NUR";
