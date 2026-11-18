@@ -25,7 +25,7 @@ index 9ca7e0e7a303..b847086e3f36 100644
        };
        meta = {
          longDescription = ''
-@@ -146,7 +146,7 @@ let
+@@ -151,7 +151,7 @@ let
        '';
      };
  
@@ -34,7 +34,7 @@ index 9ca7e0e7a303..b847086e3f36 100644
      {
        shortName,
        shortDescription,
-@@ -156,17 +156,17 @@ let
+@@ -160,17 +160,17 @@ let
      }:
      mkDict rec {
        inherit dictFileName;
@@ -56,58 +56,58 @@ index 9ca7e0e7a303..b847086e3f36 100644
 +        description = "Hunspell dictionary for ${shortDescription} from Grammalecte";
 +        homepage = "https://www.grammalecte.net";
          license = lib.licenses.mpl20;
-         maintainers = with lib.maintainers; [ renzo ];
-         platforms = lib.platforms.all;
-@@ -628,7 +628,7 @@ rec {
+         maintainers = with lib.maintainers; [
+           magicquark
+@@ -639,7 +639,7 @@ rec {
  
-   # FRENCH
+     # FRENCH
  
--  fr-any = mkDictFromDicollecte {
-+  fr-any = mkDictFromGrammalecte {
-     shortName = "fr-any";
-     dictFileName = "fr-toutesvariantes";
-     shortDescription = "French (any variant)";
-@@ -638,7 +638,7 @@ rec {
-     '';
-   };
+-    fr-any = mkDictFromDicollecte {
++    fr-any = mkDictFromGrammalecte {
+       shortName = "fr-any";
+       dictFileName = "fr-toutesvariantes";
+       shortDescription = "French (any variant)";
+@@ -650,7 +650,7 @@ rec {
+       '';
+     };
  
--  fr-classique = mkDictFromDicollecte {
-+  fr-classique = mkDictFromGrammalecte {
-     shortName = "fr-classique";
-     dictFileName = "fr-classique";
-     shortDescription = "French (classic)";
-@@ -649,19 +649,7 @@ rec {
-     '';
-   };
+-    fr-classique = mkDictFromDicollecte {
++    fr-classique = mkDictFromGrammalecte {
+       shortName = "fr-classique";
+       dictFileName = "fr-classique";
+       shortDescription = "French (classic)";
+@@ -660,19 +660,7 @@ rec {
+       '';
+     };
  
--  fr-moderne = mkDictFromDicollecte {
--    shortName = "fr-moderne";
--    dictFileName = "fr-moderne";
--    shortDescription = "French (modern)";
--    longDescription = ''
--      Ce dictionnaire propose une sélection des graphies classiques et
--      réformées, suivant la lente évolution de l’orthographe actuelle. Ce
--      dictionnaire contient les graphies les moins polémiques de la réforme.
--    '';
--    isDefault = true;
--  };
+-    fr-moderne = mkDictFromDicollecte {
+-      shortName = "fr-moderne";
+-      dictFileName = "fr-moderne";
+-      shortDescription = "French (modern)";
+-      longDescription = ''
+-        Ce dictionnaire propose une sélection des graphies classiques et
+-        réformées, suivant la lente évolution de l’orthographe actuelle. Ce
+-        dictionnaire contient les graphies les moins polémiques de la réforme.
+-      '';
+-      isDefault = true;
+-    };
 -
--  fr-reforme1990 = mkDictFromDicollecte {
-+  fr-reforme1990 = mkDictFromGrammalecte {
-     shortName = "fr-reforme1990";
-     dictFileName = "fr-reforme1990";
-     shortDescription = "French (1990 reform)";
-@@ -708,11 +696,11 @@ rec {
-     srcs = [
-       (fetchurl {
-         url = "http://xuxen.eus/static/hunspell/eu_ES.aff";
--        sha256 = "12w2j6phzas2rdzc7f20jnk93sm59m2zzfdgxv6p8nvcvbrkmc02";
-+        sha256 = "1dhiy77nqlnz7q7a628lacp7wwlx07qzcbjwc4a7nclmimknfzrf";
-       })
-       (fetchurl {
-         url = "http://xuxen.eus/static/hunspell/eu_ES.dic";
--        sha256 = "0lw193jr7ldvln5x5z9p21rz1by46h0say9whfcw2kxs9vprd5b3";
-+        sha256 = "01mb5qby5fpnh3i7mm0x6i8mzgzqs8368v554vmhrx4kxh11r6cb";
-       })
-     ];
-   };
+-    fr-reforme1990 = mkDictFromDicollecte {
++    fr-reforme1990 = mkDictFromGrammalecte {
+       shortName = "fr-reforme1990";
+       dictFileName = "fr-reforme1990";
+       shortDescription = "French (1990 reform)";
+@@ -719,11 +719,11 @@ rec {
+       srcs = [
+         (fetchurl {
+           url = "http://xuxen.eus/static/hunspell/eu_ES.aff";
+-          sha256 = "12w2j6phzas2rdzc7f20jnk93sm59m2zzfdgxv6p8nvcvbrkmc02";
++          sha256 = "1dhiy77nqlnz7q7a628lacp7wwlx07qzcbjwc4a7nclmimknfzrf";
+         })
+         (fetchurl {
+           url = "http://xuxen.eus/static/hunspell/eu_ES.dic";
+-          sha256 = "0lw193jr7ldvln5x5z9p21rz1by46h0say9whfcw2kxs9vprd5b3";
++          sha256 = "01mb5qby5fpnh3i7mm0x6i8mzgzqs8368v554vmhrx4kxh11r6cb";
+         })
+       ];
+     };

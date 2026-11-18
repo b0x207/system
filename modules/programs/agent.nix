@@ -50,24 +50,27 @@
       };
     };
 
-    home.file.".pi/agent/extensions/pi-permission-system/config.json".text = ''
-      {
-        "permission": {
-          "*": "allow",
-          "path": {
+    home.file.".pi/agent/extensions/pi-permission-system/config.json" = {
+      text = ''
+        {
+          "permission": {
             "*": "allow",
-            "*.env": "deny",
-            "*.env.*": "deny",
-            "*.env.example": "allow"
-          },
-          "bash": {
-            "*": "ask",
-            "rm -rf *": "deny",
-            "sudo *": "ask"
-          },
-          "external_directory": "ask"
+            "path": {
+              "*": "allow",
+              "*.env": "deny",
+              "*.env.*": "deny",
+              "*.env.example": "allow"
+            },
+            "bash": {
+              "*": "ask",
+              "rm -rf *": "deny",
+              "sudo *": "ask"
+            },
+            "external_directory": "ask"
+          }
         }
-      }
-    '';
+      '';
+      force = true;
+    };
   };
 }

@@ -23,6 +23,7 @@ This is mostly documentation for myself.
   - [x] Hyprland `graphical-session.target` (thanks vaxry)
   - [ ] Fix bitwarden float by ensuring it is removed from any window groups before forcing float
 - [ ] Build tooling around `./upstream-diff.sh` that can check the todo-tree and notify when manual PR inclusion can be removed
+- [ ] Low battery percent notice in quickshell for connected bluetooth devices
 - [ ] Flake parts
   - [x] Split config out for desktop versus laptop
   - [x] Modularize home manager config
@@ -61,6 +62,7 @@ This is mostly documentation for myself.
       - [ ] `librsvg-2.62.3-i686-linux`
       - [ ] `ffmpeg-headless` checkPhase
       - [ ] `sqlite` checkPhase
+      - [ ] `nodejs` checkPhase
   - Packages having problems due to `.git` being missing (see: a lot of the LLVM packages)
   - Some packages don't build in parallel
     - `lager`

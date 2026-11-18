@@ -56,7 +56,6 @@
 
     systemd.user.services.polkit-kde-agent =
       let
-        kvantum = pkgs.kdePackages.qtstyleplugin-kvantum;
         agent = pkgs.kdePackages.polkit-kde-agent-1;
       in
       {
@@ -66,7 +65,6 @@
         after = [ "graphical-session.target" ];
 
         path = [
-          kvantum
           agent
         ];
 
@@ -76,6 +74,7 @@
           RestartSec = 1;
           TimeoutStopSec = 10;
           Environment = [
+            "QT_QPA_PLATFORMTHEME=kde"
             "QT_STYLE_OVERRIDE="
           ];
         };

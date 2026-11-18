@@ -82,8 +82,11 @@
           self.overlays.zopfli-py
           self.overlays.electron-bin
           self.overlays.libjpeg_turbo
+          self.overlays.filelock
         ];
       };
+
+      environment.variables.NIXPKGS_ALLOW_UNFREE = if config.nixpkgs.config.allowUnfree then "1" else "0";
 
       # I already run nix builds with a limited number of jobs. Instead, let's just for a CPU
       # affinity for p-cores only

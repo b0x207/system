@@ -45,6 +45,7 @@
           self.homeModules.sway-notification-center
 
           # Theme it up
+          self.homeModules.gtk-theme
           self.homeModules.qt-theme
 
           # Shells
@@ -67,6 +68,7 @@
           self.homeModules.fastfetch
           self.homeModules.microfetch
           self.homeModules.kopuz
+          self.homeModules.subtui
         ];
       };
       useUserPackages = true;

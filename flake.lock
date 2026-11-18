@@ -74,6 +74,21 @@
     },
     "crane": {
       "locked": {
+        "lastModified": 1783203018,
+        "narHash": "sha256-G6R9IT/xwFuu+CYBWDUAok6AdC4ERC4ZfPPFtEpxnZE=",
+        "owner": "ipetkov",
+        "repo": "crane",
+        "rev": "80db5bdc391be8a1794f6d8a2d56e3a84ebcede2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ipetkov",
+        "repo": "crane",
+        "type": "github"
+      }
+    },
+    "crane_2": {
+      "locked": {
         "lastModified": 1767461147,
         "narHash": "sha256-TH/xTeq/RI+DOzo+c+4F431eVuBpYVwQwBxzURe7kcI=",
         "owner": "ipetkov",
@@ -87,7 +102,7 @@
         "type": "github"
       }
     },
-    "crane_2": {
+    "crane_3": {
       "locked": {
         "lastModified": 1770169865,
         "narHash": "sha256-iPiy13xzDQ9GjpOez+NNIjh/qjl7i4RDf9dF2x5mF9I=",
@@ -102,7 +117,7 @@
         "type": "github"
       }
     },
-    "crane_3": {
+    "crane_4": {
       "locked": {
         "lastModified": 1770169865,
         "narHash": "sha256-iPiy13xzDQ9GjpOez+NNIjh/qjl7i4RDf9dF2x5mF9I=",
@@ -690,6 +705,29 @@
         "type": "github"
       }
     },
+    "kopuz": {
+      "inputs": {
+        "crane": "crane",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-overlay": "rust-overlay"
+      },
+      "locked": {
+        "lastModified": 1793896156,
+        "narHash": "sha256-6/YyZjj8E09CLghJcH9W78WTqgCGNn6Jeuaao3kvls8=",
+        "owner": "Kopuz-org",
+        "repo": "kopuz",
+        "rev": "7a3474e9aa880f7ddc4e68a8846c48b23e13302c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Kopuz-org",
+        "ref": "v0.67.1",
+        "repo": "kopuz",
+        "type": "github"
+      }
+    },
     "naersk": {
       "inputs": {
         "fenix": "fenix",
@@ -799,18 +837,6 @@
       },
       "parent": []
     },
-    "nixpkgs-patch-fix-anubis-fetchurl": {
-      "flake": false,
-      "locked": {
-        "path": "./nixpkgs-patches/anubis-fetchurl.patch",
-        "type": "path"
-      },
-      "original": {
-        "path": "./nixpkgs-patches/anubis-fetchurl.patch",
-        "type": "path"
-      },
-      "parent": []
-    },
     "nixpkgs-patch-fix-gnufpt-mirror": {
       "flake": false,
       "locked": {
@@ -831,18 +857,6 @@
       },
       "original": {
         "path": "./nixpkgs-patches/fprintd.patch",
-        "type": "path"
-      },
-      "parent": []
-    },
-    "nixpkgs-patch-gcc-regular-libdir": {
-      "flake": false,
-      "locked": {
-        "path": "./nixpkgs-patches/gcc-regular-libdir.patch",
-        "type": "path"
-      },
-      "original": {
-        "path": "./nixpkgs-patches/gcc-regular-libdir.patch",
         "type": "path"
       },
       "parent": []
@@ -871,16 +885,16 @@
       },
       "parent": []
     },
-    "nixpkgs-patch-openssl": {
+    "nixpkgs-patch-tzdata": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-GA0nMfal9FWk/F2/8N08AJmpXvishmqR0GYpXNZZ5tQ=",
+        "narHash": "sha256-VUBcg/5UOIIWFSxNq7lVdbRFDUxJLj3KCPIJtWIoYjQ=",
         "type": "file",
-        "url": "https://github.com/NixOS/nixpkgs/pull/579040.diff"
+        "url": "https://github.com/NixOS/nixpkgs/pull/582577.diff"
       },
       "original": {
         "type": "file",
-        "url": "https://github.com/NixOS/nixpkgs/pull/579040.diff"
+        "url": "https://github.com/NixOS/nixpkgs/pull/582577.diff"
       }
     },
     "nixpkgs-patcher": {
@@ -1053,17 +1067,16 @@
         "home-manager": "home-manager",
         "hyprland": "hyprland",
         "import-tree": "import-tree",
+        "kopuz": "kopuz",
         "nh": "nh",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-patch-bmake": "nixpkgs-patch-bmake",
         "nixpkgs-patch-cpio": "nixpkgs-patch-cpio",
-        "nixpkgs-patch-fix-anubis-fetchurl": "nixpkgs-patch-fix-anubis-fetchurl",
         "nixpkgs-patch-fix-gnufpt-mirror": "nixpkgs-patch-fix-gnufpt-mirror",
         "nixpkgs-patch-fprintd": "nixpkgs-patch-fprintd",
-        "nixpkgs-patch-gcc-regular-libdir": "nixpkgs-patch-gcc-regular-libdir",
         "nixpkgs-patch-hunspell": "nixpkgs-patch-hunspell",
         "nixpkgs-patch-libtirpc": "nixpkgs-patch-libtirpc",
-        "nixpkgs-patch-openssl": "nixpkgs-patch-openssl",
+        "nixpkgs-patch-tzdata": "nixpkgs-patch-tzdata",
         "nixpkgs-patcher": "nixpkgs-patcher",
         "nur": "nur",
         "todo-tree": "todo-tree",
@@ -1121,6 +1134,27 @@
       }
     },
     "rust-overlay": {
+      "inputs": {
+        "nixpkgs": [
+          "kopuz",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783921439,
+        "narHash": "sha256-DsSIQSRMrLOz40LrGZ03sp2RlJ9sz3wKpd8XPTOzXnw=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "e013376c32a8fcf07ddb6ec71739552bc118b7bd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "rust-overlay_2": {
       "inputs": {
         "nixpkgs": "nixpkgs_6"
       },
@@ -1187,7 +1221,7 @@
       "inputs": {
         "naersk": "naersk",
         "nixpkgs": "nixpkgs_5",
-        "rust-overlay": "rust-overlay"
+        "rust-overlay": "rust-overlay_2"
       },
       "locked": {
         "lastModified": 1786445606,
@@ -1223,7 +1257,7 @@
     },
     "typst": {
       "inputs": {
-        "crane": "crane",
+        "crane": "crane_2",
         "fenix": "fenix_2",
         "flake-compat": "flake-compat_3",
         "flake-parts": "flake-parts_3",
@@ -1251,7 +1285,7 @@
     },
     "typst-plantuml": {
       "inputs": {
-        "crane": "crane_2",
+        "crane": "crane_3",
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs_8"
       },
@@ -1287,7 +1321,7 @@
     },
     "utpm": {
       "inputs": {
-        "crane": "crane_3",
+        "crane": "crane_4",
         "flake-compat": "flake-compat_4",
         "flake-utils": "flake-utils_2",
         "nixpkgs": [

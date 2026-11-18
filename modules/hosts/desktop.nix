@@ -44,12 +44,10 @@
       self.nixosModules.quickshell
       self.nixosModules.awww
       self.nixosModules.sway-notification-center
-      self.nixosModules.hyprquickframe
-      self.nixosModules.clipboard
+      self.nixosModules.grimblast
 
       self.nixosModules.user
       self.nixosModules.attic
-      self.nixosModules.catppuccin
       # self.nixosModules.fstrim
       self.nixosModules.keyd
       self.nixosModules.bluetooth
@@ -129,7 +127,6 @@
         "sd_mod"
       ];
       boot.initrd.kernelModules = [ ];
-      boot.initrd.systemd.enable = true;
       boot.kernelModules = [
         "kvm-intel"
       ];

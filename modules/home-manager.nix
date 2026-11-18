@@ -1,9 +1,5 @@
 { ... }: {
   flake.homeModules.home-manager-base = { pkgs, ... }: {
-    imports = [
-      ../theme/home-manager.nix
-    ];
-
     home.username = "ben";
     home.homeDirectory = "/home/ben";
     home.stateVersion = "26.05";

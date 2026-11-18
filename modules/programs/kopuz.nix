@@ -1,5 +1,5 @@
-{ ... }: {
+{ inputs, ... }: {
   flake.homeModules.kopuz = { pkgs, ... }: {
-    home.packages = [ pkgs.kopuz ];
+    home.packages = [ inputs.kopuz.packages.${pkgs.stdenv.hostPlatform.system}.default ];
   };
 }

@@ -13,20 +13,14 @@
       flake = false;
     };
 
-    nixpkgs-patch-fix-anubis-fetchurl = {
-      url = "path:./nixpkgs-patches/anubis-fetchurl.patch";
-      flake = false;
-    };
-
     # Fixes problem with upstream source archives for bmake version 20260313 being delisted
     nixpkgs-patch-bmake = {
       url = "https://github.com/NixOS/nixpkgs/pull/515225.diff";
       flake = false;
     };
 
-    # Fixes a build error that is caused by changes to the 7.3 kernel
-    nixpkgs-patch-openssl = {
-      url = "https://github.com/NixOS/nixpkgs/pull/579040.diff";
+    nixpkgs-patch-tzdata = {
+      url = "https://github.com/NixOS/nixpkgs/pull/582577.diff";
       flake = false;
     };
 
@@ -40,10 +34,6 @@
     };
     nixpkgs-patch-cpio = {
       url = "path:./nixpkgs-patches/cpio.patch";
-      flake = false;
-    };
-    nixpkgs-patch-gcc-regular-libdir = {
-      url = "path:./nixpkgs-patches/gcc-regular-libdir.patch";
       flake = false;
     };
     nixpkgs-patch-fprintd = {
@@ -93,6 +83,7 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     nh = {
       url = "github:nix-community/nh";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -104,7 +95,13 @@
     };
 
     todo-tree.url = "github:alexandretrotel/todo-tree";
+
     treefmt-nix.url = "github:numtide/treefmt-nix";
+
+    kopuz = {
+      url = "github:Kopuz-org/kopuz/v0.67.1";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -156,10 +153,16 @@
             settings = {
               enable = true;
               hooks = {
-                deadnix.enable = true;
+                deadnix = {
+                  enable = true;
+                  excludes = [ "inputs" ];
+                };
                 shellcheck = {
                   enable = true;
-                  excludes = [ ".envrc" ];
+                  excludes = [
+                    ".envrc"
+                    "inputs"
+                  ];
                 };
 
                 treefmt-nix = {
@@ -168,6 +171,7 @@
                   description = "treefmt-nix";
                   files = "";
                   entry = "${pkgs.lib.getExe config.formatter}";
+                  excludes = [ "inputs" ];
                 };
               };
             };
