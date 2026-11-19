@@ -8,7 +8,7 @@
         owner = "MattiaPun";
         repo = "SubTUI";
         rev = "v2.14.3";
-        hash = lib.fakeHash;
+        hash = "sha256-LuiWdTfuUsIPV3RhMup6XegZaATFko8cIPI0Xe/O2Sc=";
       };
       vendorHash = "sha256-XtTO9muHlPJu+BHk2+bt7M4tCNGud52cjAswCFpjv2w=";
 
@@ -35,7 +35,7 @@
     };
   };
 
-  flake.homeModules.subtui = { ... }: {
-    home.packages = [ self.packages.SubTUI ];
+  flake.homeModules.subtui = { pkgs, ... }: {
+    home.packages = [ self.packages.${pkgs.stdenv.hostPlatform.system}.SubTUI ];
   };
 }
