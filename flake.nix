@@ -99,7 +99,7 @@
     treefmt-nix.url = "github:numtide/treefmt-nix";
 
     kopuz = {
-      url = "github:Kopuz-org/kopuz/v0.67.1";
+      url = "github:Kopuz-org/kopuz/v1.0.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

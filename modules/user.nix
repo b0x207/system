@@ -55,6 +55,7 @@
           # Browsers
           self.homeModules.firefox
           self.homeModules.tor-browser
+          self.homeModules.librewolf
 
           # Misc
           self.homeModules.agent
