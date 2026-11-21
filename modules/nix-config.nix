@@ -83,6 +83,7 @@
           self.overlays.electron-bin
           self.overlays.libjpeg_turbo
           self.overlays.filelock
+          self.overlays.protobuf
         ];
       };
 
