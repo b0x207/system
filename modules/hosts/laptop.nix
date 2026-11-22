@@ -14,6 +14,7 @@
       # Disable till secrets are needed
       # inputs.agenix.nixosModules.default
 
+      self.nixosModules.docker
       self.nixosModules.i2p
       self.nixosModules.games
       self.nixosModules.xonotic

@@ -23,6 +23,8 @@
         packages = [
           "npm:pi-ketch"
           "npm:@gotgenes/pi-permission-system"
+          "npm:@henryqw/pi-ask-question"
+          "npm:pi-subagents"
         ];
         retry = {
           enabled = true;
