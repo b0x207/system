@@ -348,6 +348,8 @@ self: super: with self; {
 
   aiohortos = callPackage ../development/python-modules/aiohortos { };
 
+  aiohpprinter = callPackage ../development/python-modules/aiohpprinter { };
+
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 
   aiohttp-apispec = callPackage ../development/python-modules/aiohttp-apispec { };
@@ -2605,6 +2607,8 @@ self: super: with self; {
     callPackage ../development/python-modules/bluetooth-sensor-state-data
       { };
 
+  bluetti-modbus = callPackage ../development/python-modules/bluetti-modbus { };
+
   bluezero = callPackage ../development/python-modules/bluezero { };
 
   blurhash = callPackage ../development/python-modules/blurhash { };
@@ -3225,8 +3229,6 @@ self: super: with self; {
   clarifai-grpc = callPackage ../development/python-modules/clarifai-grpc { };
 
   clarifai-protocol = callPackage ../development/python-modules/clarifai-protocol { };
-
-  class-doc = callPackage ../development/python-modules/class-doc { };
 
   classify-imports = callPackage ../development/python-modules/classify-imports { };
 
@@ -4434,6 +4436,8 @@ self: super: with self; {
 
   devtools = callPackage ../development/python-modules/devtools { };
 
+  dextrace = callPackage ../development/python-modules/dextrace { };
+
   dfdiskcache = callPackage ../development/python-modules/dfdiskcache { };
 
   dfir-ntfs = callPackage ../development/python-modules/dfir_ntfs { };
@@ -4511,6 +4515,8 @@ self: super: with self; {
   discum = callPackage ../development/python-modules/discum { };
 
   diskcache = callPackage ../development/python-modules/diskcache { };
+
+  diskcache-community = callPackage ../development/python-modules/diskcache-community { };
 
   diskcache-stubs = callPackage ../development/python-modules/diskcache-stubs { };
 
@@ -6748,8 +6754,6 @@ self: super: with self; {
   garminconnect = callPackage ../development/python-modules/garminconnect { };
 
   garminconnect-aio = callPackage ../development/python-modules/garminconnect-aio { };
-
-  garth = callPackage ../development/python-modules/garth { };
 
   gassist-text = callPackage ../development/python-modules/gassist-text { };
 
@@ -15262,6 +15266,8 @@ self: super: with self; {
 
   pyflic = callPackage ../development/python-modules/pyflic { };
 
+  pyflic-ble = callPackage ../development/python-modules/pyflic-ble { };
+
   pyflipper = callPackage ../development/python-modules/pyflipper { };
 
   pyfluidsynth = callPackage ../development/python-modules/pyfluidsynth { };
@@ -17492,6 +17498,8 @@ self: super: with self; {
   python-rtmidi = callPackage ../development/python-modules/python-rtmidi { };
 
   python-sat = callPackage ../development/python-modules/python-sat { };
+
+  python-sbom = callPackage ../development/python-modules/python-sbom { inherit (pkgs) cmake; };
 
   python-secp256k1-cardano = callPackage ../development/python-modules/python-secp256k1-cardano { };
 
@@ -21634,8 +21642,6 @@ self: super: with self; {
 
   tuf = callPackage ../development/python-modules/tuf { };
 
-  tunigo = callPackage ../development/python-modules/tunigo { };
-
   tunit = callPackage ../development/python-modules/tunit { };
 
   turbohtml = callPackage ../development/python-modules/turbohtml { };
@@ -22154,6 +22160,8 @@ self: super: with self; {
   types-psutil = callPackage ../development/python-modules/types-psutil { };
 
   types-psycopg2 = callPackage ../development/python-modules/types-psycopg2 { };
+
+  types-pyasn1 = callPackage ../development/python-modules/types-pyasn1 { };
 
   types-pyopenssl = callPackage ../development/python-modules/types-pyopenssl { };
 
@@ -23498,6 +23506,8 @@ self: super: with self; {
   zipfile2 = callPackage ../development/python-modules/zipfile2 { };
 
   zipp = callPackage ../development/python-modules/zipp { };
+
+  zipremove = callPackage ../development/python-modules/zipremove { };
 
   zipstream-ng = callPackage ../development/python-modules/zipstream-ng { };
 
