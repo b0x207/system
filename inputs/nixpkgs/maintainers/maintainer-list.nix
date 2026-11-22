@@ -4610,13 +4610,6 @@
     githubId = 8891115;
     name = "Brian Choy";
   };
-  byteflavour = {
-    email = "synapse@byteflavour.dev";
-    github = "byteflavour";
-    githubId = 131113314;
-    matrix = "@synapse:byteflavour.dev";
-    name = "Byte Flavour";
-  };
   ByteSudoer = {
     email = "bytesudoer@gmail.com";
     github = "ByteSudoer";
@@ -5228,6 +5221,12 @@
     github = "chekoopa";
     githubId = 1689801;
     name = "Mikhail Chekan";
+  };
+  Chemaclass = {
+    github = "Chemaclass";
+    githubId = 5256287;
+    name = "Jose M. Valera Reales";
+    keys = [ { fingerprint = "56D5 D60B 0934 0999 199C  3750 E51B 5BF4 5F85 D160"; } ];
   };
   chemonke = {
     email = "nixpkgs@chemonke.ch";
@@ -16750,7 +16749,7 @@
     keys = [ { fingerprint = "5BE4 98D5 1C24 2CCD C21A  4604 AC6F 4BA0 78E6 7833"; } ];
   };
   leoflo = {
-    email = "noreply@leoflo.me";
+    email = "leonardo@leoflo.net";
     github = "le0flo";
     githubId = 128467278;
     name = "Leonardo";
@@ -23870,6 +23869,12 @@
     name = "Kevin Mullins";
     keys = [ { fingerprint = "2CD2 B030 BD22 32EF DF5A  008A 3618 20A4 5DB4 1E9A"; } ];
   };
+  poacher = {
+    email = "poacher@poacher.dev";
+    github = "poach3r";
+    githubId = 58641438;
+    name = "Henry Matonis";
+  };
   podium868909 = {
     email = "89096245@proton.me";
     github = "podium868909";
@@ -29539,6 +29544,12 @@
     githubId = 6579711;
     name = "Martin Hostettler";
   };
+  tfausak = {
+    email = "taylor@fausak.me";
+    github = "tfausak";
+    githubId = 408753;
+    name = "Taylor Fausak";
+  };
   tfc = {
     email = "jacek@galowicz.de";
     matrix = "@tfc:matrix.org";
@@ -33038,6 +33049,12 @@
     githubId = 8006928;
     name = "Yuannan (Brandon) Lin";
   };
+  yueyinqiu = {
+    email = "me@yueyinqiu.top";
+    github = "yueyinqiu";
+    githubId = 18749772;
+    name = "yueyinqiu";
+  };
   yujonpradhananga = {
     email = "yujonpradhan123@gmail.com";
     github = "Yujonpradhananga";
@@ -33080,6 +33097,13 @@
     github = "yureka-wdz";
     githubId = 255085068;
     name = "Yureka (WDZ)";
+  };
+  yuri-becker = {
+    name = "Yuri";
+    githubId = 16067917;
+    github = "yuri-becker";
+    email = "hi@yuri.li";
+    matrix = "@yuri:bundestag.gmbh";
   };
   yurkobb = {
     name = "Yury Bulka";
