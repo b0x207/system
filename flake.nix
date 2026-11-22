@@ -85,7 +85,7 @@
     };
 
     nh = {
-      url = "github:nix-community/nh";
+      url = "github:b0x207/nh";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
