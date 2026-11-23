@@ -58,18 +58,19 @@
           self.homeModules.librewolf
 
           # Misc
-          self.homeModules.agent
-          self.homeModules.lazygit
           self.homeModules.rofi
-          self.homeModules.games
           self.homeModules.zathura
-          self.homeModules.fzf
           self.homeModules.discord
           self.homeModules.mpv
           self.homeModules.fastfetch
           self.homeModules.microfetch
+          self.homeModules.agent
+          self.homeModules.lazygit
+          self.homeModules.games
+          self.homeModules.fzf
           self.homeModules.kopuz
           self.homeModules.subtui
+          self.homeModules.remmina
         ];
       };
       useUserPackages = true;
