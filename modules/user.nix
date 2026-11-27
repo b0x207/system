@@ -17,6 +17,7 @@
           "render"
           "video"
           "input"
+          "kvm" # For virtual machines
         ];
         shell = pkgs.zsh;
       };
